@@ -1,0 +1,35 @@
+{
+  "company": "SwiftFreight Logistics (sample company for this project)",
+  "faqs": [
+    {
+      "topic": "delay",
+      "keywords": ["delay", "delayed", "late", "behind schedule", "why is"],
+      "question": "Why is my shipment delayed?",
+      "answer": "Shipments can be delayed by port congestion, bad weather, customs holds, or missing documents. When a delay is logged, the status changes to 'Delayed' and the delay reason is shown on the shipment record. The estimated delivery date is updated once the delay is confirmed."
+    },
+    {
+      "topic": "customs",
+      "keywords": ["customs", "duty", "duties", "clearance", "import", "export", "declaration", "tax"],
+      "question": "What is customs clearance?",
+      "answer": "Customs clearance is the government check that lets goods enter or leave a country. A shipment is held if documents such as the commercial invoice or packing list are missing or incorrect. Import duties and taxes are set by the destination country and are not included in our shipping fee."
+    },
+    {
+      "topic": "route",
+      "keywords": ["route", "path", "hub", "transit", "via", "journey"],
+      "question": "How is my delivery route planned?",
+      "answer": "Each shipment follows a planned route through our regional hubs. The route on the shipment record lists the main hubs in order. The route can change if a hub is closed or a port is congested, and the record is updated when that happens."
+    },
+    {
+      "topic": "status",
+      "keywords": ["status", "tracking", "track", "where is", "location"],
+      "question": "How do I check my shipment status?",
+      "answer": "Share your shipment ID (format SHP-12345) and we will show the current status, location, and estimated delivery date. Possible statuses are In Transit, Delayed, On Hold - Customs, Out for Delivery, and Delivered."
+    },
+    {
+      "topic": "support",
+      "keywords": ["human", "agent", "complaint", "speak to someone"],
+      "question": "How do I contact support?",
+      "answer": "For issues the chatbot cannot resolve, contact our support team during business hours and include your shipment ID."
+    }
+  ]
+}

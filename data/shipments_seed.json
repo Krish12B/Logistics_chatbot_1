@@ -1,0 +1,62 @@
+[
+  {
+    "shipment_id": "SHP-10001",
+    "origin": "Mumbai, India",
+    "destination": "London, UK",
+    "status": "In Transit",
+    "current_location": "Dubai Hub, UAE",
+    "route": "Mumbai Hub -> Dubai Hub -> London Heathrow Hub",
+    "estimated_delivery": "2026-11-20",
+    "delay_reason": null,
+    "customs_status": "Not yet required",
+    "last_updated": "2026-11-15 18:30"
+  },
+  {
+    "shipment_id": "SHP-10002",
+    "origin": "Chennai, India",
+    "destination": "Dubai, UAE",
+    "status": "Delayed",
+    "current_location": "Jebel Ali Port, UAE",
+    "route": "Chennai Port -> Jebel Ali Port",
+    "estimated_delivery": "2026-11-19",
+    "delay_reason": "Port congestion at Jebel Ali",
+    "customs_status": "Cleared",
+    "last_updated": "2026-11-16 08:00"
+  },
+  {
+    "shipment_id": "SHP-10003",
+    "origin": "Delhi, India",
+    "destination": "New York, USA",
+    "status": "On Hold - Customs",
+    "current_location": "JFK Airport, USA",
+    "route": "Delhi Hub -> Frankfurt Hub -> JFK Airport",
+    "estimated_delivery": "2026-11-22",
+    "delay_reason": "Customs hold",
+    "customs_status": "Held - awaiting commercial invoice",
+    "last_updated": "2026-11-15 12:10"
+  },
+  {
+    "shipment_id": "SHP-10004",
+    "origin": "Ahmedabad, India",
+    "destination": "Singapore",
+    "status": "Delivered",
+    "current_location": "Singapore",
+    "route": "Ahmedabad Hub -> Singapore Hub",
+    "estimated_delivery": "2026-11-10",
+    "delay_reason": null,
+    "customs_status": "Cleared",
+    "last_updated": "2026-11-10 14:45"
+  },
+  {
+    "shipment_id": "SHP-10005",
+    "origin": "Pune, India",
+    "destination": "Sydney, Australia",
+    "status": "Out for Delivery",
+    "current_location": "Sydney Local Depot",
+    "route": "Pune Hub -> Singapore Hub -> Sydney Hub",
+    "estimated_delivery": "2026-11-16",
+    "delay_reason": null,
+    "customs_status": "Cleared",
+    "last_updated": "2026-11-16 07:20"
+  }
+]

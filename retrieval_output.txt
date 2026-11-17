@@ -1,0 +1,60 @@
+======================================================================
+QUESTION: What is the status of SHP-10001?
+----------------------------------------------------------------------
+SHIPMENT RECORD:
+Shipment ID: SHP-10001
+Status: In Transit
+Origin: Mumbai, India
+Destination: London, UK
+Current location: Dubai Hub, UAE
+Route: Mumbai Hub -> Dubai Hub -> London Heathrow Hub
+Estimated delivery: 2026-11-20
+Delay reason: None
+Customs status: Not yet required
+Last updated: 2026-11-15 18:30
+
+KNOWLEDGE BASE:
+FAQ (status): Share your shipment ID (format SHP-12345) and we will show the current status, location, and estimated delivery date. Possible statuses are In Transit, Delayed, On Hold - Customs, Out for Delivery, and Delivered.
+
+======================================================================
+QUESTION: Has SHP-10003 cleared customs?
+----------------------------------------------------------------------
+SHIPMENT RECORD:
+Shipment ID: SHP-10003
+Status: On Hold - Customs
+Origin: Delhi, India
+Destination: New York, USA
+Current location: JFK Airport, USA
+Route: Delhi Hub -> Frankfurt Hub -> JFK Airport
+Estimated delivery: 2026-11-22
+Delay reason: Customs hold
+Customs status: Held - awaiting commercial invoice
+Last updated: 2026-11-15 12:10
+
+KNOWLEDGE BASE:
+FAQ (customs): Customs clearance is the government check that lets goods enter or leave a country. A shipment is held if documents such as the commercial invoice or packing list are missing or incorrect. Import duties and taxes are set by the destination country and are not included in our shipping fee.
+
+======================================================================
+QUESTION: What is the delivery route for SHP-10001?
+----------------------------------------------------------------------
+SHIPMENT RECORD:
+Shipment ID: SHP-10001
+Status: In Transit
+Origin: Mumbai, India
+Destination: London, UK
+Current location: Dubai Hub, UAE
+Route: Mumbai Hub -> Dubai Hub -> London Heathrow Hub
+Estimated delivery: 2026-11-20
+Delay reason: None
+Customs status: Not yet required
+Last updated: 2026-11-15 18:30
+
+KNOWLEDGE BASE:
+FAQ (route): Each shipment follows a planned route through our regional hubs. The route on the shipment record lists the main hubs in order. The route can change if a hub is closed or a port is congested, and the record is updated when that happens.
+
+======================================================================
+QUESTION: What causes shipment delays?
+----------------------------------------------------------------------
+KNOWLEDGE BASE:
+FAQ (delay): Shipments can be delayed by port congestion, bad weather, customs holds, or missing documents. When a delay is logged, the status changes to 'Delayed' and the delay reason is shown on the shipment record. The estimated delivery date is updated once the delay is confirmed.
+
