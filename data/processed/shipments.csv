@@ -1,0 +1,11 @@
+shipment_id,origin,destination,status,current_location,route,estimated_delivery,delay_reason,customs_status,last_updated
+SHP-10001,"Mumbai, India","London, UK",In Transit,"Dubai Hub, UAE",Mumbai Hub -> Dubai Hub -> London Heathrow Hub,2026-11-20,,Not yet required,2026-11-15 18:30
+SHP-10002,"Chennai, India","Dubai, UAE",Delayed,"Jebel Ali Port, UAE",Chennai Port -> Jebel Ali Port,2026-11-19,Port congestion at Jebel Ali,Cleared,2026-11-16 08:00
+SHP-10003,"Delhi, India","New York, USA",On Hold - Customs,"JFK Airport, USA",Delhi Hub -> Frankfurt Hub -> JFK Airport,2026-11-22,Customs hold,Held - awaiting commercial invoice,2026-11-15 12:10
+SHP-10004,"Ahmedabad, India",Singapore,Delivered,Singapore,Ahmedabad Hub -> Singapore Hub,2026-11-10,,Cleared,2026-11-10 14:45
+SHP-10005,"Pune, India","Sydney, Australia",Out for Delivery,Sydney Local Depot,Pune Hub -> Singapore Hub -> Sydney Hub,2026-11-16,,Cleared,2026-11-16 07:20
+SHP-10006,"Kolkata, India","Tokyo, Japan",In Transit,Singapore Hub,Kolkata Hub -> Singapore Hub -> Tokyo Hub,2026-11-25,,Pending,2026-11-17 09:15
+SHP-10007,"Bangalore, India","Berlin, Germany",Delayed,"Mumbai Hub, India",Bangalore Hub -> Mumbai Hub -> Frankfurt Hub -> Berlin Depot,2026-11-28,Weather disruption at Mumbai airport,Not yet required,2026-11-17 06:00
+SHP-10008,"Hyderabad, India","Toronto, Canada",In Transit,"London Heathrow Hub, UK",Hyderabad Hub -> Dubai Hub -> London Hub -> Toronto Pearson Hub,2026-11-24,,Cleared,2026-11-16 22:45
+SHP-10009,"Jaipur, India","Dubai, UAE",Delivered,"Dubai, UAE",Jaipur Hub -> Mumbai Hub -> Dubai Hub,2026-11-12,,Cleared,2026-11-12 11:30
+SHP-10010,"Surat, India","Los Angeles, USA",On Hold - Customs,"LAX Airport, USA",Surat Hub -> Singapore Hub -> LAX Airport,2026-11-26,Customs hold,Held - missing packing list,2026-11-17 03:50

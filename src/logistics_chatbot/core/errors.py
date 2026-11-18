@@ -1,9 +1,10 @@
-"""Custom error classes.
+"""Custom error classes for FleetHarbor Logistics AI Chatbot.
 
 Every error has two messages:
-  * user_message - friendly text that is safe to show to the customer
-  * detail       - technical text that is written to the log only
+  * user_message - friendly text safe to show to the customer / API client
+  * detail       - technical text written to internal logs only
 """
+from __future__ import annotations
 
 
 class ChatbotError(Exception):
@@ -20,6 +21,10 @@ class EmptyMessageError(ChatbotError):
         "Please type a question about your shipment, for example: "
         "'What is the status of SHP-10001?'"
     )
+
+
+class QueryTooLongError(ChatbotError):
+    default_message = "Your question is too long. Please keep questions under 2,000 characters."
 
 
 class InvalidShipmentIdError(ChatbotError):
@@ -41,6 +46,10 @@ class KnowledgeBaseError(ChatbotError):
     default_message = "I'm having trouble loading our help articles right now. Please try again shortly."
 
 
+class VectorDBError(KnowledgeBaseError):
+    default_message = "I'm having trouble loading our vector knowledge base right now. Please try again shortly."
+
+
 class LLMTimeoutError(ChatbotError):
     default_message = "The assistant took too long to respond. Please try again in a moment."
 
@@ -50,6 +59,10 @@ class LLMAuthError(ChatbotError):
         "The assistant is not set up correctly (the API key is missing or invalid). "
         "Please contact the administrator."
     )
+
+
+class LLMRateLimitError(ChatbotError):
+    default_message = "The assistant is very busy right now. Please try again in a few seconds."
 
 
 class LLMUnavailableError(ChatbotError):

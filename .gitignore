@@ -1,2 +1,48 @@
+# Environment & Secrets
 .env
+.env.*
+!.env.example
+*.env
+
+# Python artifacts
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Databases & local data stores
+data/shipments.db
+*.sqlite3
+*.db
+data/chroma_db/
+chroma_db/
+.chroma/
+
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
