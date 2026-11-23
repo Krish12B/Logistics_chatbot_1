@@ -1,0 +1,37 @@
+# FleetHarbor Logistics • Cold-Chain Pharmaceutical & GDP Temperature-Controlled Operations Manual
+Document Reference: DOC-FLEET-COLD-2026
+Classification: Healthcare Compliance Reference
+Last Revised: 20 November 2026
+
+## 1. Compliance Mandates & Policy CC-POL-9921
+All temperature-sensitive pharmaceutical, biological, vaccine, and clinical trial shipments managed by FleetHarbor Life Sciences are governed by Policy Code CC-POL-9921. This policy mandates full compliance with:
+- World Health Organization (WHO) Good Distribution Practices (GDP) Technical Report Series No. 957.
+- European Commission Guidelines on GDP of Medicinal Products (2013/C 343/01).
+- United States Pharmacopeia (USP) <1079> Good Storage and Shipping Practices.
+
+## 2. Defined Temperature Operating Regimes
+FleetHarbor provides certified temperature control across four defined operating ranges:
+1. Deep Cryogenic & Dry Ice (-70°C to -80°C):
+   - Used for mRNA vaccines, cell therapies, and genetic materials.
+   - Packaged in certified VIP (Vacuum Insulated Panel) dry ice shippers with monitored sublimation rates (standard hold time: 120-168 hours).
+2. Frozen Regime (-20°C to -10°C):
+   - Used for specialized plasma, viral vectors, and frozen active pharmaceutical ingredients (APIs).
+3. Refrigerated Cold-Chain (+2°C to +8°C):
+   - Primary biopharmaceutical standard for monoclonal antibodies, insulin, and injectable biologics.
+   - Strictly prohibited from freezing; requires calibrated phase-change material (PCM) coolants.
+4. Controlled Room Temperature / Ambient (+15°C to +25°C):
+   - Required for finished pharmaceutical tablets, medical devices, and diagnostics vulnerable to extreme hot or cold climate swings.
+
+## 3. Real-Time Telematics, Calibration & Data Logging
+- Active Telemetry Trackers: Every cold-chain shipment carries a calibrated NIST-traceable cellular/satellite tracker reporting:
+  - Internal cargo temperature (±0.1°C precision).
+  - Ambient outside temperature.
+  - Real-time GPS location and geofence triggers.
+  - Shock, tilt, and box lid opening (ambient light sensor).
+- Data Sampling Rate: Standard logging interval is every 10 minutes during transit and every 2 minutes when temperature deviates within 1.0°C of critical limits.
+
+## 4. Temperature Excursion Management Protocol
+An excursion is defined as any verified temperature reading outside the validated specification. When an excursion occurs:
+- Immediate Quarantine: The shipment is tagged as "Under Investigation" in the tracking portal. Warehouse staff move goods into emergency backup cold rooms (+4°C or -20°C).
+- Quality Assurance Notification: FleetHarbor Healthcare QA team and the shipper are notified via automated emergency webhook and phone dispatch within 30 minutes.
+- Investigation & Root-Cause Analysis (RCA): FleetHarbor compiles an Excursion RCA dossier within 24 hours, evaluating Mean Kinetic Temperature (MKT), duration of deviation, and sensor calibration certificates for pharmaceutical QA release.

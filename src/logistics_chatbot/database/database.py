@@ -126,17 +126,37 @@ def init_database():
 
 
 def fetch_shipment_row(shipment_id: str) -> Optional[dict]:
-    """Fetch a raw shipment row from the database, falling back to local CSV."""
+    """Fetch a raw shipment row from the database, falling back to local SQLite/CSV."""
+    clean_id = (shipment_id or "").strip().upper()
+    if not clean_id:
+        return None
+
     if not config.SUPABASE_DB_URL:
+        # 1. Fast indexed SQLite lookup (<0.5ms)
+        try:
+            import sqlite3
+            db_path = config.PROJECT_ROOT / "data" / "raw" / "shipments.db"
+            if db_path.exists():
+                with sqlite3.connect(str(db_path)) as conn:
+                    conn.row_factory = sqlite3.Row
+                    cur = conn.cursor()
+                    cur.execute("SELECT * FROM shipments WHERE UPPER(shipment_id) = ?", (clean_id,))
+                    row = cur.fetchone()
+                    if row:
+                        return dict(row)
+        except Exception as exc:
+            logger.debug("SQLite lookup fallback notice: %s", exc)
+
+        # 2. Local CSV fallback
         from logistics_chatbot.rag import ingestion
         for row in ingestion.load_shipment_rows():
-            if row.get("shipment_id", "").upper() == shipment_id.upper():
+            if row.get("shipment_id", "").upper() == clean_id:
                 return dict(row)
         return None
 
     rows = run_query(
         "SELECT * FROM shipments WHERE shipment_id = %s",
-        (shipment_id,),
+        (clean_id,),
     )
     return rows[0] if rows else None
 
@@ -152,6 +172,61 @@ def get_shipment(shipment_id: str) -> dict:
 
     row["estimated_delivery"] = format_date(row.get("estimated_delivery"))
     row["last_updated"] = format_date(row.get("last_updated"))
+    return row
+
+
+def fetch_employee_row(employee_id: str) -> Optional[dict]:
+    """Fetch an employee row by ID from Supabase, SQLite, or CSV."""
+    clean_id = (employee_id or "").strip().upper()
+    if not clean_id:
+        return None
+
+    if config.SUPABASE_DB_URL:
+        try:
+            rows = run_query(
+                "SELECT * FROM employees WHERE employee_id = %s",
+                (clean_id,),
+            )
+            if rows:
+                return rows[0]
+        except Exception:
+            pass
+
+    # 1. Indexed SQLite lookup
+    try:
+        import sqlite3
+        db_path = config.PROJECT_ROOT / "data" / "raw" / "shipments.db"
+        if db_path.exists():
+            with sqlite3.connect(str(db_path)) as conn:
+                conn.row_factory = sqlite3.Row
+                cur = conn.cursor()
+                cur.execute("SELECT * FROM employees WHERE UPPER(employee_id) = ?", (clean_id,))
+                row = cur.fetchone()
+                if row:
+                    return dict(row)
+    except Exception:
+        pass
+
+    # 2. CSV fallback
+    emp_csv = config.PROJECT_ROOT / "data" / "generated" / "employees_roster.csv"
+    if emp_csv.exists():
+        import csv
+        with open(emp_csv, encoding="utf-8-sig", newline="") as f:
+            reader = csv.DictReader(f)
+            for r in reader:
+                if r.get("employee_id", "").upper() == clean_id:
+                    return dict(r)
+    return None
+
+
+def get_employee(employee_id: str) -> dict:
+    """Fetch one employee and return their details."""
+    row = fetch_employee_row(employee_id)
+    if row is None:
+        raise ShipmentNotFoundError(
+            f"I couldn't find employee {employee_id}. Please check the ID and try again.",
+            detail=f"No row for {employee_id}",
+        )
     return row
 
 

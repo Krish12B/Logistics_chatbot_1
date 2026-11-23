@@ -1,0 +1,49 @@
+# FleetHarbor Logistics • Internal Employee Operations Handbook & Warehouse SOP
+Document Reference: DOC-FLEET-EMP-2026
+Classification: Internal Operations Manual / Staff Reference
+Last Revised: 20 November 2026
+
+## 1. Safety Protocols & Personal Protective Equipment (PPE)
+All FleetHarbor operations personnel, dock workers, and forklift operators must strictly adhere to Zero-Harm Safety Standards:
+- Mandatory PPE in all warehouse, dock, and container yard areas:
+  - Steel-toe certified safety shoes (EN ISO 20345 / ASTM F2413).
+  - High-visibility class 2 or class 3 fluorescent vest.
+  - Protective hard hats when operating under overhead racking or container cranes.
+  - Protective gloves and safety glasses during hazmat handling or pallet strapping.
+- Forklift & Material Handling Equipment (MHE):
+  - Maximum warehouse aisle speed: 8 km/h (5 mph).
+  - Daily pre-shift equipment checklist mandatory before turning on any forklift or reach truck.
+  - Pedestrian walkway separation: Maintain a minimum 3-meter safety bubble from moving machinery.
+
+## 2. Inbound Dock Receiving & Verification Workflow
+Step 1: Driver Check-In & Security Inspection
+- Confirm driver identity against dispatch manifest and verify carrier seal numbers on trailer doors before breaking seals.
+- If seal is broken or does not match manifest, DO NOT open doors. Immediately notify the Dock Supervisor and Security Desk.
+
+Step 2: Unloading & Barcode Scanning
+- Scan master Bill of Lading / Air Waybill barcode into FleetHarbor WMS.
+- Inspect outer pallets for transit damage, tilting, crushing, or water ingress.
+- Generate and affix internal FleetHarbor License Plate Number (LPN) tracking barcodes to every received pallet.
+
+Step 3: Staging & Temperature Verification
+- Ambient Cargo: Move to designated staging lane within 45 minutes of receipt.
+- Cold-Chain Cargo: Move into temperature-controlled pre-cool dock within 15 minutes. Check internal data logger display and log temperature into WMS.
+
+## 3. Hazmat & Dangerous Goods Handling SOP
+- Segregation: Incompatible chemicals (e.g., Class 3 Flammables and Class 5.1 Oxidizers) must never be stored in adjacent rack bays. Maintain minimum 6-meter segregation distance or fire-rated barrier wall.
+- Spill Kit Deployment: Every dock station is equipped with a universal chemical spill kit. In the event of a leak > 5 liters, activate facility emergency response and evacuate downwind personnel.
+
+## 4. Dispatch, Linehaul Loading & Weight Distribution
+- Axle Weight Compliance: Forklift operators must distribute heavy pallets evenly along trailer bed to ensure steering and drive axle weight limits are never breached.
+- Pallet Bracing: Use certified load bars, ratchet straps (minimum 2,500 kg rating), and inflatable dunnage bags in trailer gaps to prevent cargo movement during transit.
+- Driver Sign-Out: Driver receives printed paper manifest, signed equipment interchange receipt (EIR), and digital dispatch confirmation on mobile terminal.
+
+## 5. Shift Handover & Escalation Protocols
+- Shift Handover Log: Operations supervisors must conduct a 15-minute face-to-face handover at shift change (06:00, 14:00, 22:00), reviewing:
+  - Unresolved tracking exceptions or customs holds.
+  - Reefer units undergoing active temperature observation.
+  - High-value cargo stored in high-security cage.
+- Escalation Matrix:
+  - Level 1 (Immediate): Warehouse Supervisor (resolves dock delays, damaged pallet repackaging).
+  - Level 2 (Within 2 Hours): Terminal Operations Manager (resolves equipment failure, driver shortages).
+  - Level 3 (Within 4 Hours): Regional Operations Director & VP Quality (handles catastrophic incidents, structural loss).

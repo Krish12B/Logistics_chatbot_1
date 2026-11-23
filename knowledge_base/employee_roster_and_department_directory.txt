@@ -1,0 +1,163 @@
+# FLEETHARBOR GLOBAL LOGISTICS – EMPLOYEE ROSTER & DEPARTMENT DIRECTORY
+Document ID: SOP-EMP-500
+Effective Date: November 2026
+Classification: Internal Operations Manual & Staffing Directory
+
+## 1. Executive Summary & Workforce Architecture
+FleetHarbor Logistics operates an international workforce of 500 certified logistics professionals deployed across 15 global mega-hubs and regional gateways. Operations span 24/7/365 across three primary shift rotations: Day Shift (06:00 - 14:30), Swing Shift (14:00 - 22:30), and Overnight Shift (22:00 - 06:30), supported by an On-Call Escalation rotation.
+
+## 2. Departmental Breakdown & Key Roles
+### Department: Cold-Chain Quality & Life Sciences (Total Staff: 49)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for cold-chain quality & life sciences operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20010: Lucia Yamamoto | Title: IoT Sensor Calibration Lead | Hub: Busan New Port Container Terminal (South Korea) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: lucia.yamamoto@fleetharbor.com (Ext: x4010)
+  * EMP-20023: Andrew Takahashi | Title: GDP Compliance Manager | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Licensed Customs Broker (LCB) | Contact: andrew.takahashi@fleetharbor.com (Ext: x4023)
+  * EMP-20036: David Miller | Title: GDP Compliance Manager | Hub: Mumbai Air Cargo & JNPT Terminal (India) | Shift: Day Shift (06:00 - 14:30) | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: david.miller@fleetharbor.com (Ext: x4036)
+  * EMP-20041: Priya Simon | Title: Temperature Excursion Investigator | Hub: Mumbai Air Cargo & JNPT Terminal (India) | Shift: 24/7 Operations On-Call Rotation | Cert: Certified Supply Chain Professional (CSCP) | Contact: priya.simon@fleetharbor.com (Ext: x4041)
+  * EMP-20045: Grace Moreau | Title: GDP Compliance Manager | Hub: Antwerp Port Container Terminal (Belgium) | Shift: Day Shift (06:00 - 14:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: grace.moreau@fleetharbor.com (Ext: x4045)
+  * EMP-20049: Alejandro Laurent | Title: Temperature Excursion Investigator | Hub: London Heathrow World Cargo Centre (UK) | Shift: Swing Shift (14:00 - 22:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: alejandro.laurent@fleetharbor.com (Ext: x4049)
+  * EMP-20057: Stefan Huang | Title: Temperature Excursion Investigator | Hub: Sydney Mascot International Cargo (Australia) | Shift: Swing Shift (14:00 - 22:30) | Cert: Standard Operations Certified | Contact: stefan.huang@fleetharbor.com (Ext: x4057)
+  * EMP-20060: Siddharth Simon | Title: Healthcare QA Specialist | Hub: Shanghai Pudong Logistics Park (China) | Shift: 24/7 Operations On-Call Rotation | Cert: Licensed Customs Broker (LCB) | Contact: siddharth.simon@fleetharbor.com (Ext: x4060)
+  * EMP-20061: Isabella Silva | Title: Cryogenic Storage Technician | Hub: London Heathrow World Cargo Centre (UK) | Shift: Swing Shift (14:00 - 22:30) | Cert: Licensed Customs Broker (LCB) | Contact: isabella.silva@fleetharbor.com (Ext: x4061)
+  * EMP-20069: Joseph Michel | Title: Temperature Excursion Investigator | Hub: Chicago O'Hare Northeast Cargo Terminal (USA) | Shift: 24/7 Operations On-Call Rotation | Cert: Licensed Customs Broker (LCB) | Contact: joseph.michel@fleetharbor.com (Ext: x4069)
+
+### Department: Customer Success & Accounts (Total Staff: 62)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for customer success & accounts operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20004: Wei Russo | Title: Cargo Claims Resolution Manager | Hub: Amsterdam Schiphol Logistics Hub (Netherlands) | Shift: 24/7 Operations On-Call Rotation | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: wei.russo@fleetharbor.com (Ext: x4004)
+  * EMP-20011: Ananya Marino | Title: Cargo Claims Resolution Manager | Hub: Sydney Mascot International Cargo (Australia) | Shift: Day Shift (06:00 - 14:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: ananya.marino@fleetharbor.com (Ext: x4011)
+  * EMP-20013: Lucia Verma | Title: Tracking Escalation & Incident Lead | Hub: Busan New Port Container Terminal (South Korea) | Shift: Swing Shift (14:00 - 22:30) | Cert: Standard Operations Certified | Contact: lucia.verma@fleetharbor.com (Ext: x4013)
+  * EMP-20014: Alexander Clark | Title: Tracking Escalation & Incident Lead | Hub: Busan New Port Container Terminal (South Korea) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: alexander.clark@fleetharbor.com (Ext: x4014)
+  * EMP-20024: Diego Romano | Title: Tracking Escalation & Incident Lead | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Standard Operations Certified | Contact: diego.romano@fleetharbor.com (Ext: x4024)
+  * EMP-20031: Naveen Anderson | Title: Cargo Claims Resolution Manager | Hub: Rotterdam Maasvlakte Terminal (Netherlands) | Shift: 24/7 Operations On-Call Rotation | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: naveen.anderson@fleetharbor.com (Ext: x4031)
+  * EMP-20044: Ava Schulz | Title: Cargo Claims Resolution Manager | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: ava.schulz@fleetharbor.com (Ext: x4044)
+  * EMP-20047: Charlotte Iyer | Title: Priority Customer Support Specialist | Hub: Shanghai Pudong Logistics Park (China) | Shift: 24/7 Operations On-Call Rotation | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: charlotte.iyer@fleetharbor.com (Ext: x4047)
+  * EMP-20072: Pooja Yamamoto | Title: Tracking Escalation & Incident Lead | Hub: Rotterdam Maasvlakte Terminal (Netherlands) | Shift: Day Shift (06:00 - 14:30) | Cert: TAPA Security Class-A Certified | Contact: pooja.yamamoto@fleetharbor.com (Ext: x4072)
+  * EMP-20073: Elena Wagner | Title: Tracking Escalation & Incident Lead | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: Day Shift (06:00 - 14:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: elena.wagner@fleetharbor.com (Ext: x4073)
+
+### Department: Customs & Trade Compliance (Total Staff: 44)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for customs & trade compliance operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20012: Rajesh Watanabe | Title: Senior Licensed Customs Broker | Hub: Sydney Mascot International Cargo (Australia) | Shift: 24/7 Operations On-Call Rotation | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: rajesh.watanabe@fleetharbor.com (Ext: x4012)
+  * EMP-20032: James Zhang | Title: Tariff & HS Classification Specialist | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: Swing Shift (14:00 - 22:30) | Cert: Standard Operations Certified | Contact: james.zhang@fleetharbor.com (Ext: x4032)
+  * EMP-20033: Katja Mukherjee | Title: Trade Compliance Auditor | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Swing Shift (14:00 - 22:30) | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: katja.mukherjee@fleetharbor.com (Ext: x4033)
+  * EMP-20056: Priya Wang | Title: Senior Licensed Customs Broker | Hub: Antwerp Port Container Terminal (Belgium) | Shift: Swing Shift (14:00 - 22:30) | Cert: Standard Operations Certified | Contact: priya.wang@fleetharbor.com (Ext: x4056)
+  * EMP-20058: Harper Davis | Title: Trade Compliance Auditor | Hub: Sydney Mascot International Cargo (Australia) | Shift: Swing Shift (14:00 - 22:30) | Cert: TAPA Security Class-A Certified | Contact: harper.davis@fleetharbor.com (Ext: x4058)
+  * EMP-20059: Andrew Moreau | Title: Export Control Specialist | Hub: Mumbai Air Cargo & JNPT Terminal (India) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: andrew.moreau@fleetharbor.com (Ext: x4059)
+  * EMP-20068: Lucia Mueller | Title: Cross-Border Regulatory Officer | Hub: Busan New Port Container Terminal (South Korea) | Shift: Day Shift (06:00 - 14:30) | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: lucia.mueller@fleetharbor.com (Ext: x4068)
+  * EMP-20090: Kenji Suzuki | Title: Trade Compliance Auditor | Hub: Antwerp Port Container Terminal (Belgium) | Shift: Swing Shift (14:00 - 22:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: kenji.suzuki@fleetharbor.com (Ext: x4090)
+  * EMP-20095: Amit Brown | Title: Senior Licensed Customs Broker | Hub: Shanghai Pudong Logistics Park (China) | Shift: Swing Shift (14:00 - 22:30) | Cert: Standard Operations Certified | Contact: amit.brown@fleetharbor.com (Ext: x4095)
+  * EMP-20120: Jackson Hoffmann | Title: Trade Compliance Auditor | Hub: Busan New Port Container Terminal (South Korea) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: jackson.hoffmann@fleetharbor.com (Ext: x4120)
+
+### Department: Dangerous Goods & Hazmat Safety (Total Staff: 69)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for dangerous goods & hazmat safety operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20006: Noah Kobayashi | Title: Hazmat Chemical Containment Specialist | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: 24/7 Operations On-Call Rotation | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: noah.kobayashi@fleetharbor.com (Ext: x4006)
+  * EMP-20048: Lucia Almeida | Title: IATA DGR Compliance Inspector | Hub: London Heathrow World Cargo Centre (UK) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: lucia.almeida@fleetharbor.com (Ext: x4048)
+  * EMP-20052: Ling Martinez | Title: Industrial Packaging Verification Officer | Hub: Amsterdam Schiphol Logistics Hub (Netherlands) | Shift: 24/7 Operations On-Call Rotation | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: ling.martinez@fleetharbor.com (Ext: x4052)
+  * EMP-20064: Mateo Bose | Title: Industrial Packaging Verification Officer | Hub: Chicago O'Hare Northeast Cargo Terminal (USA) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: mateo.bose@fleetharbor.com (Ext: x4064)
+  * EMP-20070: Lucia Verma | Title: Certified Dangerous Goods Safety Advisor (DGSA) | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Licensed Customs Broker (LCB) | Contact: lucia.verma1@fleetharbor.com (Ext: x4070)
+  * EMP-20080: Andrew Fischer | Title: Hazmat Chemical Containment Specialist | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Swing Shift (14:00 - 22:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: andrew.fischer@fleetharbor.com (Ext: x4080)
+  * EMP-20082: Isabella Ricci | Title: IATA DGR Compliance Inspector | Hub: Busan New Port Container Terminal (South Korea) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: isabella.ricci@fleetharbor.com (Ext: x4082)
+  * EMP-20086: William Oliveira | Title: Industrial Packaging Verification Officer | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: william.oliveira@fleetharbor.com (Ext: x4086)
+  * EMP-20107: Ananya Rossi | Title: IATA DGR Compliance Inspector | Hub: Mumbai Air Cargo & JNPT Terminal (India) | Shift: 24/7 Operations On-Call Rotation | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: ananya.rossi@fleetharbor.com (Ext: x4107)
+  * EMP-20124: Giulia Costa | Title: Hazmat Chemical Containment Specialist | Hub: Chicago O'Hare Northeast Cargo Terminal (USA) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: giulia.costa@fleetharbor.com (Ext: x4124)
+
+### Department: Fleet Engineering & Maintenance (Total Staff: 57)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for fleet engineering & maintenance operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20007: Valentina Fischer | Title: Automated Guided Vehicle (AGV) Systems Engineer | Hub: Dubai Logistics City Gateway (UAE) | Shift: 24/7 Operations On-Call Rotation | Cert: Certified Supply Chain Professional (CSCP) | Contact: valentina.fischer@fleetharbor.com (Ext: x4007)
+  * EMP-20015: Ava Santos | Title: Commercial Fleet Maintenance Supervisor | Hub: Sydney Mascot International Cargo (Australia) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: TAPA Security Class-A Certified | Contact: ava.santos@fleetharbor.com (Ext: x4015)
+  * EMP-20022: Ethan Bose | Title: Automated Guided Vehicle (AGV) Systems Engineer | Hub: Sydney Mascot International Cargo (Australia) | Shift: Day Shift (06:00 - 14:30) | Cert: Certified Supply Chain Professional (CSCP) | Contact: ethan.bose@fleetharbor.com (Ext: x4022)
+  * EMP-20037: Giulia Wilson | Title: Commercial Fleet Maintenance Supervisor | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Standard Operations Certified | Contact: giulia.wilson@fleetharbor.com (Ext: x4037)
+  * EMP-20053: Ji-woo Moreau | Title: Commercial Fleet Maintenance Supervisor | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: Day Shift (06:00 - 14:30) | Cert: TAPA Security Class-A Certified | Contact: jiwoo.moreau@fleetharbor.com (Ext: x4053)
+  * EMP-20063: Ha-eun Kulkarni | Title: Commercial Fleet Maintenance Supervisor | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: Swing Shift (14:00 - 22:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: haeun.kulkarni@fleetharbor.com (Ext: x4063)
+  * EMP-20066: Sunita Meyer | Title: Commercial Fleet Maintenance Supervisor | Hub: Antwerp Port Container Terminal (Belgium) | Shift: Swing Shift (14:00 - 22:30) | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: sunita.meyer@fleetharbor.com (Ext: x4066)
+  * EMP-20094: Oliver Roux | Title: Commercial Fleet Maintenance Supervisor | Hub: Chicago O'Hare Northeast Cargo Terminal (USA) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Standard Operations Certified | Contact: oliver.roux@fleetharbor.com (Ext: x4094)
+  * EMP-20111: Vikram Almeida | Title: Heavy Vehicle Telematics Technician | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Licensed Customs Broker (LCB) | Contact: vikram.almeida@fleetharbor.com (Ext: x4111)
+  * EMP-20122: Diego Martin | Title: Heavy Vehicle Telematics Technician | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: diego.martin@fleetharbor.com (Ext: x4122)
+
+### Department: Flight Operations & Airfreight (Total Staff: 58)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for flight operations & airfreight operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20001: Stella Davis | Title: Airfreight Capacity Planner | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Swing Shift (14:00 - 22:30) | Cert: Certified Supply Chain Professional (CSCP) | Contact: stella.davis@fleetharbor.com (Ext: x4001)
+  * EMP-20005: Lily Hoffmann | Title: Air Cargo Loadmaster | Hub: London Heathrow World Cargo Centre (UK) | Shift: Swing Shift (14:00 - 22:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: lily.hoffmann@fleetharbor.com (Ext: x4005)
+  * EMP-20020: Logan Bianchi | Title: Airfreight Capacity Planner | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: logan.bianchi@fleetharbor.com (Ext: x4020)
+  * EMP-20034: Harper Jones | Title: Charter Flight Operations Lead | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Swing Shift (14:00 - 22:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: harper.jones@fleetharbor.com (Ext: x4034)
+  * EMP-20055: Nora Verma | Title: Charter Flight Operations Lead | Hub: Busan New Port Container Terminal (South Korea) | Shift: Day Shift (06:00 - 14:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: nora.verma@fleetharbor.com (Ext: x4055)
+  * EMP-20067: Leah Oliveira | Title: Charter Flight Operations Lead | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Swing Shift (14:00 - 22:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: leah.oliveira@fleetharbor.com (Ext: x4067)
+  * EMP-20077: Harish Kulkarni | Title: Aviation Ramp Controller | Hub: Busan New Port Container Terminal (South Korea) | Shift: Swing Shift (14:00 - 22:30) | Cert: Standard Operations Certified | Contact: harish.kulkarni@fleetharbor.com (Ext: x4077)
+  * EMP-20091: Olivia Iyer | Title: Airfreight Capacity Planner | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: Day Shift (06:00 - 14:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: olivia.iyer@fleetharbor.com (Ext: x4091)
+  * EMP-20093: Rohan Moreau | Title: Aviation Ramp Controller | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: rohan.moreau@fleetharbor.com (Ext: x4093)
+  * EMP-20102: Hana Verma | Title: Airfreight Capacity Planner | Hub: Dubai Logistics City Gateway (UAE) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: hana.verma@fleetharbor.com (Ext: x4102)
+
+### Department: Last-Mile Express Courier Network (Total Staff: 47)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for last-mile express courier network operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20008: Lucas Williams | Title: Last-Mile Courier Dispatch Manager | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Licensed Customs Broker (LCB) | Contact: lucas.williams@fleetharbor.com (Ext: x4008)
+  * EMP-20018: Ling White | Title: Route Optimization Controller | Hub: London Heathrow World Cargo Centre (UK) | Shift: Swing Shift (14:00 - 22:30) | Cert: Licensed Customs Broker (LCB) | Contact: ling.white@fleetharbor.com (Ext: x4018)
+  * EMP-20025: Joseph Schulz | Title: Last-Mile Courier Dispatch Manager | Hub: Sydney Mascot International Cargo (Australia) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: joseph.schulz@fleetharbor.com (Ext: x4025)
+  * EMP-20035: Gabriel Lefebvre | Title: Last-Mile Courier Dispatch Manager | Hub: Busan New Port Container Terminal (South Korea) | Shift: Swing Shift (14:00 - 22:30) | Cert: TAPA Security Class-A Certified | Contact: gabriel.lefebvre@fleetharbor.com (Ext: x4035)
+  * EMP-20039: Evelyn Russo | Title: Route Optimization Controller | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: Day Shift (06:00 - 14:30) | Cert: Certified Supply Chain Professional (CSCP) | Contact: evelyn.russo@fleetharbor.com (Ext: x4039)
+  * EMP-20050: Ethan Roux | Title: Last-Mile Courier Dispatch Manager | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: Day Shift (06:00 - 14:30) | Cert: TAPA Security Class-A Certified | Contact: ethan.roux@fleetharbor.com (Ext: x4050)
+  * EMP-20078: Chen Souza | Title: Route Optimization Controller | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: Swing Shift (14:00 - 22:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: chen.souza@fleetharbor.com (Ext: x4078)
+  * EMP-20087: Stefan Anderson | Title: Route Optimization Controller | Hub: Shanghai Pudong Logistics Park (China) | Shift: Swing Shift (14:00 - 22:30) | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: stefan.anderson@fleetharbor.com (Ext: x4087)
+  * EMP-20101: David Greco | Title: Route Optimization Controller | Hub: Antwerp Port Container Terminal (Belgium) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: david.greco@fleetharbor.com (Ext: x4101)
+  * EMP-20112: Mateo Nair | Title: Last-Mile Courier Dispatch Manager | Hub: Singapore Changi Mega Cargo Hub (Singapore) | Shift: 24/7 Operations On-Call Rotation | Cert: Standard Operations Certified | Contact: mateo.nair@fleetharbor.com (Ext: x4112)
+
+### Department: Marine Logistics & Ocean Freight (Total Staff: 57)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for marine logistics & ocean freight operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20002: Marco Chowdhury | Title: Intermodal Rail Transfer Planner | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: 24/7 Operations On-Call Rotation | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: marco.chowdhury@fleetharbor.com (Ext: x4002)
+  * EMP-20003: Siddharth Jackson | Title: Port Terminal Liaison Officer | Hub: Mumbai Air Cargo & JNPT Terminal (India) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Certified Supply Chain Professional (CSCP) | Contact: siddharth.jackson@fleetharbor.com (Ext: x4003)
+  * EMP-20009: Michael Meyer | Title: Port Terminal Liaison Officer | Hub: Rotterdam Maasvlakte Terminal (Netherlands) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: michael.meyer@fleetharbor.com (Ext: x4009)
+  * EMP-20017: Jian Hoffmann | Title: Port Terminal Liaison Officer | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: 24/7 Operations On-Call Rotation | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: jian.hoffmann@fleetharbor.com (Ext: x4017)
+  * EMP-20026: Wei Meyer | Title: Reefer Technical Inspector | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: 24/7 Operations On-Call Rotation | Cert: Six Sigma Green Belt (Logistics Quality) | Contact: wei.meyer@fleetharbor.com (Ext: x4026)
+  * EMP-20040: Wei Dubois | Title: Intermodal Rail Transfer Planner | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Swing Shift (14:00 - 22:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: wei.dubois@fleetharbor.com (Ext: x4040)
+  * EMP-20042: Rohan Suzuki | Title: Container Vessel Stowage Coordinator | Hub: Amsterdam Schiphol Logistics Hub (Netherlands) | Shift: Day Shift (06:00 - 14:30) | Cert: Certified Supply Chain Professional (CSCP) | Contact: rohan.suzuki@fleetharbor.com (Ext: x4042)
+  * EMP-20043: Michael Kobayashi | Title: Reefer Technical Inspector | Hub: Rotterdam Maasvlakte Terminal (Netherlands) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: michael.kobayashi@fleetharbor.com (Ext: x4043)
+  * EMP-20051: Seo-jun Nakamura | Title: Intermodal Rail Transfer Planner | Hub: Chicago O'Hare Northeast Cargo Terminal (USA) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: seojun.nakamura@fleetharbor.com (Ext: x4051)
+  * EMP-20054: Oliver Sharma | Title: Reefer Technical Inspector | Hub: Amsterdam Schiphol Logistics Hub (Netherlands) | Shift: Day Shift (06:00 - 14:30) | Cert: Standard Operations Certified | Contact: oliver.sharma@fleetharbor.com (Ext: x4054)
+
+### Department: Terminal & Warehouse Operations (Total Staff: 57)
+- Primary Operational Mandate: End-to-end execution, oversight, and quality control for terminal & warehouse operations operations.
+- Key Active Specialists & Certified Personnel:
+  * EMP-20016: Yuki Colombo | Title: Inbound Dock Receiving Lead | Hub: Antwerp Port Container Terminal (Belgium) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: yuki.colombo@fleetharbor.com (Ext: x4016)
+  * EMP-20019: Noah Carvalho | Title: Container Yard Marshall | Hub: Mumbai Air Cargo & JNPT Terminal (India) | Shift: Day Shift (06:00 - 14:30) | Cert: Certified Forklift & MHE Safety Trainer | Contact: noah.carvalho@fleetharbor.com (Ext: x4019)
+  * EMP-20021: Kenji Watanabe | Title: Inbound Dock Receiving Lead | Hub: Tokyo Narita Air Cargo Center (Japan) | Shift: Night / Overnight Shift (22:00 - 06:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: kenji.watanabe@fleetharbor.com (Ext: x4021)
+  * EMP-20027: Ethan Souza | Title: Inbound Dock Receiving Lead | Hub: Los Angeles Long Beach Intermodal (USA) | Shift: 24/7 Operations On-Call Rotation | Cert: TAPA Security Class-A Certified | Contact: ethan.souza@fleetharbor.com (Ext: x4027)
+  * EMP-20028: Aditya Deshmukh | Title: Outbound Dispatch Coordinator | Hub: Dubai Logistics City Gateway (UAE) | Shift: 24/7 Operations On-Call Rotation | Cert: Licensed Customs Broker (LCB) | Contact: aditya.deshmukh@fleetharbor.com (Ext: x4028)
+  * EMP-20029: Ellie Romano | Title: Lead Forklift Equipment Operator | Hub: London Heathrow World Cargo Centre (UK) | Shift: Swing Shift (14:00 - 22:30) | Cert: TAPA Security Class-A Certified | Contact: ellie.romano@fleetharbor.com (Ext: x4029)
+  * EMP-20030: Marco Chen | Title: Warehouse Operations Supervisor | Hub: Chicago O'Hare Northeast Cargo Terminal (USA) | Shift: Day Shift (06:00 - 14:30) | Cert: IATA Dangerous Goods Regulations (DGR Cat 6) | Contact: marco.chen@fleetharbor.com (Ext: x4030)
+  * EMP-20038: Lukas Huang | Title: Warehouse Operations Supervisor | Hub: Frankfurt CargoCity South Hub (Germany) | Shift: Swing Shift (14:00 - 22:30) | Cert: ISO 9001 / ISO 14001 Quality Auditor | Contact: lukas.huang@fleetharbor.com (Ext: x4038)
+  * EMP-20046: Ava Nair | Title: Outbound Dispatch Coordinator | Hub: Dubai Logistics City Gateway (UAE) | Shift: 24/7 Operations On-Call Rotation | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: ava.nair@fleetharbor.com (Ext: x4046)
+  * EMP-20062: Michael Clark | Title: Outbound Dispatch Coordinator | Hub: London Heathrow World Cargo Centre (UK) | Shift: Swing Shift (14:00 - 22:30) | Cert: GDP Life Sciences & Pharma Certified (CC-POL-9921) | Contact: michael.clark@fleetharbor.com (Ext: x4062)
+
+## 3. Global Hub Staffing Directory
+Every global gateway maintains a dedicated operations desk reachable via VoIP extension and dispatch channel:
+- Dubai Logistics City Gateway (UAE): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Singapore Changi Mega Cargo Hub (Singapore): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Rotterdam Maasvlakte Terminal (Netherlands): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Frankfurt CargoCity South Hub (Germany): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- London Heathrow World Cargo Centre (UK): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Los Angeles Long Beach Intermodal (USA): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Shanghai Pudong Logistics Park (China): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Mumbai Air Cargo & JNPT Terminal (India): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Sydney Mascot International Cargo (Australia): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Chicago O'Hare Northeast Cargo Terminal (USA): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Tokyo Narita Air Cargo Center (Japan): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Hong Kong SuperTerminal 1 (Hong Kong): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Amsterdam Schiphol Logistics Hub (Netherlands): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Antwerp Port Container Terminal (Belgium): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+- Busan New Port Container Terminal (South Korea): Staffed 24/7 across Inbound, Outbound, Customs, and Cold-Chain desks.
+
+## 4. Certification Standards
+FleetHarbor personnel maintain rigorous international certifications:
+- Licensed Customs Broker (LCB): Mandatory for export/import declaration validation.
+- IATA Dangerous Goods Regulations (DGR Cat 6): Mandatory for hazmat cargo handling and lithium battery packaging.
+- GDP Life Sciences & Pharma (CC-POL-9921): Mandatory for temperature-controlled active container reefer maintenance.
+- Six Sigma Green Belt: Continuous improvement and freight claims mitigation.
+- TAPA Security Class-A: High-value asset handling and container seal inspection.
+
+## 5. Escalation & Contact Protocol
+For urgent shipment tracking, customs holds, or temperature excursion investigations, staff and customers can reach the command center at dispatch@fleetharbor.com or internal extensions x4001 through x4500.

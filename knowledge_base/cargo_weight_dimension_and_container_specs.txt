@@ -1,0 +1,81 @@
+# FleetHarbor Logistics Reference Manual: Cargo Weight, Dimensions & Container Specifications
+Document ID: DOC-CARGO-SPECS-2026
+Authoritative Standard: ISO 668, ISO 1496, IATA ULD Technical Manual, DOT Title 23 CFR 658
+
+### 1. Standard Ocean Shipping Container Specifications
+FleetHarbor ocean freight division operates standard ISO intermodal shipping containers compliant with International Organization for Standardization (ISO) guidelines. All shippers must adhere to maximum payload and gross mass ratings.
+
+| Container Model | Internal Dimensions (L × W × H) | Door Opening (W × H) | Tare Weight | Max Cargo Payload | Max Gross Mass (MGM) | Cubic Capacity |
+|---|---|---|---|---|---|---|
+| **20ft Standard Dry Container** | 5.90 m × 2.35 m × 2.39 m (19'4" × 7'8" × 7'10") | 2.34 m × 2.28 m (7'8" × 7'6") | 2,280 kg (5,026 lbs) | 28,200 kg (62,170 lbs) | 30,480 kg (67,200 lbs) | 33.2 m³ (1,172 cu ft) |
+| **40ft Standard Dry Container** | 12.03 m × 2.35 m × 2.39 m (39'5" × 7'8" × 7'10") | 2.34 m × 2.28 m (7'8" × 7'6") | 3,700 kg (8,157 lbs) | 28,800 kg (63,490 lbs) | 32,500 kg (71,650 lbs) | 67.7 m³ (2,390 cu ft) |
+| **40ft High Cube (HC) Container** | 12.03 m × 2.35 m × 2.70 m (39'5" × 7'8" × 8'10") | 2.34 m × 2.58 m (7'8" × 8'6") | 3,900 kg (8,598 lbs) | 28,600 kg (63,050 lbs) | 32,500 kg (71,650 lbs) | 76.4 m³ (2,698 cu ft) |
+| **45ft High Cube (HC) Container** | 13.56 m × 2.35 m × 2.70 m (44'6" × 7'8" × 8'10") | 2.34 m × 2.58 m (7'8" × 8'6") | 4,640 kg (10,230 lbs) | 27,860 kg (61,420 lbs) | 32,500 kg (71,650 lbs) | 86.0 m³ (3,037 cu ft) |
+| **20ft Refrigerated (Reefer)** | 5.44 m × 2.29 m × 2.27 m (17'10" × 7'6" × 7'5") | 2.29 m × 2.26 m (7'6" × 7'5") | 3,080 kg (6,790 lbs) | 27,400 kg (60,410 lbs) | 30,480 kg (67,200 lbs) | 28.3 m³ (999 cu ft) |
+| **40ft High Cube Refrigerated (Reefer)** | 11.58 m × 2.29 m × 2.54 m (38'0" × 7'6" × 8'4") | 2.29 m × 2.50 m (7'6" × 8'2") | 4,480 kg (9,880 lbs) | 29,520 kg (65,080 lbs) | 34,000 kg (74,960 lbs) | 67.3 m³ (2,377 cu ft) |
+| **20ft Open Top Container** | 5.89 m × 2.35 m × 2.35 m (19'4" × 7'8" × 7'8") | 2.34 m × 2.28 m (7'8" × 7'6") | 2,400 kg (5,290 lbs) | 28,080 kg (61,910 lbs) | 30,480 kg (67,200 lbs) | 32.5 m³ (1,148 cu ft) |
+| **40ft Flat Rack Container** | 12.06 m × 2.40 m × 1.95 m (39'7" × 7'10" × 6'5") | N/A (Collapsible ends) | 4,900 kg (10,800 lbs) | 40,100 kg (88,400 lbs) | 45,000 kg (99,200 lbs) | Open bed |
+
+*Verified Gross Mass (VGM) Rule:* In accordance with SOLAS (Safety of Life at Sea) Chapter VI, Regulation 2, every export ocean container must have a signed VGM declaration submitted at least 24 hours prior to vessel cutoff.
+
+### 2. Air Freight Cargo Limits, ULD Containers and Volumetric Rules
+Air freight cargo must comply with International Air Transport Association (IATA) aircraft weight and balance limits.
+
+- **Passenger Aircraft Lower Deck Restrictions:**
+  - Maximum height per package: 160 cm (63 inches).
+  - Maximum package weight for non-palletized cargo: 150 kg (330 lbs) per piece unless pre-arranged heavy-cargo loaders are deployed.
+  - Standard Lower Deck ULDs:
+    - **LD3 (AKE):** Base dimensions 156 cm × 153 cm (61.5" × 60.4"), height 163 cm (64"). Max gross weight: 1,588 kg (3,500 lbs). Internal volume: 4.3 m³ (152 cu ft).
+    - **LD7 / PMC Pallet:** Base 318 cm × 244 cm (125" × 96"). Max gross weight: 6,804 kg (15,000 lbs).
+
+- **Main Deck Dedicated Freighter Cargo Limits:**
+  - Maximum cargo height: Up to 300 cm (118 inches) for main deck Boeing 747-8F and 777F freighters.
+  - Single piece maximum weight: Up to 25,000 kg (55,000 lbs) subject to floor load limits (typically max 1,000 kg/m² or 200 lbs/sq ft without load spreaders).
+
+- **Volumetric Weight (Dimensional Weight) Calculation:**
+  Air freight charges are based on the greater of actual gross weight or volumetric weight.
+  - Metric Formula: Volumetric Weight (kg) = [Length (cm) × Width (cm) × Height (cm)] / 6000
+  - Imperial Formula: Volumetric Weight (lbs) = [Length (in) × Width (in) × Height (in)] / 139
+  - IATA Standard Conversion: 1 cubic meter (cbm) = 167 kg for air freight.
+
+### 3. Pallet Dimensions, Stacking Standards and Payload Capacities
+FleetHarbor standardizes on internationally certified wooden and composite pallets treated in accordance with ISPM 15 standards:
+
+- **Euro Pallet (EUR-1 / EPAL):**
+  - Dimensions: 1,200 mm × 800 mm × 144 mm (47.2" × 31.5" × 5.7").
+  - Tare Weight: 25 kg (55 lbs).
+  - Maximum Safe Working Payload: 1,500 kg (3,307 lbs) dynamic load, 4,000 kg (8,818 lbs) static load.
+  - Container Loading Capacity: A 20ft container accommodates 11 Euro pallets; a 40ft container accommodates 24 to 25 Euro pallets.
+  - Recommended Maximum Stack Height: 180 cm (including pallet base) for standard warehousing.
+
+- **Standard Industrial Pallet (ISO / US GMA Standard):**
+  - Dimensions: 1,200 mm × 1,000 mm × 162 mm (48" × 40" × 6.4").
+  - Tare Weight: ~22 to 28 kg.
+  - Maximum Safe Dynamic Working Load: 1,500 kg (3,307 lbs).
+  - Container Loading Capacity: A 20ft container accommodates 10 ISO pallets; a 40ft container accommodates 20 to 21 ISO pallets.
+
+### 4. Over-The-Road (OTR) Trucking and Road Freight Limits
+Road freight haulage operates under Federal Highway Administration (FHWA) and state Department of Transportation regulations:
+
+- **Standard 53ft Dry Van Truckload Limits:**
+  - Exterior Dimensions: Length 53ft (16.15 m), Width 102 in (2.6 m), Height 13ft 6in (4.11 m).
+  - Interior Usable Dimensions: Length 52ft 6in, Width 99 in, Height 110 in.
+  - Usable Cargo Volume: ~3,800 cubic feet (107.6 m³).
+  - Maximum Legal Cargo Weight: 44,000 to 45,000 lbs (19,958 to 20,412 kg).
+
+- **Legal Axle Weight Limits (US Interstate Standard):**
+  - Steer Axle: Maximum 12,000 lbs (5,443 kg).
+  - Drive Tandem Axles: Maximum 34,000 lbs (15,422 kg).
+  - Trailer Tandem Axles: Maximum 34,000 lbs (15,422 kg).
+  - Maximum Total Gross Vehicle Weight (GVW): 80,000 lbs (36,287 kg) without heavy-haul oversized permits.
+
+- **Oversize and Overweight (OOG / Heavy Haul) Requirements:**
+  - Oversize loads exceeding 102 inches in width, 13 feet 6 inches in height, or 80,000 lbs gross weight require state permits, escort pilot vehicles, and daylight transit restrictions.
+
+### 5. Express Courier and Small Parcel Dimensional Restrictions
+FleetHarbor Express parcel division enforces the following threshold limits for small package routing:
+
+- Maximum weight per single package: 70 kg (150 lbs).
+- Maximum package length: 274 cm (108 inches).
+- Maximum length plus girth: Length + 2 × (Width + Height) cannot exceed 400 cm (157 inches).
+- Packages weighing above 30 kg (66 lbs) or exceeding 120 cm on any single dimension incur Special Handling Surcharges (SHS) and mandatory team-lift labels.

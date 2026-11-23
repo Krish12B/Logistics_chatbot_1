@@ -160,6 +160,10 @@ def get_or_create_collection(
         ) from exc
 
 
+# Convenient alias
+get_chroma_collection = get_or_create_collection
+
+
 def delete_collection(name: Optional[str] = None) -> bool:
     """Delete a collection by name."""
     collection_name = name or config.CHROMA_COLLECTION_NAME

@@ -1,0 +1,65 @@
+# FleetHarbor Logistics • Customer Shipping Rules, Service Level Agreements & Terms of Carriage
+Document Reference: DOC-FLEET-CUST-2026
+Classification: Public / Customer Reference
+Last Revised: 20 November 2026
+
+## 1. General Carriage Terms & Scope
+These Terms of Carriage apply to all transport, warehousing, customs brokerage, and logistics services arranged by FleetHarbor Logistics. By booking a consignment or tendering cargo, the customer (shipper, consignee, or agent) agrees to these terms.
+
+## 2. Customer Account Tiers & Service Level Agreements (SLAs)
+FleetHarbor operates three account tiers:
+1. Enterprise Corporate:
+   - Dedicated Account Manager and 24/7 logistics desk.
+   - Guaranteed space allocation on core maritime and air lanes.
+   - Customized API integration for continuous tracking webhook feeds.
+   - Standard credit terms: Net 30 or Net 60 days.
+2. Healthcare & Pharma Priority:
+   - Mandatory GDP compliance under policy CC-POL-9921.
+   - Pre-conditioned reefer containers and continuous temperature alerts.
+   - Immediate 2-hour escalation on any sensor excursion.
+3. Standard Commercial:
+   - Access to FleetHarbor web portal and automated REST API.
+   - Standard transit schedules.
+   - Credit terms: Net 15 days or prepayment.
+
+## 3. Booking, Cancellation & Amendment Procedures
+- Booking Cut-Off Times:
+  - Air Freight: Minimum 8 hours prior to scheduled flight departure.
+  - Ocean FCL: Minimum 48 hours prior to vessel container port cut-off.
+  - Ocean LCL: Minimum 24 hours prior to CFS cargo delivery deadline.
+  - Road Linehaul: Minimum 4 hours prior to scheduled dock pickup.
+- Booking Cancellations:
+  - Cancellations received before cargo dispatch: No cancellation penalty.
+  - Cancellations received after container placement or vehicle dispatch: Subject to empty haulage charges ($150 - $450 depending on zone).
+- In-Transit Rerouting:
+  - Shippers may request in-transit destination diversion via the portal or API prior to cargo arrival at the final delivery hub.
+  - Rerouting administration fee: $75 plus difference in linehaul freight rates.
+
+## 4. Demurrage, Detention & Free Time Allowances
+To maintain equipment velocity and prevent port terminal congestion, strict free time rules apply:
+- Ocean Import FCL Free Time: 5 calendar days from vessel discharge.
+- Ocean Export FCL Free Time: 7 calendar days prior to vessel departure.
+- Demurrage Daily Rates (after free time expiry):
+  - Standard Dry Container (20ft / 40ft): $85 per day for Days 1-5; $150 per day thereafter.
+  - Reefer Temperature-Controlled Container: $180 per day for Days 1-3; $320 per day thereafter.
+- Air Cargo Free Time: 48 hours from airline airway bill availability notice. Free time excludes national customs gazetted holidays.
+
+## 5. Freight Loss, Damage & Claims Resolution
+- Notification Windows:
+  - Obvious External Damage: Must be noted on the Proof of Delivery (POD) at the time of delivery. Written notice within 3 calendar days.
+  - Concealed Damage (internal): Written claim notice within 14 calendar days of delivery.
+  - Non-Delivery / Loss: Written notice within 30 calendar days from the scheduled estimated delivery date.
+- Required Claim Documents:
+  - Formal claim statement specifying claimed amount.
+  - Copy of signed Waybill / Bill of Lading with delivery exception notation.
+  - Original commercial supplier invoice proving cargo cost value.
+  - Photographic evidence of outer packaging, inner packaging, and damaged merchandise.
+  - Certified salvage assessment or destruction certificate.
+- Settlement SLA: Complete claims evaluated and settled within 21 business days of file completion.
+
+## 6. Liability Limits & Marine Cargo Insurance
+- Standard Carrier Liability:
+  - Air Freight: 22 SDR (Special Drawing Rights) per kilogram pursuant to the Montreal Convention.
+  - Ocean Freight: 666.67 SDR per package or 2 SDR per kilogram under the Hague-Visby Rules.
+  - Domestic Road: $2.00 per pound unless higher declared value is contracted.
+- All-Risk Cargo Insurance: Shippers are strongly advised to purchase FleetHarbor All-Risk Marine Insurance, covering 110% of CIF invoice value against accidental physical loss or damage from external causes.

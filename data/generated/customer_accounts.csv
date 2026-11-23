@@ -1,0 +1,101 @@
+customer_id,company_name,tier,on_time_sla_target,specialty_requirements,payment_terms,credit_limit,dedicated_account_rep,contract_status
+CUST-50001,BioPharma Global Inc.,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$218,000",Rohan Iyer,Active / Verified
+CUST-50002,AeroDynamics Propulsion Ltd.,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$380,000",Charlotte Sato,Active / Verified
+CUST-50003,OmniRetail Direct E-Commerce,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$280,000",Mia Johnson,Active / Verified
+CUST-50004,Quantum Silicon Microdevices,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$581,000",Camila Williams,Active / Verified
+CUST-50005,Nordic Marine Harvest Co.,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$130,000",Ethan Wilson,Active / Verified
+CUST-50006,Apex Automotive Tier-1,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$251,000",Ethan Williams,Active / Verified
+CUST-50007,Horizon Renewable Solar Systems,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$614,000",Amelia Brown,Active / Verified
+CUST-50008,GeneVax Vaccines International,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$178,000",Deepa Williams,Active / Verified
+CUST-50009,TerraChemical Industrial Solutions,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$360,000",Harper Brown,Active / Verified
+CUST-50010,Alpine Precision Watches & Optics,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$596,000",Ananya Jones,Active / Verified
+CUST-50011,BioPharma Global Inc. 11,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$564,000",Deepa Miller,Active / Verified
+CUST-50012,AeroDynamics Propulsion Ltd. 12,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$222,000",William Williams,Active / Verified
+CUST-50013,OmniRetail Direct E-Commerce 13,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$644,000",Michael Jones,Active / Verified
+CUST-50014,Quantum Silicon Microdevices 14,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$225,000",Ananya Li,Active / Verified
+CUST-50015,Nordic Marine Harvest Co. 15,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$689,000",Michael Wang,Active / Verified
+CUST-50016,Apex Automotive Tier-1 16,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$669,000",Sophia Mukherjee,Active / Verified
+CUST-50017,Horizon Renewable Solar Systems 17,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$627,000",Ethan Zhang,Active / Verified
+CUST-50018,GeneVax Vaccines International 18,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$79,000",Vikram Moreau,Active / Verified
+CUST-50019,TerraChemical Industrial Solutions 19,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$96,000",Deepa Miller,Active / Verified
+CUST-50020,Alpine Precision Watches & Optics 20,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$640,000",Evelyn Moreau,Active / Verified
+CUST-50021,BioPharma Global Inc. 21,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$716,000",Charlotte Santos,Active / Verified
+CUST-50022,AeroDynamics Propulsion Ltd. 22,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$635,000",Liam Schmidt,Active / Verified
+CUST-50023,OmniRetail Direct E-Commerce 23,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$682,000",Ethan Williams,Active / Verified
+CUST-50024,Quantum Silicon Microdevices 24,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$81,000",Isabella Jones,Active / Verified
+CUST-50025,Nordic Marine Harvest Co. 25,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$692,000",Amelia Tanaka,Active / Verified
+CUST-50026,Apex Automotive Tier-1 26,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$346,000",Deepa Miller,Active / Verified
+CUST-50027,Horizon Renewable Solar Systems 27,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$359,000",Arjun Smith,Active / Verified
+CUST-50028,GeneVax Vaccines International 28,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$300,000",Ananya Mukherjee,Active / Verified
+CUST-50029,TerraChemical Industrial Solutions 29,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$465,000",Rahul Williams,Active / Verified
+CUST-50030,Alpine Precision Watches & Optics 30,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$514,000",Charlotte Iyer,Active / Verified
+CUST-50031,BioPharma Global Inc. 31,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$755,000",Siddharth Verma,Active / Verified
+CUST-50032,AeroDynamics Propulsion Ltd. 32,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$211,000",David Wang,Active / Verified
+CUST-50033,OmniRetail Direct E-Commerce 33,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$475,000",Arjun Smith,Active / Verified
+CUST-50034,Quantum Silicon Microdevices 34,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$525,000",Charlotte Santos,Active / Verified
+CUST-50035,Nordic Marine Harvest Co. 35,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$398,000",Joseph Johnson,Active / Verified
+CUST-50036,Apex Automotive Tier-1 36,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$197,000",Ananya Rossi,Active / Verified
+CUST-50037,Horizon Renewable Solar Systems 37,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$785,000",Ananya Rossi,Active / Verified
+CUST-50038,GeneVax Vaccines International 38,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$403,000",Evelyn Miller,Active / Verified
+CUST-50039,TerraChemical Industrial Solutions 39,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$183,000",Michael Jones,Active / Verified
+CUST-50040,Alpine Precision Watches & Optics 40,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$429,000",Yuki Moreau,Active / Verified
+CUST-50041,BioPharma Global Inc. 41,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$625,000",Ava Iyer,Active / Verified
+CUST-50042,AeroDynamics Propulsion Ltd. 42,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$376,000",Meera Dubois,Active / Verified
+CUST-50043,OmniRetail Direct E-Commerce 43,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$527,000",David Brown,Active / Verified
+CUST-50044,Quantum Silicon Microdevices 44,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$323,000",Pooja Santos,Active / Verified
+CUST-50045,Nordic Marine Harvest Co. 45,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$303,000",Priya Sharma,Active / Verified
+CUST-50046,Apex Automotive Tier-1 46,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$149,000",Michael Jones,Active / Verified
+CUST-50047,Horizon Renewable Solar Systems 47,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$347,000",Evelyn Wang,Active / Verified
+CUST-50048,GeneVax Vaccines International 48,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$680,000",Liam Schmidt,Active / Verified
+CUST-50049,TerraChemical Industrial Solutions 49,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$304,000",Rohan Iyer,Active / Verified
+CUST-50050,Alpine Precision Watches & Optics 50,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$385,000",Ethan Santos,Active / Verified
+CUST-50051,BioPharma Global Inc. 51,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$788,000",Ananya Rossi,Active / Verified
+CUST-50052,AeroDynamics Propulsion Ltd. 52,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$244,000",Michael Jones,Active / Verified
+CUST-50053,OmniRetail Direct E-Commerce 53,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$213,000",Isabella Jones,Active / Verified
+CUST-50054,Quantum Silicon Microdevices 54,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$577,000",Ananya Wang,Active / Verified
+CUST-50055,Nordic Marine Harvest Co. 55,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$560,000",Arjun Li,Active / Verified
+CUST-50056,Apex Automotive Tier-1 56,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$559,000",Mei Brown,Active / Verified
+CUST-50057,Horizon Renewable Solar Systems 57,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$142,000",Mei Williams,Active / Verified
+CUST-50058,GeneVax Vaccines International 58,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$567,000",Daniel Fischer,Active / Verified
+CUST-50059,TerraChemical Industrial Solutions 59,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$296,000",Ling Moreau,Active / Verified
+CUST-50060,Alpine Precision Watches & Optics 60,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$647,000",Alexander Sharma,Active / Verified
+CUST-50061,BioPharma Global Inc. 61,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$99,000",Michael Jones,Active / Verified
+CUST-50062,AeroDynamics Propulsion Ltd. 62,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$338,000",Isabella Jones,Active / Verified
+CUST-50063,OmniRetail Direct E-Commerce 63,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$661,000",Elena Iyer,Active / Verified
+CUST-50064,Quantum Silicon Microdevices 64,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$738,000",Harper Mukherjee,Active / Verified
+CUST-50065,Nordic Marine Harvest Co. 65,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$342,000",Kenji Wilson,Active / Verified
+CUST-50066,Apex Automotive Tier-1 66,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$58,000",Ava Iyer,Active / Verified
+CUST-50067,Horizon Renewable Solar Systems 67,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$491,000",Emma Sato,Active / Verified
+CUST-50068,GeneVax Vaccines International 68,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$320,000",Mateo Miller,Active / Verified
+CUST-50069,TerraChemical Industrial Solutions 69,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$424,000",Michael Jones,Active / Verified
+CUST-50070,Alpine Precision Watches & Optics 70,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$462,000",Mateo Mueller,Active / Verified
+CUST-50071,BioPharma Global Inc. 71,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$96,000",Evelyn Miller,Active / Verified
+CUST-50072,AeroDynamics Propulsion Ltd. 72,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$102,000",Arjun Fischer,Active / Verified
+CUST-50073,OmniRetail Direct E-Commerce 73,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$625,000",Andrew Schmidt,Active / Verified
+CUST-50074,Quantum Silicon Microdevices 74,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$421,000",Michael Li,Active / Verified
+CUST-50075,Nordic Marine Harvest Co. 75,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$345,000",Charlotte Iyer,Active / Verified
+CUST-50076,Apex Automotive Tier-1 76,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$445,000",Rahul Sato,Active / Verified
+CUST-50077,Horizon Renewable Solar Systems 77,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$511,000",Michael Jones,Active / Verified
+CUST-50078,GeneVax Vaccines International 78,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$613,000",Amelia Brown,Active / Verified
+CUST-50079,TerraChemical Industrial Solutions 79,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$688,000",Ananya Mukherjee,Active / Verified
+CUST-50080,Alpine Precision Watches & Optics 80,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$675,000",David Brown,Active / Verified
+CUST-50081,BioPharma Global Inc. 81,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$181,000",Deepa Brown,Active / Verified
+CUST-50082,AeroDynamics Propulsion Ltd. 82,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$453,000",Rohan Anderson,Active / Verified
+CUST-50083,OmniRetail Direct E-Commerce 83,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$397,000",Wei Johnson,Active / Verified
+CUST-50084,Quantum Silicon Microdevices 84,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$424,000",Meera Dubois,Active / Verified
+CUST-50085,Nordic Marine Harvest Co. 85,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$197,000",Liam Wilson,Active / Verified
+CUST-50086,Apex Automotive Tier-1 86,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$666,000",Yuki Moreau,Active / Verified
+CUST-50087,Horizon Renewable Solar Systems 87,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$461,000",Rahul Sato,Active / Verified
+CUST-50088,GeneVax Vaccines International 88,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$91,000",Ethan Zhang,Active / Verified
+CUST-50089,TerraChemical Industrial Solutions 89,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$89,000",Emma Sato,Active / Verified
+CUST-50090,Alpine Precision Watches & Optics 90,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$780,000",Kenji Mueller,Active / Verified
+CUST-50091,BioPharma Global Inc. 91,Healthcare Priority,99.8%,CC-POL-9921 Cold Chain,Net 45,"$535,000",Evelyn Brown,Active / Verified
+CUST-50092,AeroDynamics Propulsion Ltd. 92,Enterprise Corporate,99.5%,Charter & AOG Urgent,Net 30,"$517,000",Michael Jones,Active / Verified
+CUST-50093,OmniRetail Direct E-Commerce 93,E-Commerce Premier,98.9%,Daily Cross-Docking,Net 15,"$670,000",Yuki Moreau,Active / Verified
+CUST-50094,Quantum Silicon Microdevices 94,Enterprise Corporate,99.7%,Temperature & Shock Monitored,Net 30,"$193,000",Jian Verma,Active / Verified
+CUST-50095,Nordic Marine Harvest Co. 95,Perishable Reefer Priority,99.2%,Reefer Maritime & Cold Storage,Net 30,"$677,000",Ananya Rossi,Active / Verified
+CUST-50096,Apex Automotive Tier-1 96,Enterprise Corporate,99.4%,Just-In-Time Assembly Feed,Net 45,"$216,000",Mei Williams,Active / Verified
+CUST-50097,Horizon Renewable Solar Systems 97,Standard Commercial,98.0%,Oversized Flat Rack Cargo,Net 30,"$681,000",Amelia Fischer,Active / Verified
+CUST-50098,GeneVax Vaccines International 98,Healthcare Priority,99.9%,Cryogenic Dry Ice (-70°C),Net 60,"$356,000",William Williams,Active / Verified
+CUST-50099,TerraChemical Industrial Solutions 99,Enterprise Corporate,99.1%,Class 3/8 Hazmat Certified,Net 30,"$394,000",Rahul Sato,Active / Verified
+CUST-50100,Alpine Precision Watches & Optics 100,High-Value Secured,99.9%,Armored Escort & Tamper Seal,Net 15,"$571,000",Kenji Wilson,Active / Verified

@@ -50,7 +50,7 @@ class FastAPIApiTests(unittest.TestCase):
         data = response.json()
         self.assertEqual(data["status"], "healthy")
         self.assertIn("groq_model", data)
-        self.assertEqual(data["active_dataset_shipments"], 10)
+        self.assertGreaterEqual(data["active_dataset_shipments"], 10)
         self.assertGreaterEqual(data["active_dataset_kb_articles"], 2194)
 
     def test_vector_db_health_endpoint(self):

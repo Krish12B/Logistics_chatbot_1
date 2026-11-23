@@ -1,0 +1,40 @@
+# FleetHarbor Logistics • International Customs Clearance, Tariffs & Cross-Border Compliance Guide
+Document Reference: DOC-FLEET-CUSTM-2026
+Classification: Public / Compliance Advisory
+Last Revised: 20 November 2026
+
+## 1. Statutory International Clearance Documentation
+Every cross-border commercial shipment processed by FleetHarbor Customs Brokerage must be accompanied by accurate documentation:
+1. Commercial Invoice:
+   - Full legal names and addresses of Seller (Exporter) and Buyer (Importer).
+   - Detailed product description (generic names like "parts" or "samples" are legally rejected).
+   - 6-digit to 10-digit Harmonized System (HS) Tariff Code.
+   - Declared unit value, total invoice value, and commercial trade currency (USD, EUR, GBP, etc.).
+   - Applicable Incoterms 2020 rules (e.g. FOB Mumbai, CIF Rotterdam, DDP London).
+   - True Country of Origin for each line item.
+2. Packing List:
+   - Exact itemization of packages, box dimensions, gross weight, net weight, and packaging type.
+   - Identification of package marks, numbers, and container seal IDs.
+3. Transport Document:
+   - Original Ocean Bill of Lading (OBL), Express Sea Waybill, or Master Air Waybill (MAWB).
+4. Preferential Certificate of Origin:
+   - When claiming duty reduction under bilateral or multilateral Free Trade Agreements (e.g. USMCA, EU-UK TCA, ASEAN FTA).
+
+## 2. Global Customs Inspection Lanes & Procedures
+Customs authorities across the globe categorize consignments into three processing channels:
+- Green Channel (Immediate Clearance): Automated electronic manifest assessment with no physical inspection. Release issued within 1-4 hours of vessel/flight arrival.
+- Yellow Channel (Documentary Audit): Customs officer audits valuation, HS classification, licenses, or origin certificates. Clearance turnaround: 12-24 hours.
+- Red Channel (Physical & X-Ray Examination): Container or cargo is transferred to customs exam station for container destuffing, non-intrusive imaging, and physical commodity sampling. Clearance turnaround: 48-72 hours.
+
+## 3. Resolving Customs Holds & Exception Management
+When a shipment is marked "On Hold - Customs", FleetHarbor's Automated Customs Interface flags the specific hold code:
+- HOLD-DOC: Documentation Discrepancy. Resolution: Customer must provide amended commercial invoice or packing list within 24 hours.
+- HOLD-VAL: Valuation Review. Resolution: Importer must provide commercial purchase order, manufacturer payment proof, or catalog price verification.
+- HOLD-PGA: Partner Government Agency Review (e.g. US FDA, EU Health Authority, UK DEFRA, Indian FSSAI). Resolution: Specialized product registration filings, laboratory batch certificates, or import permit validation.
+- HOLD-PHYS: Physical Customs Inspection. Resolution: FleetHarbor customs runner attends examination station to oversee cargo unpacking and repacking.
+
+## 4. Key Regional Customs Frameworks
+- United States (US CBP): ACE automated portal, ISF (10+2) filing required 24 hours prior to ocean loading, Section 321 de minimis limit ($800).
+- European Union: UCC framework, Import Control System 2 (ICS2) safety and security filing, IOSS for e-commerce imports < €150.
+- United Kingdom (HMRC): Customs Declaration Service (CDS), GVMS (Goods Vehicle Movement Service) for cross-Channel roll-on/roll-off freight.
+- India (CBIC / ICEGATE): Mandatory Bill of Entry filing, IGST valuation, faceless assessment processing.

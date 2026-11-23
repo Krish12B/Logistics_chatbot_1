@@ -1,0 +1,67 @@
+# FleetHarbor Logistics • Comprehensive Company Profile & Global Services Manual
+Document Reference: DOC-FLEET-CO-2026
+Classification: Public / Customer & Employee Reference
+Last Revised: 20 November 2026
+
+## 1. Executive Summary & Company History
+FleetHarbor AI Logistics (operating globally as FleetHarbor Maritime & Freight Inc.) is a premier multi-modal third-party logistics (3PL) and supply chain technology carrier founded in 2011. Operating dual corporate headquarters in Singapore (Asia-Pacific Operations) and Rotterdam (European & Transatlantic Operations), FleetHarbor connects over 140 nations through 280 strategic logistics facilities, 45 automated regional sorting hubs, and a unified digital freight platform.
+
+Our corporate mission is to deliver zero-defect logistics intelligence, connecting shippers, carriers, customs authorities, and end-consignees with complete end-to-end transparency, audited temperature control, and automated clearance workflows.
+
+## 2. Core Service Offerings & Transport Modes
+FleetHarbor provides six core logistics service channels:
+
+### A. Ocean Freight Services (FCL & LCL)
+- Full Container Load (FCL): Direct maritime shipping using standard 20ft, 40ft, 40ft High Cube, flat rack, and open-top containers across major carrier alliances.
+- Less than Container Load (LCL): Consolidated weekly groupage sailings between major global trade lanes with guaranteed container stripping at destination container freight stations (CFS).
+- Reefer Maritime Transport: Active temperature-controlled container transport for agricultural and pharmaceutical consignments with 24/7 telematics monitoring.
+
+### B. Global Air Freight & Express Cargo
+- FleetHarbor Air Priority (24-48 Hours): Guaranteed space on scheduled widebody flights with priority apron transfer and express customs processing.
+- Standard Air Freight (3-5 Business Days): Cost-effective consolidated air cargo for high-density, general industrial freight.
+- Air Charter Services: Dedicated full-charter Boeing 777F and 747-8F freighters for oversized project cargo, humanitarian emergencies, and urgent automotive factory-line disruptions.
+
+### C. Road Linehaul & Intermodal Rail
+- Domestic & Cross-Border Linehaul: Modern fleet of Euro-6 and Tier-4 compliant semi-trucks, double-drop trailers, and insulated box-trailers.
+- Intermodal Rail Corridors: High-efficiency rail transport connecting inland container depots (ICDs) directly to deep-water maritime ports in North America, Europe, and India.
+- Last-Mile Express: Dedicated courier fleet for business delivery with photographic Proof of Delivery (POD) and electronic signature capture.
+
+### D. Cold-Chain Life Sciences & Healthcare Logistics
+- GDP-certified pharmaceutical storage and transport operating under policy code CC-POL-9921.
+- Validated temperature regimes: Cryogenic/Dry Ice (-70°C), Deep Frozen (-20°C), Refrigerated (2°C to 8°C), and Controlled Room Temperature (15°C to 25°C).
+- Real-time IoT continuous data logging with cellular, satellite, and GPS position telemetry.
+
+### E. Customs Brokerage & Trade Compliance Advisory
+- Dedicated licensed in-house customs brokers operating across 60+ global customs jurisdictions.
+- Direct automated data interchange with US CBP (ACE), EU Customs (ICS2), UK HMRC (CDS), and Indian Customs (ICEGATE).
+- Tariff classification (HS codes), binding tariff rulings, and trade compliance audits.
+
+### F. Warehousing, 3PL Fulfillment & Value-Added Services
+- Over 12 million square feet of Class-A warehousing across North America, Europe, Asia, and the Middle East.
+- Capabilities include bonded warehousing, pick-and-pack fulfillment, kitting, cross-docking, and return logistics (reverse supply chain).
+
+## 3. Global Infrastructure & Primary Gateway Hubs
+FleetHarbor operates primary gateway facilities at:
+- Dubai Logistics City Hub (UAE): Transshipment crossroads connecting Europe, Africa, and East Asia.
+- Singapore Changi Airfreight Centre (Singapore): Southeast Asian pharma and high-tech electronics hub.
+- Rotterdam Maasvlakte Gateway (Netherlands): Deep-water maritime port and European intermodal rail terminal.
+- Frankfurt CargoCity South (Germany): Central European air freight consolidation and cold-storage center.
+- London Heathrow Cargo Centre (UK): Air cargo gateway for transatlantic and Asian freight.
+- Los Angeles Long Beach Intermodal Terminal (USA): Transpacific maritime gateway to North American rail networks.
+- Shanghai Pudong Logistics Park (China): East Asian manufacturing export consolidation center.
+- Mumbai Air Cargo Complex & JNPT Port (India): South Asian industrial and pharmaceutical export hub.
+- Sydney Mascot Cargo Depot (Australia): Australasian distribution center.
+
+## 4. Sustainability & Green Logistics Commitment
+FleetHarbor is pledged to achieve net-zero carbon operations by 2040:
+- Sustainable Aviation Fuel (SAF) partnership covering 15% of annual air freight routes.
+- Electric and hydrogen fuel cell last-mile delivery fleet deployed in 30 major urban centers.
+- Carbon offset tracking and verified emissions reporting provided free of charge on all commercial invoices.
+
+## 5. Contact & Support Escalation Directory
+- Global Customer Service: support@fleetharbor.com (24/7/365 coverage)
+- Operations Escalation Hotline: +1 (800) 555-HARBOR / +44 20 7946 0991
+- Customs Emergency Desk: customs-clearing@fleetharbor.com
+- Pharma & Cold-Chain Operations: pharma-care@fleetharbor.com
+- Corporate Headquarters Singapore: 12 Marina Boulevard, Marina Bay Financial Centre, Singapore 018982
+- European Headquarters Rotterdam: Wilhelminakade 179, 3072 AP Rotterdam, Netherlands

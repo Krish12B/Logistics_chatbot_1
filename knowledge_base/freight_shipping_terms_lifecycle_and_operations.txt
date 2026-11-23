@@ -1,0 +1,79 @@
+# FleetHarbor Logistics Reference Manual: Freight Lifecycle, Shipping Terms & Operational SOP
+Document ID: DOC-LIFECYCLE-TERMS-2026
+Authoritative Standard: Incoterms 2020 (ICC), IATA Cargo Services Conference, FIATA Model Rules
+
+### 1. Complete End-to-End Shipment Lifecycle
+The standard shipment lifecycle across the FleetHarbor global freight forwarding network comprises six sequential, audited stages:
+
+- **Stage 1 – Booking & Order Creation:**
+  - The shipper or consignee books freight via EDI, API, or FleetHarbor portal.
+  - Mandatory shipping documentation generated: Master Bill of Lading (Ocean) or Master Air Waybill (Air), Commercial Invoice, and Packing List.
+  - Unique tracking number (e.g., `SHP-10001` series) and barcode labels assigned to packages.
+
+- **Stage 2 – Inbound Pickup & Hub Consolidation:**
+  - FleetHarbor local dispatch carrier collects freight from shipper origin facility.
+  - Cargo arrives at origin cross-dock hub for dimensional weight verification, barcode scan, and palletization.
+  - Status updates to `In Transit` with origin departure milestone timestamped.
+
+- **Stage 3 – Export Clearance & Security Screening:**
+  - Export customs documentation filed electronically with national customs authorities.
+  - Mandatory security screening: X-ray scanning and dangerous goods compliance verification.
+  - Cargo loaded into intermodal containers (FCL/LCL) or aircraft Unit Load Devices (ULD).
+
+- **Stage 4 – Linehaul Transit:**
+  - Primary multi-modal movement begins across ocean lanes, international air routes, or interstate trucking corridors.
+  - Active satellite GPS tracking and milestone telemetry published to the FleetHarbor tracking engine.
+  - If unexpected severe weather or port congestion arises, the shipment status is marked `Delayed` with root-cause reason recorded.
+
+- **Stage 5 – Gateway Arrival & Import Customs Clearance:**
+  - Vessel berths at seaport or aircraft touches down at destination airport gateway.
+  - Import customs declarations submitted to border protection authorities. Duties and applicable tariffs calculated.
+  - If inspection is requested by customs authorities, status updates to `On Hold - Customs` until release order is issued.
+
+- **Stage 6 – Out for Delivery & Proof of Delivery (POD):**
+  - Cargo is de-consolidated and transferred to the destination last-mile fulfillment hub.
+  - Dispatched onto the local delivery courier van with status updated to `Out for Delivery`.
+  - Delivery executive delivers cargo to consignee address and obtains electronic Proof of Delivery (e-POD) with signature, timestamp, and package integrity sign-off. Status updates to `Delivered`.
+
+### 2. Status Definitions & Operational Meanings
+- **In Transit:** The shipment has departed the origin facility and is moving through carrier linehaul networks toward the next transit hub or destination port.
+- **Out for Delivery:** The shipment has arrived at the destination local facility, has been sorted onto the delivery route, and is currently onboard the courier vehicle for physical delivery today during standard operational hours.
+- **On Hold - Customs:** Shipment movement is paused at the international border or port terminal pending regulatory inspection, duty payment, or missing commercial documentation.
+- **Delayed:** An operational disruption (such as vessel mechanical issues, severe weather, or highway congestion) has caused transit time to extend beyond the initial estimated delivery date.
+- **Delivered:** The shipment has been physically received and signed for at the designated delivery address by the authorized consignee.
+
+### 3. Incoterms 2020 Definitions: FOB vs CIF
+Incoterms define the legal division of costs, risks, and responsibilities between buyers and sellers:
+
+- **FOB (Free On Board):**
+  - Seller responsibility ends once goods are safely loaded over the ship's rail at the designated port of shipment.
+  - Buyer pays: Main ocean freight carriage, marine insurance, destination terminal handling charges (DTHC), import duties, and final inland delivery.
+  - Risk transfer: Transfers from seller to buyer as soon as the cargo is loaded on board the vessel.
+
+- **CIF (Cost, Insurance, and Freight):**
+  - Seller pays: Inland transport to origin port, export clearance, ocean freight shipping costs, and minimum marine insurance coverage (Institute Cargo Clauses C) to the destination port.
+  - Buyer pays: Import customs clearance, import tariffs and taxes, port destination charges, and final delivery to buyer warehouse.
+  - Risk transfer: Note that while seller pays freight to destination, risk of loss transfers to the buyer once cargo is loaded on board the vessel at origin.
+
+### 4. Demurrage vs Detention vs Port Storage Fees
+- **Demurrage:** A penalty fee charged per day by ocean carriers or port terminals when an imported container remains full inside the marine terminal beyond the contractually agreed free time (typically 4 to 7 calendar days).
+- **Detention (Per Diem):** A daily fee charged when an empty or loaded container is held outside the port or rail terminal beyond the permitted free return window (typically 5 to 10 days).
+- **Port Storage Fees:** Terminal operator fees assessed for physical ground space occupancy of containers inside the port yard.
+
+### 5. Proof of Delivery (POD) Standards
+- FleetHarbor requires electronic Proof of Delivery (e-POD) on all commercial and residential freight handovers.
+- A legally compliant POD record must include:
+  1. Consignee full name and legible digital signature.
+  2. Exact delivery date, hour, minute, and GPS coordinate stamp.
+  3. Package piece count and physical carton condition verification.
+  4. Exception annotations (if visible outer packaging damage or shortage exists).
+- Electronic PODs are archived in the FleetHarbor digital repository and accessible via shipment tracking lookup within 15 minutes of completion.
+
+### 6. Air Freight vs Ocean Freight Transit Times & Economics
+- **Air Freight:**
+  - Typical transit time: 1 to 5 business days globally.
+  - Cost factor: 4x to 6x higher than ocean freight; billed on dimensional or actual weight (1:6000 ratio).
+  - Best suited for: High-value, perishable, pharmaceutical cold-chain, and urgent time-critical consignments.
+- **Ocean Freight:**
+  - Typical transit time: 15 to 45 calendar days depending on maritime lane and port congestion.
+  - Cost factor: Highly cost-effective for bulk, heavy cargo, machinery, and containerized commodities (FCL/LCL).

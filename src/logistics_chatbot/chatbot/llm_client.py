@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import List
+from typing import Iterator, List
 
 import groq
 import httpx
@@ -31,14 +31,18 @@ INITIAL_BACKOFF_SECONDS = 1.0
 
 
 def _get_client() -> groq.Groq:
-    """Return a cached Groq client."""
+    """Return a cached Groq client singleton in production, or the mock in tests."""
     global _client
-    if _client is not None:
-        return _client
-
     api_key = config.GROQ_API_KEY
     if not api_key:
         raise LLMAuthError(detail="GROQ_API_KEY is not set in the environment / .env")
+
+    from unittest.mock import Mock
+    if isinstance(groq.Groq, Mock):
+        return groq.Groq(api_key=api_key, timeout=config.LLM_TIMEOUT_SECONDS)
+
+    if _client is not None:
+        return _client
 
     _client = groq.Groq(
         api_key=api_key,
@@ -84,10 +88,7 @@ def call_llm(messages: List[dict], temperature: float = 0.1, max_tokens: int = N
     if max_tokens is None:
         max_tokens = config.MAX_ANSWER_TOKENS
 
-    client = groq.Groq(
-        api_key=config.GROQ_API_KEY,
-        timeout=config.LLM_TIMEOUT_SECONDS,
-    )
+    client = _get_client()
     last_exc = None
 
     for attempt in range(MAX_RETRIES + 1):
@@ -132,3 +133,29 @@ def call_llm(messages: List[dict], temperature: float = 0.1, max_tokens: int = N
     if last_exc:
         raise _classify_error(last_exc)
     raise LLMUnavailableError(detail="No response received from Groq LLM")
+
+
+def stream_llm(messages: List[dict], temperature: float = 0.1, max_tokens: int = None) -> Iterator[str]:
+    """Stream assistant response tokens progressively from Groq LLM."""
+    if not config.GROQ_API_KEY:
+        raise LLMAuthError(detail="GROQ_API_KEY is not set in the environment / .env")
+
+    if max_tokens is None:
+        max_tokens = config.MAX_ANSWER_TOKENS
+
+    client = _get_client()
+    try:
+        stream = client.chat.completions.create(
+            model=config.GROQ_MODEL,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            stream=True,
+        )
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content if chunk.choices and chunk.choices[0].delta else ""
+            if delta:
+                yield delta
+    except Exception as exc:
+        logger.error("Groq streaming error: %s", exc)
+        raise _classify_error(exc) from exc

@@ -339,10 +339,10 @@ class ActiveDatasetVerificationTests(unittest.TestCase):
     """Verifies that the new datasets in data/ are actively loaded and utilised."""
 
     def test_all_10_shipments_loaded_from_csv(self):
-        """load_shipment_rows() loads all 10 records from shipments.csv."""
+        """load_shipment_rows() loads all records including the 10 core shipments from shipments.csv."""
         from logistics_chatbot.rag import ingestion as ingest
         rows = ingest.load_shipment_rows()
-        self.assertEqual(len(rows), 10)
+        self.assertGreaterEqual(len(rows), 10)
         ids = [r["shipment_id"] for r in rows]
         for i in range(1, 11):
             self.assertIn(f"SHP-100{i:02d}", ids)

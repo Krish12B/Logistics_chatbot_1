@@ -1,0 +1,33 @@
+# FleetHarbor Logistics • Dangerous Goods, Hazardous Materials & Industrial Packaging Standards
+Document Reference: DOC-FLEET-HAZ-2026
+Classification: Dangerous Goods Compliance Reference
+Last Revised: 20 November 2026
+
+## 1. Regulatory Authority & Dangerous Goods Classes
+Transport of dangerous goods is conducted under strict adherence to IATA Dangerous Goods Regulations (DGR) for air transport, the International Maritime Dangerous Goods (IMDG) Code for ocean freight, and ADR regulations for European road transit.
+
+FleetHarbor accepts and handles Dangerous Goods in Classes 2 through 9:
+- Class 2: Gases (Flammable, Non-Flammable, Toxic - e.g. compressed nitrogen, argon, propane).
+- Class 3: Flammable Liquids (e.g. paints, solvents, adhesives, ethanol solutions).
+- Class 4: Flammable Solids, Spontaneously Combustible & Dangerous When Wet substances.
+- Class 5: Oxidizing Substances (Class 5.1) and Organic Peroxides (Class 5.2).
+- Class 6: Toxic Substances (Class 6.1) and Infectious Substances (Class 6.2 - UN2814/UN2900).
+- Class 8: Corrosive Substances (Acids and Alkalis - UN1789, UN1824).
+- Class 9: Miscellaneous Dangerous Goods (including lithium batteries UN3480, UN3481, UN3090, UN3091, environmentally hazardous substances, dry ice UN1845).
+Note: Class 1 Explosives and Class 7 Radioactive Materials are subject to specialized government permitting and restricted commercial charter.
+
+## 2. Lithium Battery Transport Requirements
+Lithium-ion and lithium-metal batteries represent the highest-volume regulated commodity in modern supply chains:
+- State of Charge (SoC) Limit: Lithium-ion batteries (UN3480) shipped as standalone cargo via air must be tendered at a State of Charge not exceeding 30% of rated capacity.
+- Cargo Aircraft Only (CAO): Standalone lithium batteries (UN3480 / UN3090) are strictly forbidden on passenger aircraft and must carry the CAO orange diamond label.
+- UN Testing Requirements: All battery types must have successfully completed UN Manual of Tests and Criteria Part III, Subsection 38.3 (UN 38.3 test summary report required prior to booking).
+
+## 3. UN-Certified Packaging & Marking Requirements
+- Packaging Performance Standards: Dangerous goods must be packed in UN-certified packaging displaying official UN specification codes (e.g. `UN 4G/Y145/S/26/USA/...`).
+- Outer Markings:
+  - Applicable Hazard Diamond Warning Labels (minimum 100mm x 100mm).
+  - Proper Shipping Name (PSN) in English.
+  - UN Identification Number (e.g. "UN 1263 PAINT").
+  - Shipper and Consignee contact details.
+  - Two Package Orientation "This Way Up" red arrows on opposite vertical faces.
+- Shipper's Declaration for Dangerous Goods (DGD): Must be completed and signed by an IATA/IMDG certified dangerous goods specialist.

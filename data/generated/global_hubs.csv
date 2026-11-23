@@ -1,0 +1,11 @@
+facility_name,hub_code,city_country,primary_transport_mode,storage_capacity_sqft,certifications,operations_desk_phone,status
+Dubai Logistics City Gateway,DXB-HUB-01,"Dubai, UAE",Air & Ocean Transshipment,450000,"GDP Pharma, IATA CEIV, Free Trade Zone",+971 4 800 4272,Operational 24/7
+Singapore Changi Mega Cargo Hub,SIN-HUB-02,Singapore,Air Cargo & Life Sciences,380000,"GDP Pharma Certified, Halal Logistics, TAPA Class A",+65 6542 8899,Operational 24/7
+Rotterdam Maasvlakte Terminal,RTM-HUB-03,"Rotterdam, Netherlands",Maritime Container & Intermodal Rail,850000,"Automated Guided Vehicles, Authorized Economic Operator (AEO)",+31 10 252 0000,Operational 24/7
+Frankfurt CargoCity South Hub,FRA-HUB-04,"Frankfurt, Germany",Airfreight & European Distribution,520000,"IATA CEIV Pharma, Temperature Controlled -20°C to +25°C",+49 69 690 0,Operational 24/7
+London Heathrow World Cargo Centre,LHR-HUB-05,"London, UK",Air Cargo & Transatlantic Linehaul,290000,"AEO Certified, Bonded Customs Warehouse, Courier Express",+44 20 8759 7700,Operational 24/7
+Los Angeles Long Beach Intermodal,LAX-HUB-06,"Los Angeles, USA",Transpacific Ocean & BNSF Rail,920000,"C-TPAT Tier 3, Container Freight Station, Heavy-Lift Crane",+1 310 555 0199,Operational 24/7
+Shanghai Pudong Logistics Park,PVG-HUB-07,"Shanghai, China",Air & Ocean Export Consolidation,680000,"China Customs Class AA, High-Tech Electronics Cleanroom",+86 21 6834 0000,Operational 24/7
+Mumbai Air Cargo & JNPT Terminal,BOM-HUB-08,"Mumbai, India",Air Cargo & Port Transshipment,410000,"Pharma Cold Chain, ICEGATE EDI, Bonded Zone",+91 22 2682 9000,Operational 24/7
+Sydney Mascot International Cargo,SYD-HUB-09,"Sydney, Australia",Air Cargo & Domestic Express Linehaul,260000,"DAFF Biosecurity Certified, Dangerous Goods Storage",+61 2 9667 9111,Operational 24/7
+Chicago O'Hare Northeast Cargo Terminal,ORD-HUB-10,"Chicago, USA",Midwest Intermodal Rail & Air Cargo,490000,"Foreign Trade Zone #22, Cold Chain Vaccine Hub",+1 773 686 2200,Operational 24/7
