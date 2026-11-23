@@ -217,6 +217,48 @@ def classify_logistics_query(
                 preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.GENERAL_CONVERSATION],
             )
 
+    # 2b. Check for Aggregate Shipment Analytics & Count Queries
+    is_shipment_count_query = (
+        re.search(r"\b(how\s+many|count|total|number\s+of|breakdown|summary|overview\s+of)\b", clean) and
+        re.search(r"\b(shipments?|packages?|orders?|cargo|freight|consignments?)\b", clean)
+    ) or clean in ("total shipments", "all shipments count", "how many shipments", "shipment count", "shipment breakdown")
+
+    if is_shipment_count_query:
+        status_target = None
+        if re.search(r"\b(in\s+transit|transit|moving)\b", clean):
+            status_target = "In Transit"
+        elif re.search(r"\b(delivered|completed|received)\b", clean):
+            status_target = "Delivered"
+        elif re.search(r"\b(delayed|delay|delays)\b", clean):
+            status_target = "Delayed"
+        elif re.search(r"\b(customs|customs\s+hold|on\s+hold|hold)\b", clean):
+            status_target = "On Hold - Customs"
+        elif re.search(r"\b(out\s+for\s+delivery)\b", clean):
+            status_target = "Out for Delivery"
+        elif re.search(r"\b(pending)\b", clean):
+            status_target = "Pending"
+
+        return ClassifiedIntent(
+            intent=LogisticsIntent.SHIPMENT_INFO,
+            confidence=0.98,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.SHIPMENT_INFO],
+            target_attribute="aggregate_count",
+            entities={"status_filter": status_target},
+        )
+
+    # 2c. Check for Aggregate Employee Count Queries
+    is_employee_count_query = (
+        re.search(r"\b(how\s+many|count|total|number\s+of|breakdown|summary)\b", clean) and
+        re.search(r"\b(employees?|staff|workers?|personnel|drivers?|workforce)\b", clean)
+    )
+    if is_employee_count_query:
+        return ClassifiedIntent(
+            intent=LogisticsIntent.EMPLOYEE_SUPPORT,
+            confidence=0.98,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.EMPLOYEE_SUPPORT],
+            target_attribute="aggregate_count",
+        )
+
     # 3. Check for Explicit Shipment ID in query
     direct_shipment_id = None
     try:
