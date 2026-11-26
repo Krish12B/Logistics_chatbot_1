@@ -72,6 +72,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 LLM_TIMEOUT_SECONDS = float(os.getenv("LLM_TIMEOUT_SECONDS", "30"))
 MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
+QUERY_MAX_LENGTH = int(os.getenv("QUERY_MAX_LENGTH", "2000"))
 
 # ── Supabase PostgreSQL Settings ───────────────────────────────────
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
@@ -94,7 +95,8 @@ VECTOR_STORE = os.getenv("VECTOR_STORE", "auto").lower()
 
 # ── ChromaDB Settings ──────────────────────────────────────────────
 CHROMA_MODE = os.getenv("CHROMA_MODE", "persistent").lower()
-CHROMA_PERSIST_DIRECTORY = Path(os.getenv("CHROMA_PERSIST_DIRECTORY", str(DATA_DIR / "chroma_db")))
+_raw_chroma_dir = Path(os.getenv("CHROMA_PERSIST_DIRECTORY", str(DATA_DIR / "chroma_db")))
+CHROMA_PERSIST_DIRECTORY = _raw_chroma_dir if _raw_chroma_dir.is_absolute() else (PROJECT_ROOT / _raw_chroma_dir)
 CHROMA_HOST = os.getenv("CHROMA_HOST", "localhost")
 CHROMA_PORT = int(os.getenv("CHROMA_PORT", "8000"))
 CHROMA_SSL = os.getenv("CHROMA_SSL", "false").lower() in ("true", "1", "yes")
@@ -102,3 +104,9 @@ CHROMA_COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "logistics_knowledg
 CHROMA_API_KEY = os.getenv("CHROMA_API_KEY", "")
 CHROMA_TENANT = os.getenv("CHROMA_TENANT", "")
 CHROMA_DATABASE = os.getenv("CHROMA_DATABASE", "")
+
+# ── Hugging Face / Transformers Offline Optimization ────────────────
+if "HF_HUB_OFFLINE" not in os.environ:
+    os.environ["HF_HUB_OFFLINE"] = "1"
+if "TRANSFORMERS_OFFLINE" not in os.environ:
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"

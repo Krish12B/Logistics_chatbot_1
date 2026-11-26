@@ -54,14 +54,21 @@ class ShipmentResponse(BaseModel):
 
 class DocUploadData(BaseModel):
     filename: str
-    chunks_created: int
+    chunks_created: int = 0
     status: str = "Indexed Successfully"
+    total_records: Optional[int] = None
+    imported: Optional[int] = None
+    skipped: Optional[int] = None
+    failed: Optional[int] = None
+    category: Optional[str] = None
+    summary: Optional[str] = None
 
 
 class DocUploadResponse(BaseModel):
     success: bool = True
     message: str = "Document uploaded successfully"
     data: DocUploadData
+    summary: Optional[str] = None
 
 
 class HealthResponse(BaseModel):

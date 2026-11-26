@@ -182,8 +182,9 @@ app.include_router(employee_router)
 app.include_router(upload_router)
 
 # Also include existing modular routes under /api for full backward compatibility
+# (core_shipments_router already sets prefix="/api" internally)
 from logistics_chatbot.api.routes.shipments import router as core_shipments_router
-app.include_router(core_shipments_router, prefix="/api")
+app.include_router(core_shipments_router)
 
 
 @app.get(

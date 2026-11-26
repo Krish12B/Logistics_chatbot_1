@@ -1,0 +1,287 @@
+[
+  {
+    "test_id": "GEN_001",
+    "category": "general_logistics",
+    "question": "What is logistics in modern supply chain management?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain the coordination of movement, storage, inventory, and packaging of goods from origin to consumption.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "movement",
+        "storage",
+        "supply chain",
+        "origin",
+        "destination"
+      ],
+      "must_not_contain": [
+        "hallucination"
+      ]
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_002",
+    "category": "general_logistics",
+    "question": "What are the core functions of a logistics carrier like FleetHarbor?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail freight forwarding, ocean/air cargo transportation, warehousing, customs clearance, and last-mile delivery.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "freight",
+        "warehousing",
+        "transportation",
+        "customs",
+        "delivery"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_003",
+    "category": "general_logistics",
+    "question": "What is the difference between logistics and supply chain management?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Clarify that logistics is a specialized subset focusing on movement/storage, while supply chain encompasses procurement, manufacturing, sourcing, and distribution.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "subset",
+        "procurement",
+        "movement",
+        "storage",
+        "supply chain"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P2"
+  },
+  {
+    "test_id": "GEN_004",
+    "category": "general_logistics",
+    "question": "What is the difference between logistics and transportation?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain that transportation is the physical movement of freight, whereas logistics encompasses transportation plus warehousing, inventory, documentation, and customs compliance.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "physical movement",
+        "warehousing",
+        "inventory",
+        "documentation"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P2"
+  },
+  {
+    "test_id": "GEN_005",
+    "category": "general_logistics",
+    "question": "What is a Bill of Lading (BOL) and why is it legally important?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Define Bill of Lading as a legal title document, contract of carriage, and receipt for goods issued by carrier to shipper.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "contract of carriage",
+        "receipt of goods",
+        "document of title",
+        "consignee"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "GEN_006",
+    "category": "general_logistics",
+    "question": "Explain the difference between FOB and CIF Incoterms.",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Provide structured comparison of Free On Board (buyer pays marine freight and insurance from origin port) vs Cost Insurance Freight (seller pays carriage and marine insurance to destination port).",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "FOB",
+        "CIF",
+        "Free On Board",
+        "Cost, Insurance, and Freight",
+        "risk transfer"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "GEN_007",
+    "category": "general_logistics",
+    "question": "What is demurrage and how does it differ from detention?",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain that demurrage applies inside the port terminal beyond free days, whereas detention applies outside the terminal when containers are held past allowed return time.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "demurrage",
+        "detention",
+        "terminal",
+        "free days",
+        "container"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_008",
+    "category": "general_logistics",
+    "question": "What is cross-docking in modern freight distribution?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Describe unloading inbound cargo from incoming trucks/rail directly into outbound vehicles with zero or minimal intermediate warehouse storage.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "cross-docking",
+        "inbound",
+        "outbound",
+        "storage",
+        "hub"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P2"
+  },
+  {
+    "test_id": "GEN_009",
+    "category": "general_logistics",
+    "question": "What does LCL and FCL stand for in container shipping?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain Less than Container Load (consolidated shipments from multiple shippers) vs Full Container Load (dedicated exclusive container for a single shipper).",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "Less than Container Load",
+        "Full Container Load",
+        "consolidation",
+        "container"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_010",
+    "category": "general_logistics",
+    "question": "What is an Air Waybill (AWB)?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Define AWB as the non-negotiable transport document issued by an air carrier covering carriage of goods on scheduled flights.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "Air Waybill",
+        "air carrier",
+        "tracking",
+        "non-negotiable",
+        "consignee"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_011",
+    "category": "general_logistics",
+    "question": "What is intermodal freight transport?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain moving freight in a standardized container or vehicle using multiple modes of transportation (rail, ship, truck) without handling cargo itself during mode transfers.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "intermodal",
+        "rail",
+        "ship",
+        "truck",
+        "container",
+        "transfer"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P2"
+  },
+  {
+    "test_id": "GEN_012",
+    "category": "general_logistics",
+    "question": "What are standard ISO container dimensions for 20ft and 40ft containers?",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "List standard dimensions: 20ft (approx 5.9m x 2.35m x 2.39m, ~33 CBM) and 40ft (12.03m x 2.35m x 2.39m, ~67.7 CBM).",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "20ft",
+        "40ft",
+        "payload",
+        "capacity",
+        "dimensions"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_013",
+    "category": "general_logistics",
+    "question": "What is volumetric weight and how is air freight dimensional weight calculated?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "State the IATA standard volumetric ratio: (L x W x H in cm) / 6000 = volumetric weight in kg (or 1 CBM = 167 kg).",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "volumetric weight",
+        "IATA",
+        "6000",
+        "dimensional weight"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P1"
+  },
+  {
+    "test_id": "GEN_014",
+    "category": "general_logistics",
+    "question": "What is cold-chain logistics in pharmaceutical transport?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain temperature-controlled supply chain maintaining prescribed temperature ranges (2-8\u00b0C, -20\u00b0C, -70\u00b0C) from manufacturer to patient under GDP standards.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "temperature-controlled",
+        "cold-chain",
+        "pharma",
+        "GDP",
+        "2\u00b0C to 8\u00b0C"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "GEN_015",
+    "category": "general_logistics",
+    "question": "What are the six stages of a complete shipment lifecycle?",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail the 6 stages: Booking & Order Creation, Inbound Pickup & Consolidation, Export Customs, Linehaul Transit, Import Customs, Out for Delivery & POD.",
+    "evaluation_criteria": {
+      "required_concepts": [
+        "Booking",
+        "Pickup",
+        "Export Customs",
+        "Linehaul",
+        "Import Customs",
+        "Proof of Delivery"
+      ],
+      "must_not_contain": []
+    },
+    "priority": "P0"
+  }
+]

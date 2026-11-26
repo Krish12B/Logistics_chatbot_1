@@ -1,0 +1,71 @@
+{
+  "audit_title": "FleetHarbor AI - CSV Ingestion & Document Processing Audit",
+  "generated_at": "2026-11-23T15:58:00+05:30",
+  "audited_file": "attach_data.csv",
+  "file_metadata": {
+    "size_bytes": 106366,
+    "row_count": 120,
+    "column_count": 6,
+    "columns": ["doc_id", "category", "section_title", "content", "tags", "last_updated"]
+  },
+  "ingestion_pipeline": {
+    "step_1_receive": {
+      "endpoint": "POST /upload-doc",
+      "formats_accepted": [".csv", ".txt", ".pdf", ".docx"],
+      "max_size_limit_mb": 10,
+      "status": "PASSED"
+    },
+    "step_2_parse": {
+      "encodings_supported": ["utf-8-sig", "utf-8", "latin-1", "cp1252"],
+      "delimiter_sniffing": "Supported (comma, tab, semicolon)",
+      "whitespace_and_null_filtering": "Active",
+      "status": "PASSED"
+    },
+    "step_3_identify_data_type": {
+      "rules": {
+        "operational_records": "Matches doc_id with OPS-* or columns [doc_id, category, section_title, content, tags]",
+        "shipment_records": "Matches columns [shipment_id, origin, destination, status]",
+        "employee_records": "Matches columns [employee_id, full_name/name, department, job_title]",
+        "logistics_knowledge": "Matches columns [question, answer] or [topic, content]"
+      },
+      "identified_category": "operational_records",
+      "status": "PASSED"
+    },
+    "step_4_validate_data": {
+      "records_checked": 120,
+      "required_fields_present": 120,
+      "duplicate_ids_in_batch": 0,
+      "date_standardization_format": "YYYY-MM-DD",
+      "invalid_dates_detected": 0,
+      "invalid_statuses_detected": 0,
+      "status": "PASSED"
+    },
+    "step_5_database_integration": {
+      "target_tables": ["operational_records (SQLite)", "public.operational_records (Supabase PostgreSQL)"],
+      "upsert_mechanism": "ON CONFLICT(doc_id) DO UPDATE SET...",
+      "records_inserted": 120,
+      "records_skipped": 0,
+      "records_failed": 0,
+      "idempotency_verified": true,
+      "status": "PASSED"
+    },
+    "step_6_rag_vector_integration": {
+      "vector_store": "ChromaDB (PersistentClient)",
+      "collection_name": "logistics_knowledge_chunks",
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2 (384-dim)",
+      "chunks_indexed": 120,
+      "search_verifications": [
+        {
+          "query": "moisture exposure textile rolls Surat to Ahmedabad",
+          "top_match_id": "OPS-071 / OPS-081 / OPS-001",
+          "retrieval_status": "SUCCESS"
+        }
+      ],
+      "status": "PASSED"
+    },
+    "step_7_confirmation_summary": {
+      "sample_output": "CSV IMPORT SUMMARY\nFile: attach_data.csv\nTotal Records: 120\nSuccessfully Imported: 120\nSkipped: 0\nFailed: 0\nData Category: Operational Records (OPS-Cases)\nDatabase: SQLite & Supabase\nKnowledge Base: Indexed 120 records into ChromaDB",
+      "status": "PASSED"
+    }
+  }
+}

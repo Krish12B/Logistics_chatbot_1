@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-11-23T15:59:49.339486",
+  "total_queries_measured": 174,
+  "latency_metrics_ms": {
+    "mean": 716.7,
+    "p50": 8.94,
+    "p90": 1433.46,
+    "p95": 1485.18,
+    "min": 0.0,
+    "max": 22764.01
+  },
+  "category_latency_ranking": [
+    {
+      "category": "ambiguous_questions",
+      "avg_latency_ms": 0.44
+    },
+    {
+      "category": "shipment_tracking",
+      "avg_latency_ms": 7.0
+    },
+    {
+      "category": "data_validation",
+      "avg_latency_ms": 8.75
+    },
+    {
+      "category": "multi_turn_conversations",
+      "avg_latency_ms": 172.2
+    },
+    {
+      "category": "edge_cases",
+      "avg_latency_ms": 431.35
+    },
+    {
+      "category": "logical_questions",
+      "avg_latency_ms": 706.96
+    },
+    {
+      "category": "shipment_delays",
+      "avg_latency_ms": 740.47
+    },
+    {
+      "category": "employee_assistance",
+      "avg_latency_ms": 792.99
+    },
+    {
+      "category": "general_logistics",
+      "avg_latency_ms": 991.96
+    },
+    {
+      "category": "delivery_management",
+      "avg_latency_ms": 1104.82
+    },
+    {
+      "category": "documentation",
+      "avg_latency_ms": 1381.44
+    },
+    {
+      "category": "company_policies",
+      "avg_latency_ms": 2709.81
+    }
+  ]
+}

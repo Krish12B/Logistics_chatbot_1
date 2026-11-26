@@ -1,0 +1,137 @@
+[
+  {
+    "test_id": "POL_001",
+    "category": "company_policies",
+    "question": "What is FleetHarbor's temperature control policy CC-POL-9921 for pharma cargo?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain CC-POL-9921 4 temperature regimes: Cryogenic (-70\u00b0C), Frozen (-20\u00b0C), Refrigerated (2\u00b0C-8\u00b0C), and Controlled Room Temp (15\u00b0C-25\u00b0C).",
+    "priority": "P0"
+  },
+  {
+    "test_id": "POL_002",
+    "category": "company_policies",
+    "question": "Where are FleetHarbor dual corporate headquarters located?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "State dual headquarters in Singapore (Marina Bay) and Rotterdam (Wilhelminakade, Netherlands).",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_003",
+    "category": "company_policies",
+    "question": "What are FleetHarbor's company commitments regarding Net-Zero sustainability?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite FleetHarbor Net-Zero 2040 commitment, bio-fueled maritime vessels, and electric last-mile delivery fleet.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "POL_004",
+    "category": "company_policies",
+    "question": "What are the speed limits and safety rules for forklifts in FleetHarbor warehouses?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite warehouse SOP: 8 km/h speed limit in pedestrian shared bays, mandatory horn at intersections, high-visibility vest and steel-toe boots.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_005",
+    "category": "company_policies",
+    "question": "What is the mandatory segregation distance for hazardous materials in sorting hubs?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite hazmat SOP: minimum 6-meter physical segregation or certified firewall between incompatible chemical classes.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "POL_006",
+    "category": "company_policies",
+    "question": "What are the rules for shipping standalone lithium-ion batteries by air?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite IATA regulations UN3480 Section IA/IB: max 30% State of Charge (SoC), Cargo Aircraft Only (CAO) label, and UN 38.3 test certificate.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "POL_007",
+    "category": "company_policies",
+    "question": "What customer account tiers does FleetHarbor provide and what are their SLAs?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain Enterprise (99.5% SLA, 15-min emergency dispatch, 30-day net payment), Healthcare, and Standard tiers.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_008",
+    "category": "company_policies",
+    "question": "What is the cancellation haulage fee policy when an order is cancelled after dispatch?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite customer rules: $150 cancellation charge for standard road haulage, $450 for specialized heavy/reefer transport.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "POL_009",
+    "category": "company_policies",
+    "question": "What is the target settlement timeframe for customer cargo damage claims?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite claims SOP: 21 business days SLA for claims review and financial compensation settlement.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_010",
+    "category": "company_policies",
+    "question": "What are the dry ice packaging standards for deep-frozen pharmaceutical transport?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail Class 9 UN1845 labelling, vented packaging to prevent pressure buildup, net weight declared on air waybill.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "POL_011",
+    "category": "company_policies",
+    "question": "What are the company warehouse stacking height limits for standard Euro pallets?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "State standard warehouse maximum pallet stack height of 1.8 meters (or 2 tiers of shrink-wrapped pallets max).",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_012",
+    "category": "company_policies",
+    "question": "What certifications are required for cold-chain handlers at FleetHarbor?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite IATA CEIV Pharma certification and WHO Good Distribution Practice (GDP) annual qualification.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_013",
+    "category": "company_policies",
+    "question": "What are the rules regarding hazardous materials Class 1 and Class 7 transport?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain that Class 1 (Explosives) and Class 7 (Radioactive) are strictly prohibited on commercial flights and require dedicated military/charter permits.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "POL_014",
+    "category": "company_policies",
+    "question": "What is the policy for reporting warehouse workplace safety incidents?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Immediate halt of operations in affected zone, notification of safety officer, and submission of incident log within 2 hours.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "POL_015",
+    "category": "company_policies",
+    "question": "What are the free time allowances before demurrage applies at international ports?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Standard ocean carriage allows 4 to 7 calendar days free time for container discharge and collection.",
+    "priority": "P1"
+  }
+]

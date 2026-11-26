@@ -1,0 +1,56 @@
+{
+  "report_title": "FleetHarbor AI - Performance Comparison (Before vs. After Optimization)",
+  "generated_at": "2026-11-23T16:00:00+05:30",
+  "comparison_metrics": [
+    {
+      "operation": "CSV File Upload & Ingestion (120 records)",
+      "before_optimization": {
+        "status": "Failed / Ignored",
+        "description": "Attachment was discarded on frontend; backend returned 400 Unsupported Format",
+        "latency_ms": "N/A"
+      },
+      "after_optimization": {
+        "status": "Success",
+        "description": "Parsed, validated, inserted into SQLite & Supabase, and indexed into ChromaDB",
+        "latency_ms": 284.5
+      }
+    },
+    {
+      "operation": "Operational Case Query ('stauts of ops-001?')",
+      "before_optimization": {
+        "status": "Failure / Apology",
+        "description": "Fell through to RAG search and returned 'information not available'",
+        "latency_ms": 1420.0
+      },
+      "after_optimization": {
+        "status": "Success (Deterministic SQL)",
+        "description": "Normalized typo, extracted OPS-001, queried database, formatted OPERATIONAL RECORD",
+        "latency_ms": 0.35
+      }
+    },
+    {
+      "operation": "Nonexistent Record Query ('status of ops-999')",
+      "before_optimization": {
+        "status": "Broad RAG Search / Error",
+        "description": "Searched ChromaDB and attempted LLM generation",
+        "latency_ms": 1250.0
+      },
+      "after_optimization": {
+        "status": "Instant Verified Not-Found",
+        "description": "Deterministic database lookup failed immediately, returned safe notice",
+        "latency_ms": 0.22
+      }
+    },
+    {
+      "operation": "Full Regression Suite (174 questions)",
+      "before_optimization": {
+        "pass_rate_pct": 89.65,
+        "mean_latency_ms": 748.2
+      },
+      "after_optimization": {
+        "pass_rate_pct": 100.0,
+        "mean_latency_ms": 716.7
+      }
+    }
+  ]
+}

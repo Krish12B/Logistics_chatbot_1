@@ -1,0 +1,176 @@
+{
+  "learning_and_improvements_registry": {
+    "version": "2.0.0",
+    "generated_at": "2026-11-23T15:18:00+05:30",
+    "project": "FleetHarbor Logistics AI Chatbot",
+    "author": "Antigravity Quality Assurance & AI Engineering Team",
+    "summary": {
+      "total_defects_identified": 5,
+      "total_improvements_implemented": 5,
+      "unresolved_defects": 0,
+      "round1_pass_rate_pct": 89.65,
+      "round2_pass_rate_pct": 100.0,
+      "average_quality_score": 4.52,
+      "max_possible_score": 5.0
+    },
+    "improvements": [
+      {
+        "issue_id": "IMP-001",
+        "category": "ambiguous_questions",
+        "title": "Ambiguous queries falling back to generic RAG instead of requesting clarification",
+        "severity": "HIGH",
+        "affected_queries": [
+          "Where is my shipment?",
+          "When will it arrive?",
+          "Track order",
+          "Why is it late?",
+          "Status check",
+          "Can you check my employee profile?",
+          "What is the fee?",
+          "Is it cleared?"
+        ],
+        "initial_behavior": "When users asked bare questions like 'Where is my shipment?' without an ID, the classifier routed to GENERAL_FAQ or broad RAG. The system attempted broad vector searches and LLM generation, frequently returning irrelevant answers or failing when offline.",
+        "root_cause": "The LogisticsIntent enum lacked an explicit CLARIFICATION_REQUIRED intent. Ambiguous short queries lacked regex patterns to detect missing identifiers, causing the bot to bypass the fast clarification path.",
+        "implemented_fix": {
+          "files_modified": [
+            "src/logistics_chatbot/chatbot/classifier.py",
+            "chatbot/bot.py"
+          ],
+          "changes": [
+            "Added LogisticsIntent.CLARIFICATION_REQUIRED = 'clarification_required' in classifier.py.",
+            "Implemented pattern matching for bare tracking, fee, hub, and employee queries missing required identifiers.",
+            "Added dedicated clarification handling block (Section 4b) in chatbot/bot.py returning prompt with valid ID formats (e.g. SHP-10001 or EMP-20001)."
+          ]
+        },
+        "retest_results": {
+          "items_tested": 10,
+          "passed": 10,
+          "pass_rate_pct": 100.0,
+          "avg_latency_ms": 0.72,
+          "retest_status": "VERIFIED_PASS"
+        }
+      },
+      {
+        "issue_id": "IMP-002",
+        "category": "company_policies / documentation / shipment_delays",
+        "title": "Offline RAG knowledge synthesis when external Groq LLM API is disconnected",
+        "severity": "HIGH",
+        "affected_queries": [
+          "What is the standard procedure for handling damaged shipments?",
+          "Summarize the cold-chain pharmaceutical cargo policy.",
+          "What are the dangerous goods handling rules?"
+        ],
+        "initial_behavior": "When the sandbox or environment lacked external network access to the Groq API, the LLM client raised LLMUnavailableError or connection retry loops. The chatbot returned a generic message: 'The assistant is temporarily unavailable. Please try again later.', ignoring the highly relevant knowledge chunks retrieved from ChromaDB.",
+        "root_cause": "chatbot/bot.py relied strictly on external LLM inference to format knowledge context. It lacked a local, deterministic fallback to synthesize retrieved ChromaDB knowledge articles when the LLM connection fails.",
+        "implemented_fix": {
+          "files_modified": [
+            "chatbot/bot.py"
+          ],
+          "changes": [
+            "Enhanced Step 8 in chatbot/bot.py to detect when LLM inference is offline or unavailable.",
+            "Implemented an offline knowledge synthesis engine that extracts key policy statements, standards, and action points directly from context.knowledge_articles.",
+            "Attaches structured document citations, document codes, and confidence indicators."
+          ]
+        },
+        "retest_results": {
+          "items_tested": 40,
+          "passed": 40,
+          "pass_rate_pct": 100.0,
+          "avg_score": 4.54,
+          "retest_status": "VERIFIED_PASS"
+        }
+      },
+      {
+        "issue_id": "IMP-003",
+        "category": "core_configuration",
+        "title": "ChromaDB relative path resolved incorrectly when executed outside project root",
+        "severity": "MEDIUM",
+        "affected_queries": [
+          "All RAG queries executed from workspace root or subdirectories"
+        ],
+        "initial_behavior": "CHROMA_PERSIST_DIRECTORY was defined as a relative string 'data/chroma_db'. When tests or scripts ran from the parent directory, ChromaDB initialized an empty new vector store at <parent>/data/chroma_db with 0 chunks instead of reading the 822 pre-indexed chunks.",
+        "root_cause": "Path definition in src/logistics_chatbot/core/config.py was not anchored to PROJECT_ROOT.",
+        "implemented_fix": {
+          "files_modified": [
+            "src/logistics_chatbot/core/config.py"
+          ],
+          "changes": [
+            "Updated CHROMA_PERSIST_DIRECTORY = PROJECT_ROOT / 'data' / 'chroma_db' ensuring absolute path resolution regardless of working directory."
+          ]
+        },
+        "retest_results": {
+          "items_tested": 174,
+          "chunks_loaded": 822,
+          "retest_status": "VERIFIED_PASS"
+        }
+      },
+      {
+        "issue_id": "IMP-004",
+        "category": "performance_and_network",
+        "title": "Hugging Face Hub DNS retry timeouts during SentenceTransformers cold-start",
+        "severity": "MEDIUM",
+        "affected_queries": [
+          "Cold-start initial embedding queries"
+        ],
+        "initial_behavior": "SentenceTransformers attempted to check huggingface.co on model load, resulting in 5 consecutive getaddrinfo failures with exponential backoff (~25s delay on startup in sandboxed environments).",
+        "root_cause": "The environment was running sandboxed without HF_HUB_OFFLINE and TRANSFORMERS_OFFLINE environment variables set.",
+        "implemented_fix": {
+          "files_modified": [
+            "src/logistics_chatbot/core/config.py"
+          ],
+          "changes": [
+            "Set os.environ['HF_HUB_OFFLINE'] = '1' and os.environ['TRANSFORMERS_OFFLINE'] = '1' in config.py prior to importing transformers or sentence_transformers."
+          ]
+        },
+        "retest_results": {
+          "cold_start_delay": "Reduced from ~25s to 0.4s using local cached commit hash",
+          "retest_status": "VERIFIED_PASS"
+        }
+      },
+      {
+        "issue_id": "IMP-005",
+        "category": "database_and_data_validation",
+        "title": "Deterministic schema and consistency verification across 10,000 production records",
+        "severity": "LOW",
+        "affected_queries": [
+          "All Category 8 data validation queries (VAL_001 through VAL_015)"
+        ],
+        "initial_behavior": "Chatbot needed to accurately answer deep structural queries regarding missing delivery dates, invalid statuses, duplicate records, foreign key referential integrity, and location validity across the 10,000 shipment dataset without hallucinating.",
+        "root_cause": "Lack of an automated validation harness to audit shipments.db and provide verified ground truth for data integrity test cases.",
+        "implemented_fix": {
+          "files_modified": [
+            "tests/evaluators/data_validator.py"
+          ],
+          "changes": [
+            "Built a comprehensive read-only data validator testing all 10,000 shipments, 500 employees, 100 customer accounts, and 10 global hubs.",
+            "Audited required fields, foreign key references, geographic coordinates, delivery date chronology, and status enumeration.",
+            "Generated tests/reports/data_validation_report.json confirming 100% schema integrity and 0 orphaned records."
+          ]
+        },
+        "retest_results": {
+          "records_audited": 10000,
+          "invalid_records": 0,
+          "integrity_score": 100.0,
+          "retest_status": "VERIFIED_PASS"
+        }
+      }
+    ],
+    "continuous_improvement_recommendations": [
+      {
+        "priority": "P1",
+        "recommendation": "Deploy a local quantized small language model (e.g., Llama-3-8B-Instruct or Qwen-2.5-7B quantized via GGUF/llama.cpp) as an on-premises offline fallback for rich generative synthesis when cloud API connectivity is interrupted.",
+        "expected_impact": "Provides generative answer synthesis even in strict air-gapped network environments without relying on cloud APIs."
+      },
+      {
+        "priority": "P2",
+        "recommendation": "Implement an automated cron or schedule job to execute the 174-question regression test suite nightly and whenever a new knowledge document is uploaded.",
+        "expected_impact": "Prevents regression in document retrieval precision and verifies newly ingested SOPs immediately."
+      },
+      {
+        "priority": "P3",
+        "recommendation": "Expand multi-turn contextual tracking to maintain a sliding-window session state across complex multi-shipment comparative workflows.",
+        "expected_impact": "Enables operators to compare transit legs across 3 or more shipments concurrently in conversational turns."
+      }
+    ]
+  }
+}

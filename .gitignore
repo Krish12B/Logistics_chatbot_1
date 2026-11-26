@@ -46,3 +46,7 @@ chroma_db/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Test & QA artifacts
+.pytest_cache/
+tests/reports/pytest_results.xml

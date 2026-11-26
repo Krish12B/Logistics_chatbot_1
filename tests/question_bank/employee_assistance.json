@@ -1,0 +1,137 @@
+[
+  {
+    "test_id": "EMP_001",
+    "category": "employee_assistance",
+    "question": "Look up employee EMP-20001 details",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Retrieve employee profile for Stella Davis (Airfreight Capacity Planner, Tokyo Narita hub).",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EMP_002",
+    "category": "employee_assistance",
+    "question": "Who is employee EMP-20004 and what is their role?",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Retrieve profile for Wei Russo (Cargo Claims Resolution Manager, Amsterdam Schiphol).",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EMP_003",
+    "category": "employee_assistance",
+    "question": "What is the phone extension and email for EMP-20003?",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Retrieve Siddharth Jackson, extension x4003, siddharth.jackson@fleetharbor.com.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EMP_004",
+    "category": "employee_assistance",
+    "question": "How do I register an operational exception for a stuck container?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain logging into WMS, tagging shipment with exception reason code, and forwarding to hub dispatch supervisor.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EMP_005",
+    "category": "employee_assistance",
+    "question": "What information is mandatory when booking a new international shipment?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "List Shipper/Consignee tax IDs, HS Tariff Codes, Cargo Gross/Net weights, Dimensions, Declared Commercial Value.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EMP_006",
+    "category": "employee_assistance",
+    "question": "How should an employee handle shift handover at a sort hub?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail shift handover checklist: high-priority hot orders, unresolved exception holds, equipment inspections, and pending linehauls.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "EMP_007",
+    "category": "employee_assistance",
+    "question": "Look up employee record for EMP-20010",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Return employee profile from employees directory.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EMP_008",
+    "category": "employee_assistance",
+    "question": "What is the procedure if a package barcode is smudged or unreadable?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Reprint LPN label via system lookup using airway bill or waybill tracking number.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "EMP_009",
+    "category": "employee_assistance",
+    "question": "Who do I contact in case of an emergency hazmat spill in the warehouse?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Evacuate upwind, activate warehouse emergency alarm, contact environmental safety response desk.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EMP_010",
+    "category": "employee_assistance",
+    "question": "How do employees file an overtime claim for night shifts?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Submit bi-weekly timesheet approved by shift operations manager to HR payroll portal.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "EMP_011",
+    "category": "employee_assistance",
+    "question": "Look up employee EMP-20005",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Retrieve Lily Hoffmann (Air Cargo Loadmaster, London Heathrow).",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EMP_012",
+    "category": "employee_assistance",
+    "question": "What is the standard procedure for pallet wrapping and strapping?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Minimum 5 layers of high-tensile stretch film with cross-corner banding for linehaul stability.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "EMP_013",
+    "category": "employee_assistance",
+    "question": "What are the weight distribution limits when loading a 53ft dry van?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Steer axle \u2264 12,000 lbs, Drive tandem \u2264 34,000 lbs, Trailer tandem \u2264 34,000 lbs, Gross \u2264 80,000 lbs.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EMP_014",
+    "category": "employee_assistance",
+    "question": "How do dispatchers confirm driver rest hours under Hours of Service (HOS) rules?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Verify Electronic Logging Device (ELD) telematics ensuring 10 consecutive hours off-duty.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "EMP_015",
+    "category": "employee_assistance",
+    "question": "Look up employee EMP-20020",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Return employee record from database.",
+    "priority": "P1"
+  }
+]

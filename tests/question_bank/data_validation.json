@@ -1,0 +1,150 @@
+[
+  {
+    "test_id": "VAL_001",
+    "category": "database_validation",
+    "question": "Show shipment details for SHP-10001",
+    "required_shipment_id": "SHP-10001",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Validate that returned record has non-null shipment_id, status, origin, destination, and valid date formats.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_002",
+    "category": "database_validation",
+    "question": "Verify if shipment SHP-10002 has a recorded delay reason.",
+    "required_shipment_id": "SHP-10002",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Confirm that delay_reason is populated ('Port congestion at Jebel Ali').",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_003",
+    "category": "database_validation",
+    "question": "Does shipment SHP-10004 have a valid delivered status and completed transit?",
+    "required_shipment_id": "SHP-10004",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Verify that status is Delivered and current_location matches destination.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_004",
+    "category": "database_validation",
+    "question": "Check the customs status field for shipment SHP-10003",
+    "required_shipment_id": "SHP-10003",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Verify customs_status contains 'Held - awaiting commercial invoice'.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_005",
+    "category": "database_validation",
+    "question": "What is the origin and destination of shipment SHP-10006?",
+    "required_shipment_id": "SHP-10006",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Verify origin is 'Kolkata, India' and destination is 'Tokyo, Japan'.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_006",
+    "category": "database_validation",
+    "question": "Verify whether employee EMP-20002 has an active status and valid certification.",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Verify Marco Chowdhury certification 'IATA Dangerous Goods Regulations (DGR Cat 6)' and Active status.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_007",
+    "category": "database_validation",
+    "question": "Is the estimated delivery date formatted properly for SHP-10008?",
+    "required_shipment_id": "SHP-10008",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Verify date '2026-11-24' formats into clean readable date string.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_008",
+    "category": "database_validation",
+    "question": "Check if shipment SHP-10009 has last_updated timestamp populated.",
+    "required_shipment_id": "SHP-10009",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Confirm timestamp '2026-11-12 11:30' is returned.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_009",
+    "category": "database_validation",
+    "question": "Verify route continuity for shipment SHP-10001",
+    "required_shipment_id": "SHP-10001",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Verify route shows 'Mumbai Hub -> Dubai Hub -> London Heathrow Hub'.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_010",
+    "category": "database_validation",
+    "question": "Does shipment SHP-10010 contain valid customs clearance information?",
+    "required_shipment_id": "SHP-10010",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Confirm customs_status reports 'Held - missing packing list'.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "VAL_011",
+    "category": "database_validation",
+    "question": "Validate the data fields of shipment SHP-10011",
+    "required_shipment_id": "SHP-10011",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Confirm all mandatory relational attributes are present.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_012",
+    "category": "database_validation",
+    "question": "Check shipment record SHP-10012 for date inconsistencies.",
+    "required_shipment_id": "SHP-10012",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Confirm estimated delivery and last updated dates are valid ISO strings.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_013",
+    "category": "database_validation",
+    "question": "Verify that shipment SHP-10013 has an assigned origin and destination.",
+    "required_shipment_id": "SHP-10013",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Validate non-empty origin and destination strings.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_014",
+    "category": "database_validation",
+    "question": "Verify employee profile EMP-20003 assigned hub details.",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Confirm Siddharth Jackson assigned to 'Mumbai Air Cargo & JNPT Terminal (India)'.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "VAL_015",
+    "category": "database_validation",
+    "question": "Validate data fields for shipment SHP-10015",
+    "required_shipment_id": "SHP-10015",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Ensure status is one of the supported 5 status types.",
+    "priority": "P1"
+  }
+]

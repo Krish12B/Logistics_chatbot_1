@@ -14,7 +14,7 @@ logger = logging.getLogger("logistics_chatbot.document_processor")
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 80
 MIN_CHUNK_LENGTH = 30
-SUPPORTED_EXTENSIONS = (".txt", ".pdf", ".docx")
+SUPPORTED_EXTENSIONS = (".txt", ".pdf", ".docx", ".csv")
 
 
 def decode_bytes(content: bytes) -> str:
@@ -102,6 +102,8 @@ def extract_text(filename: str, content: bytes | str) -> str:
         return extract_text_from_pdf(content)
     elif ext == ".docx":
         return extract_text_from_docx(content)
+    elif ext == ".csv":
+        return decode_bytes(content)
     else:
         raise ValueError(f"Unsupported format: {ext}")
 
@@ -112,7 +114,7 @@ def compute_hash(text: str) -> str:
 
 
 def split_text_into_chunks(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> List[str]:
-    """Split text into semantic chunks respecting paragraphs, sentences, and length boundaries."""
+    """Split text into semantic chunks respecting paragraphs, sentences, length boundaries, and overlap."""
     cleaned = re.sub(r"\r\n|\r", "\n", text).strip()
     if not cleaned:
         return []
@@ -127,7 +129,11 @@ def split_text_into_chunks(text: str, chunk_size: int = CHUNK_SIZE, overlap: int
     for para in paragraphs:
         para_len = len(para)
         if para_len > chunk_size:
-            # If paragraph itself exceeds chunk size, split by sentences or lines
+            # Flush existing accumulated paragraphs before splitting large paragraph
+            if current_chunk:
+                raw_chunks.append("\n\n".join(current_chunk))
+                current_chunk = []
+                current_len = 0
             sub_units = [s.strip() for s in re.split(r"(?<=[.!?])\s+", para) if s.strip()]
             for unit in sub_units:
                 if current_len + len(unit) + 1 > chunk_size and current_chunk:
@@ -147,13 +153,27 @@ def split_text_into_chunks(text: str, chunk_size: int = CHUNK_SIZE, overlap: int
     if current_chunk:
         raw_chunks.append("\n\n".join(current_chunk))
 
-    # Apply overlap if needed and filter out tiny fragments
-    final_chunks = [c.strip() for c in raw_chunks if len(c.strip()) >= MIN_CHUNK_LENGTH]
-    if not final_chunks and cleaned:
-        # Fallback to single chunk if very short
-        final_chunks = [cleaned]
+    filtered = [c.strip() for c in raw_chunks if len(c.strip()) >= MIN_CHUNK_LENGTH]
+    if not filtered and cleaned:
+        return [cleaned]
 
-    return final_chunks
+    if overlap <= 0 or len(filtered) <= 1:
+        return filtered
+
+    # Prepend word-aligned trailing overlap from chunk[i-1] into chunk[i]
+    overlapped_chunks: List[str] = [filtered[0]]
+    for idx in range(1, len(filtered)):
+        prev_text = filtered[idx - 1]
+        tail = prev_text[-overlap:].lstrip()
+        # Snap to nearest word boundary so we don't start mid-word
+        if len(prev_text) > overlap and " " in tail:
+            tail = tail.split(" ", 1)[1].strip()
+        if tail and not filtered[idx].startswith(tail):
+            overlapped_chunks.append(f"{tail}\n\n{filtered[idx]}")
+        else:
+            overlapped_chunks.append(filtered[idx])
+
+    return overlapped_chunks
 
 
 def process_document(
@@ -189,6 +209,7 @@ def process_document(
     processed_chunks: List[Dict[str, Any]] = []
     for idx, chunk_text in enumerate(chunks):
         chunk_id = f"{doc_id}-{idx + 1:03d}"
+        part_title = f"{filename} (Part {idx + 1}/{len(chunks)})"
         metadata = {
             "doc_id": doc_id,
             "filename": filename,
@@ -202,7 +223,8 @@ def process_document(
             "word_count": len(chunk_text.split()),
             "content_hash": compute_hash(chunk_text),
             "category": "uploaded_document",
-            "section_title": f"{filename} (Part {idx + 1}/{len(chunks)})",
+            "title": part_title,
+            "section_title": part_title,
             "status": "active",
         }
         processed_chunks.append({

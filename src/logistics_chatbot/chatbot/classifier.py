@@ -27,6 +27,7 @@ logger = logging.getLogger("logistics_chatbot.classifier")
 LOOSE_SHIPMENT_ID_PATTERN = re.compile(r"\bSHP[-\s]?(\d{3,6})\b", re.IGNORECASE)
 VALID_SHIPMENT_ID_PATTERN = re.compile(r"^SHP-\d{5}$")
 EMPLOYEE_ID_PATTERN = re.compile(r"\bEMP[-\s]?(\d{5})\b", re.IGNORECASE)
+OPERATIONAL_ID_PATTERN = re.compile(r"\bOPS[-\s]?(\d{1,6})\b", re.IGNORECASE)
 
 PRONOUN_FOLLOWUP_PATTERN = re.compile(
     r"\b(it|this|that|its|the shipment|the package|the order|the cargo|the container|where is it|when will it|is it)\b",
@@ -43,8 +44,10 @@ class LogisticsIntent(str, Enum):
     DOCUMENTATION = "documentation"
     EMPLOYEE_SUPPORT = "employee_support"
     OPERATIONAL_ISSUES = "operational_issues"
+    OPERATIONAL_STATUS = "operational_status"
     GENERAL_CONVERSATION = "general_conversation"
     UNSUPPORTED_OFFTOPIC = "unsupported_offtopic"
+    CLARIFICATION_REQUIRED = "clarification_required"
 
 
 INTENT_SOURCE_MAP = {
@@ -56,8 +59,10 @@ INTENT_SOURCE_MAP = {
     LogisticsIntent.DOCUMENTATION: "rag_knowledge_base",
     LogisticsIntent.EMPLOYEE_SUPPORT: "employee_directory",
     LogisticsIntent.OPERATIONAL_ISSUES: "rag_knowledge_base",
+    LogisticsIntent.OPERATIONAL_STATUS: "operational_database",
     LogisticsIntent.GENERAL_CONVERSATION: "deterministic_prompt",
     LogisticsIntent.UNSUPPORTED_OFFTOPIC: "safe_fallback",
+    LogisticsIntent.CLARIFICATION_REQUIRED: "clarification_engine",
 }
 
 
@@ -69,9 +74,52 @@ class ClassifiedIntent:
     preferred_source: str
     shipment_id: Optional[str] = None
     employee_id: Optional[str] = None
+    operational_id: Optional[str] = None
     resolved_reference: bool = False
     target_attribute: Optional[str] = None
     entities: Dict[str, Any] = field(default_factory=dict)
+
+
+def normalize_logistics_query(text: str) -> str:
+    """Normalize user query and correct common typos while leaving identifiers untouched."""
+    if not text:
+        return ""
+    typo_map = {
+        r"\bsta[ut]{2}s\b": "status",
+        r"\bstaus\b": "status",
+        r"\bstauts\b": "status",
+        r"\bstatuss\b": "status",
+        r"\bstats\b": "status",
+        r"\bloction\b": "location",
+        r"\blocaton\b": "location",
+        r"\bwhre\b": "where",
+        r"\bdelivry\b": "delivery",
+        r"\bdeleivery\b": "delivery",
+        r"\bdelivary\b": "delivery",
+        r"\bempolyee\b": "employee",
+        r"\bemploye\b": "employee",
+        r"\boprational\b": "operational",
+        r"\boperatinal\b": "operational",
+        r"\btrackng\b": "tracking",
+        r"\btrck\b": "track",
+        r"\bshpment\b": "shipment",
+        r"\bshipmnt\b": "shipment",
+    }
+    normalized = text
+    for pattern, replacement in typo_map.items():
+        normalized = re.sub(pattern, replacement, normalized, flags=re.IGNORECASE)
+    return normalized
+
+
+def extract_operational_id(text: str) -> Optional[str]:
+    """Extract an operational record ID (e.g. 'OPS-001', 'ops-025', 'OPS 001')."""
+    match = OPERATIONAL_ID_PATTERN.search(text)
+    if match:
+        digits = match.group(1)
+        if len(digits) < 3:
+            digits = f"{int(digits):03d}"
+        return f"OPS-{digits}"
+    return None
 
 
 def extract_shipment_id(text: str) -> Optional[str]:
@@ -170,34 +218,76 @@ OFFTOPIC_PATTERNS = [
     r"\b(quantum|black\s*hole|string\s*theory|relativity|einstein|astrophysics)\b",
     r"\b(recipe|bake|baking|cooking|ingredients?|pizza|cake|pasta|cocktail|dessert)\b",
     r"\b(movie|song|lyrics|guitar|chord|actor|celebrity)\b",
-    r"\b(president|election|democrat|republican|political)\b",
+    r"\b(president|election|democrat|republican|political|prime\s+minister)\b",
     r"\b(write\s+(?:a\s+)?(?:funny\s+|short\s+|rhyming\s+)?(?:poem|story|song|essay|joke))\b",
     r"\b(fifa|world\s*cup|olympics|nfl|nba|football|soccer|cricket|tennis|championship)\b",
     r"\b(stock\s*price|nasdaq|dow\s*jones|crypto|bitcoin|ethereum|shares?\s+of)\b",
     r"\b(debug|react|javascript|python\s+code|html|css|frontend|backend\s+code|hook\s+error)\b",
+    r"\b(mars|jupiter|saturn|venus|neptune|uranus|pluto|moon|planet|astronomy|solar\s+system)\b",
+    r"\b(capital\s+of|population\s+of|who\s+invented|translate\s+to)\b",
+    r"\b(weather|forecast|rain|sunny)\b(?!.*\b(shipment|delay|delayed|route|freight|blizzard|warning|cargo|hub|vessel|port)\b)",
 ]
+
+SQL_INJECTION_PATTERNS = [
+    r"\b(drop\s+table|delete\s+from|insert\s+into|truncate\s+table|alter\s+table)\b",
+    r"\b(select\s+\*\s+from|union\s+select|;\s*drop\s+|'\s*or\s+'1'\s*=\s*'1)\b",
+]
+
+EMPLOYEE_PRONOUN_PATTERN = re.compile(
+    r"\b(he|she|his|her|him|they|their|them|this employee|that employee|the employee|staff member)\b",
+    re.IGNORECASE,
+)
+
+EMPLOYEE_FOLLOWUP_ATTR_KEYWORDS = (
+    "what shift", "which shift", "shift", "hub", "email", "extension", "phone",
+    "department", "job title", "role", "certification", "assigned", "contact",
+)
 
 
 def classify_logistics_query(
     query: str,
     session_history: Optional[List[Dict[str, str]]] = None,
     previous_shipment_id: Optional[str] = None,
+    previous_employee_id: Optional[str] = None,
 ) -> ClassifiedIntent:
-    """Classify user query into 10 distinct logistics intents with reference resolution.
+    """Classify user query into distinct logistics intents with reference resolution.
 
     Args:
         query: User input query text.
         session_history: Optional list of past chat turns [{"role": ..., "content": ...}].
         previous_shipment_id: Optional shipment ID actively tracked in conversation session.
+        previous_employee_id: Optional employee ID actively discussed in conversation session.
 
     Returns:
         ClassifiedIntent dataclass with intent, preferred source, and resolved entities.
     """
-    clean = re.sub(r"[?!.,;:]+", " ", query.strip().lower())
+    normalized_query = normalize_logistics_query(query)
+    clean = re.sub(r"[?!.,;:]+", " ", normalized_query.strip().lower())
     clean = re.sub(r"\s+", " ", clean).strip()
 
-    # 1. Check for Explicit Employee Lookup
-    emp_id = extract_employee_id(query)
+    # 0. Reject SQL injection probes before keyword matching hits 'shipments' or 'users'
+    for sql_pat in SQL_INJECTION_PATTERNS:
+        if re.search(sql_pat, normalized_query, re.IGNORECASE):
+            return ClassifiedIntent(
+                intent=LogisticsIntent.UNSUPPORTED_OFFTOPIC,
+                confidence=0.99,
+                preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.UNSUPPORTED_OFFTOPIC],
+                entities={"security_block": "sql_injection"},
+            )
+
+    # 1. Check for Explicit Operational Case / Record Lookup (e.g. OPS-001)
+    ops_id = extract_operational_id(normalized_query)
+    if ops_id:
+        return ClassifiedIntent(
+            intent=LogisticsIntent.OPERATIONAL_STATUS,
+            confidence=0.99,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.OPERATIONAL_STATUS],
+            operational_id=ops_id,
+            entities={"operational_id": ops_id},
+        )
+
+    # 2. Check for Explicit Employee Lookup
+    emp_id = extract_employee_id(normalized_query)
     if emp_id:
         return ClassifiedIntent(
             intent=LogisticsIntent.EMPLOYEE_SUPPORT,
@@ -206,7 +296,7 @@ def classify_logistics_query(
             employee_id=emp_id,
         )
 
-    # 2. Check for Greetings, Capabilities, and Polite Conversation
+    # 2b. Check for Greetings, Capabilities, and Polite Conversation
     is_conversational = clean in GREETING_EXACT or any(re.search(p, clean) for p in CONVERSATIONAL_PATTERNS)
     if is_conversational:
         # Ensure it doesn't contain freight IDs or operational questions
@@ -217,7 +307,7 @@ def classify_logistics_query(
                 preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.GENERAL_CONVERSATION],
             )
 
-    # 2b. Check for Aggregate Shipment Analytics & Count Queries
+    # 2c. Check for Aggregate Shipment Analytics & Count Queries
     is_shipment_count_query = (
         re.search(r"\b(how\s+many|count|total|number\s+of|breakdown|summary|overview\s+of)\b", clean) and
         re.search(r"\b(shipments?|packages?|orders?|cargo|freight|consignments?)\b", clean)
@@ -246,7 +336,7 @@ def classify_logistics_query(
             entities={"status_filter": status_target},
         )
 
-    # 2c. Check for Aggregate Employee Count Queries
+    # 2d. Check for Aggregate Employee Count Queries
     is_employee_count_query = (
         re.search(r"\b(how\s+many|count|total|number\s+of|breakdown|summary)\b", clean) and
         re.search(r"\b(employees?|staff|workers?|personnel|drivers?|workforce)\b", clean)
@@ -266,7 +356,23 @@ def classify_logistics_query(
     except InvalidShipmentIdError:
         raise
 
-    # 4. Multi-Turn Reference Resolution (Pronoun handling)
+    # 4a. Multi-Turn Employee Pronoun Resolution (e.g., 'What shift does she work?' after EMP-20001)
+    if not direct_shipment_id and previous_employee_id:
+        has_emp_pronoun = bool(EMPLOYEE_PRONOUN_PATTERN.search(clean))
+        has_emp_attr = any(k in clean for k in EMPLOYEE_FOLLOWUP_ATTR_KEYWORDS)
+        has_explicit_shipment_word = bool(re.search(r"\b(shipment|package|parcel|cargo|container|order|waybill)\b", clean))
+        if has_emp_pronoun and has_emp_attr and not has_explicit_shipment_word:
+            logger.info("Resolved employee pronoun reference to: %s", previous_employee_id)
+            return ClassifiedIntent(
+                intent=LogisticsIntent.EMPLOYEE_SUPPORT,
+                confidence=0.95,
+                preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.EMPLOYEE_SUPPORT],
+                employee_id=previous_employee_id,
+                resolved_reference=True,
+                target_attribute="employee_followup",
+            )
+
+    # 4b. Multi-Turn Shipment Reference Resolution (Pronoun handling)
     resolved_shipment_id = direct_shipment_id
     resolved_reference = False
 
@@ -319,6 +425,63 @@ def classify_logistics_query(
                 resolved_reference=resolved_reference,
                 target_attribute="location",
             )
+
+    # 5b. Ambiguous & Incomplete Query Detection (Requests requiring specific identifiers)
+    # Check for tracking without shipment ID
+    ambiguous_tracking_patterns = [
+        r"^(where\s+(is|s)\s+(my\s+)?(shipment|order|package|parcel|cargo|consignment|delivery))$",
+        r"^(where\s+has\s+(it|my\s+shipment|my\s+order)\s+reached)$",
+        r"^when\s+(will|is)\s+(it|my\s+shipment|my\s+order|my\s+package)\s+(arrive|delivered|reaching)$",
+        r"^track\s+(order|shipment|package|parcel|consignment|delivery)$",
+        r"^why\s+is\s+(it|my\s+shipment|my\s+order|the\s+shipment)\s+(late|delayed)$",
+        r"^(status\s+check|check\s+status|show\s+(me\s+)?the\s+status|what\s+is\s+the\s+status)$",
+        r"^(tell\s+me\s+about\s+(the|my)?\s*(shipment|package|order|delivery))$",
+        r"^(what\s+happened\s+to\s+(it|my\s+shipment|my\s+order|the\s+package))$",
+        r"^(is\s+(it|my\s+shipment|my\s+order)\s+cleared(\s+yet)?)$",
+    ]
+    if any(re.search(p, clean) for p in ambiguous_tracking_patterns):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.CLARIFICATION_REQUIRED,
+            confidence=0.98,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.CLARIFICATION_REQUIRED],
+            entities={"clarification_type": "missing_shipment_id"},
+        )
+
+    # Check for employee lookup without ID
+    if re.search(r"^(can\s+you\s+)?(check|look\s*up|view|search)\s+(my\s+)?employee(\s+profile|\s+directory|\s+record)?$", clean) or clean in ("check my employee profile", "look up employee", "employee directory search"):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.CLARIFICATION_REQUIRED,
+            confidence=0.98,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.CLARIFICATION_REQUIRED],
+            entities={"clarification_type": "missing_employee_id"},
+        )
+
+    # Check for ambiguous fee query
+    if clean in ("what is the fee", "how much is the fee", "what are the fees", "check the fee"):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.CLARIFICATION_REQUIRED,
+            confidence=0.95,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.CLARIFICATION_REQUIRED],
+            entities={"clarification_type": "ambiguous_fee"},
+        )
+
+    # Check for ambiguous hub query
+    if clean in ("where is the hub located", "hub location", "where are the hubs", "where is the hub"):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.CLARIFICATION_REQUIRED,
+            confidence=0.95,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.CLARIFICATION_REQUIRED],
+            entities={"clarification_type": "ambiguous_hub"},
+        )
+
+    # Check for broad delivery query
+    if clean in ("tell me about delivery", "how does delivery work", "delivery details"):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.CLARIFICATION_REQUIRED,
+            confidence=0.95,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.CLARIFICATION_REQUIRED],
+            entities={"clarification_type": "broad_delivery"},
+        )
 
     # 6. Check for Documentation Questions (Give priority to document/form queries)
     if any(k in clean for k in ("document", "documentation", "paperwork", "form", "forms")) or any(k in clean for k in DOCUMENTATION_KEYWORDS):

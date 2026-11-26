@@ -1,0 +1,93 @@
+[
+  {
+    "test_id": "LOGIC_001",
+    "category": "complex_logical",
+    "question": "Compare the status, location, and destination of shipment SHP-10001 and SHP-10002.",
+    "expected_intent": "complex_comparison",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Compare SHP-10001 (In Transit, Dubai Hub, destined for London) with SHP-10002 (Delayed, Jebel Ali Port, destined for Dubai).",
+    "priority": "P1"
+  },
+  {
+    "test_id": "LOGIC_002",
+    "category": "complex_logical",
+    "question": "Based on the tracking history of SHP-10003, what specific action must the shipper take to resume transit?",
+    "required_shipment_id": "SHP-10003",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Reason that customs hold is due to missing commercial invoice and advise submitting invoice to JFK customs broker.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "LOGIC_003",
+    "category": "complex_logical",
+    "question": "Explain why air freight would be preferred over ocean freight for pharmaceutical vaccines under policy CC-POL-9921.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Reason about transit speed (1-5 days vs 20-40 days), strict temperature stability, active telemetry, and reduced excursion risk.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "LOGIC_004",
+    "category": "complex_logical",
+    "question": "What is the relationship between customs status and shipment status when a consignment is held at gateway?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain that regulatory hold prevents departure scan, causing shipment status to transition into 'On Hold - Customs'.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "LOGIC_005",
+    "category": "complex_logical",
+    "question": "If a shipment route is Mumbai -> Dubai -> London, and current location is Dubai Hub, what milestones are completed and pending?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Deduce: Mumbai departure completed, Dubai transit in progress, London arrival and final delivery pending.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "LOGIC_006",
+    "category": "complex_logical",
+    "question": "Compare the cost and risk transfer points of FOB vs CIF for an ocean shipment departing Singapore.",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain that both transfer risk once cargo passes ship's rail at Singapore, but CIF requires seller to pay maritime freight and insurance.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "LOGIC_007",
+    "category": "complex_logical",
+    "question": "Analyze why shipment SHP-10007 has an estimated delivery later than SHP-10001 despite similar booking dates.",
+    "expected_intent": "complex_comparison",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Explain that SHP-10007 experienced weather disruption at Mumbai airport extending transit time to 2026-11-28.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "LOGIC_008",
+    "category": "complex_logical",
+    "question": "What happens if a consignee requests delivery to a different country while cargo is in transit?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain cross-border re-manifesting requires cancelling original export customs declaration, re-filing import duties, and rerouting linehaul.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "LOGIC_009",
+    "category": "complex_logical",
+    "question": "How do weight and dimensional volume interact to determine whether actual or volumetric weight is billed?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain chargeable weight is always the greater of actual gross mass vs volumetric (dimensional) mass.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "LOGIC_010",
+    "category": "complex_logical",
+    "question": "Explain the operational dependencies between LPN barcode generation, dock receiving, and sortation bay assignment.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail that LPN uniquely tracks pallet load, allowing automated sorters to scan and route pallets directly to scheduled outbound trailer bays.",
+    "priority": "P2"
+  }
+]

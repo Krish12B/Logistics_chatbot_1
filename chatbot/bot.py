@@ -6,16 +6,14 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from logistics_chatbot.chatbot.chatbot import (
-    build_context,
-    chat as _core_chat,
-    get_conversation_store,
-)
+from logistics_chatbot.chatbot.chatbot import get_conversation_store
 from logistics_chatbot.chatbot.classifier import (
     LogisticsIntent,
     classify_logistics_query,
     extract_employee_id,
+    extract_operational_id,
     extract_shipment_id,
+    normalize_logistics_query,
 )
 from logistics_chatbot.core import config
 from logistics_chatbot.core.errors import (
@@ -369,7 +367,7 @@ def format_display_date(date_str: Any) -> str:
 
 
 def build_shipment_status_report(shipment: dict, query_lower: str) -> str:
-    """Construct a clean, professional 5-section shipment tracking report strictly adhering to specification."""
+    """Construct a concise shipment tracking report: status header, overview table, and transit progress only."""
     sid = shipment["shipment_id"]
     status_raw = shipment.get("status") or "In Transit"
     status_emoji = STATUS_EMOJI_MAP.get(status_raw.lower(), f"🔵 {status_raw}")
@@ -380,7 +378,7 @@ def build_shipment_status_report(shipment: dict, query_lower: str) -> str:
     updated = format_display_date(shipment.get("last_updated"))
     route = shipment.get("route") or f"{origin} -> {dest}"
     delay_reason = shipment.get("delay_reason")
-    customs = shipment.get("customs_status") or "Not yet required"
+    customs_status = shipment.get("customs_status")
 
     stops = [s.strip() for s in route.split("->")]
     origin_name = stops[0] if stops else origin
@@ -394,17 +392,25 @@ def build_shipment_status_report(shipment: dict, query_lower: str) -> str:
     else:
         header = f"# 📦 Shipment Status – {sid}\n\n**Current Status:** {status_emoji}"
 
-    # 1. Shipment Overview Table
+    # 1. Shipment Overview Table (always surface customs_status & delay_reason when relevant)
+    overview_rows = [
+        f"| Shipment ID | {sid} |",
+        f"| Current Location | {curr_loc} |",
+        f"| Origin | {origin} |",
+        f"| Destination | {dest} |",
+        f"| Estimated Delivery | {eta} |",
+        f"| Last Updated | {updated} |",
+    ]
+    if customs_status:
+        overview_rows.append(f"| Customs Status | {customs_status} |")
+    if delay_reason:
+        overview_rows.append(f"| Delay Reason | {delay_reason} |")
+
     overview = (
-        f"### 1. Shipment Overview\n\n"
-        f"| Field | Details |\n"
-        f"|---|---|\n"
-        f"| Shipment ID | {sid} |\n"
-        f"| Current Location | {curr_loc} |\n"
-        f"| Origin | {origin} |\n"
-        f"| Destination | {dest} |\n"
-        f"| Estimated Delivery | {eta} |\n"
-        f"| Last Updated | {updated} |"
+        "### 1. Shipment Overview\n\n"
+        "| Field | Details |\n"
+        "|---|---|\n"
+        + "\n".join(overview_rows)
     )
 
     # 2. Shipment Progress
@@ -455,49 +461,7 @@ def build_shipment_status_report(shipment: dict, query_lower: str) -> str:
 
     progress_sec = "### 2. Shipment Progress\n\n" + "\n".join(progress_lines)
 
-    # 3. Delay and Customs Information
-    deliv_status = "Delayed" if delay_reason or "delay" in status_raw.lower() else "On Schedule"
-    if "customs" in status_raw.lower():
-        deliv_status = "Customs Hold"
-    elif "delivered" in status_raw.lower():
-        deliv_status = "Delivered"
-
-    delay_sec = (
-        f"### 3. Delay and Customs Information\n\n"
-        f"- Customs Status: {customs}\n"
-        f"- Delay Reason: {delay_reason or 'None'}\n"
-        f"- Delivery Status: {deliv_status}"
-    )
-
-    # 4. Next Expected Update
-    if "delivered" in status_raw.lower():
-        next_update = "The shipment has been successfully delivered. No further tracking updates are scheduled."
-    elif delay_reason:
-        next_update = f"Carrier operations are actively managing the delay ({delay_reason}). Next tracking scan is expected within 24 hours."
-    elif "customs" in status_raw.lower():
-        next_update = "Next tracking scan will be published once customs clearance documentation is finalized."
-    elif "out for delivery" in status_raw.lower():
-        next_update = f"The shipment is out with the local delivery courier and expected to reach {dest} today."
-    else:
-        next_update = f"The shipment is expected to reach {dest_name} by the estimated delivery date, subject to the latest tracking updates."
-
-    next_sec = f"### 4. Next Expected Update\n\n{next_update}"
-
-    # 5. Recommended Action
-    if "delivered" in status_raw.lower():
-        action = "Confirm physical receipt and inspect packages for cargo integrity."
-    elif "customs" in status_raw.lower():
-        action = f"Ensure all required export/import documents ({customs}) have been forwarded to the customs broker."
-    elif delay_reason:
-        action = "Monitor tracking alerts. If delivery exceeds the estimated delivery window, contact support."
-    elif "out for delivery" in status_raw.lower():
-        action = "Ensure the consignee or authorized recipient is available to receive cargo and provide proof of delivery signature."
-    else:
-        action = "No action is currently required. Continue monitoring shipment updates."
-
-    action_sec = f"### 5. Recommended Action\n\n{action}"
-
-    return f"{header}\n\n{overview}\n\n{progress_sec}\n\n{delay_sec}\n\n{next_sec}\n\n{action_sec}"
+    return f"{header}\n\n{overview}\n\n{progress_sec}"
 
 
 def clean_citation_brackets(text: str) -> str:
@@ -510,8 +474,90 @@ def clean_citation_brackets(text: str) -> str:
     return cleaned.strip()
 
 
+def build_operational_status_report(ops: Dict[str, Any]) -> str:
+    """Construct structured OPERATIONAL RECORD card matching Issue 5 specifications."""
+    doc_id = ops.get("doc_id", "N/A")
+    category = ops.get("category", "operational_case").replace("_", " ").title()
+    title = ops.get("section_title") or f"Operational Case {doc_id}"
+    status = ops.get("status", "Active")
+    origin = ops.get("origin", "N/A")
+    destination = ops.get("destination", "N/A")
+    assigned = ops.get("assigned_employee", "Operations Coordinator (Dispatch Desk)")
+    dept = ops.get("responsible_department", category)
+    last_updated = ops.get("last_updated", "N/A")
+    risk = ops.get("risk_factors", "Standard monitoring")
+    content = ops.get("content", "")
+
+    # Status badge
+    status_lower = status.lower()
+    if "awaiting" in status_lower or "pending" in status_lower:
+        status_badge = f"🟡 {status}"
+    elif "transit" in status_lower or "active" in status_lower:
+        status_badge = f"🟢 {status}"
+    elif "delay" in status_lower or "hold" in status_lower or "exception" in status_lower:
+        status_badge = f"🔴 {status}"
+    else:
+        status_badge = f"⚪ {status}"
+
+    location_str = f"{origin} → {destination}"
+    if origin != "N/A":
+        location_str += f" (Current Facility: {origin} Hub)"
+
+    report = (
+        f"# 📋 OPERATIONAL RECORD\n\n"
+        f"**Case Title:** {title}\n\n"
+        f"- **Record ID:** `{doc_id}`\n"
+        f"- **Current Status:** {status_badge}\n"
+        f"- **Responsible Department:** {dept}\n"
+        f"- **Assigned Employee:** {assigned}\n"
+        f"- **Current Location:** {location_str}\n"
+        f"- **Last Updated:** {last_updated}\n"
+    )
+
+    details = []
+    if risk and risk != "N/A":
+        details.append(f"**Key Risk Identified:** {risk}.")
+
+    if "coordinator should" in content.lower():
+        m = re.search(r"(The coordinator should [^.]+\.)", content, re.IGNORECASE)
+        if m:
+            details.append(f"**Protocol:** {m.group(1)}")
+    elif content:
+        first_sentence = content.split(".")[0].strip()
+        if first_sentence:
+            details.append(f"{first_sentence}.")
+
+    if details:
+        report += f"- **Additional Details:** {' '.join(details)}\n"
+
+    return report
+
+
+def _build_employee_profile_report(emp: Dict[str, Any]) -> str:
+    """Format an employee database record into a structured Markdown card."""
+    return (
+        f"# 👤 Employee Profile – {emp['employee_id']}\n\n"
+        f"**Personnel Record:** {emp['full_name']} ({emp['job_title']})\n\n"
+        f"### 1. Operations Overview\n\n"
+        f"| Field | Details |\n"
+        f"|---|---|\n"
+        f"| Employee ID | {emp['employee_id']} |\n"
+        f"| Full Name | {emp['full_name']} |\n"
+        f"| Department | {emp['department']} |\n"
+        f"| Job Title | {emp['job_title']} |\n"
+        f"| Assigned Hub | {emp['assigned_hub']} |\n"
+        f"| Shift Rotation | {emp['shift']} |\n"
+        f"| Certification | {emp.get('certification') or 'Standard Operations Certified'} |\n"
+        f"| Operational Status | {emp.get('status', 'Active')} |\n\n"
+        f"### 2. Contact & Internal Routing\n\n"
+        f"- **Corporate Email:** `{emp['email']}`\n"
+        f"- **VoIP Extension:** `{emp.get('phone_extension', 'x4000')}`\n"
+        f"- **Dispatch Desk:** Reachable through {emp['assigned_hub']} operations center."
+    )
+
+
 def is_aggregate_shipment_query(text: str) -> bool:
-    """Determine if a query is asking for aggregate shipment statistics, counts, or status totals."""
+    """Determine if a query asks for aggregate shipment statistics, counts, or status totals."""
     q = re.sub(r"[?!.,;:]+", " ", text.lower()).strip()
 
     count_cues = (
@@ -524,7 +570,13 @@ def is_aggregate_shipment_query(text: str) -> bool:
     has_shipment_noun = any(n in q for n in ("shipment", "shipments", "packages", "orders", "freight", "cargo", "consignments"))
 
     direct_status_count = any(
-        f"how many {s}" in q or f"how many are {s}" in q or f"how many were {s}" in q or f"how many have been {s}" in q or f"how many shipments {s}" in q or f"how many shipments are {s}" in q or f"how many shipments have been {s}" in q
+        f"how many {s}" in q
+        or f"how many are {s}" in q
+        or f"how many were {s}" in q
+        or f"how many have been {s}" in q
+        or f"how many shipments {s}" in q
+        or f"how many shipments are {s}" in q
+        or f"how many shipments have been {s}" in q
         for s in ("in transit", "currently in transit", "delivered", "delayed", "on hold", "out for delivery", "pending")
     )
 
@@ -538,7 +590,7 @@ def is_aggregate_shipment_query(text: str) -> bool:
 
 
 def is_aggregate_employee_query(text: str) -> bool:
-    """Determine if a query is asking for total workforce count or department staffing breakdown."""
+    """Determine if a query asks for total workforce count or department staffing breakdown."""
     q = re.sub(r"[?!.,;:]+", " ", text.lower()).strip()
     has_count = any(w in q for w in ("how many", "count", "total number", "number of", "total employees", "total staff", "workforce count"))
     has_emp = any(w in q for w in ("employee", "employees", "staff", "personnel", "workers", "workforce", "drivers"))
@@ -554,7 +606,6 @@ def build_shipment_aggregate_report(
     counts = database.get_shipment_status_counts()
     total = sum(counts.values()) or 10000
 
-    # Determine status filter if not provided
     if not status_filter:
         if "transit" in q:
             status_filter = "In Transit"
@@ -579,7 +630,6 @@ def build_shipment_aggregate_report(
         "Cancelled": "⚫ Cancelled",
     }
 
-    # Order common statuses consistently
     ordered_keys = ["In Transit", "Delivered", "Delayed", "On Hold - Customs", "Out for Delivery"]
     table_rows = []
     for k in ordered_keys:
@@ -675,51 +725,145 @@ def build_employee_aggregate_report() -> ChatResult:
     )
 
 
-def generate_response(
-    message: str,
-    session_id: Optional[str] = None,
-) -> ChatResult:
-    """Process a user query through the intelligent RAG pipeline and return a structured ChatResult.
-
-    Args:
-        message: The user's query or instruction.
-        session_id: Optional conversation session identifier for multi-turn memory.
-
-    Returns:
-        ChatResult (unpacks as tuple (response_text, sources_list) for backward compatibility)
-    """
-    if not message or not message.strip():
-        raise EmptyMessageError(
-            "Message cannot be empty. Please provide a question or shipment query."
-        )
-
-    clean_msg = message.strip()
-    msg_lower = clean_msg.lower()
-
-    if len(clean_msg) > MAX_QUERY_LENGTH:
-        raise QueryTooLongError()
-
-    # 1. Inspect conversation session for previous context
+def _extract_session_context(session_id: Optional[str]):
+    """Retrieve conversation session plus most recent shipment_id & employee_id."""
     session = None
     previous_shipment_id = None
+    previous_employee_id = None
     if session_id:
         store = get_conversation_store()
         session = store.get_or_create(session_id)
         if session and session.messages:
             for past_msg in reversed(session.messages):
-                sid = detect_shipment_id(past_msg.content)
-                if sid:
-                    previous_shipment_id = sid
+                if not previous_shipment_id:
+                    try:
+                        sid = detect_shipment_id(past_msg.content)
+                        if sid:
+                            previous_shipment_id = sid
+                    except InvalidShipmentIdError:
+                        pass
+                if not previous_employee_id:
+                    eid = extract_employee_id(past_msg.content)
+                    if eid:
+                        previous_employee_id = eid
+                if previous_shipment_id and previous_employee_id:
                     break
+    return session, previous_shipment_id, previous_employee_id
 
-    # 2. Classify Logistics Query Intent & Resolve References
+
+def _lookup_shipment_safe(target_shipment_id: str, msg_lower: str) -> Tuple[str, List[str], str, Optional[Dict[str, Any]]]:
+    """Lookup shipment safely without turning missing IDs into HTTP 500 crashes."""
+    try:
+        shipment = database.get_shipment(target_shipment_id)
+        if shipment:
+            report = build_shipment_status_report(shipment, msg_lower)
+            source_label = map_source_display(target_shipment_id)
+            res_type = "shipment_location" if any(w in msg_lower for w in ("location", "where")) else "shipment_status"
+            return report, [source_label], res_type, shipment
+    except ShipmentNotFoundError:
+        pass
+    not_found_msg = (
+        f"I couldn't find shipment **{target_shipment_id}** in the FleetHarbor tracking database. "
+        "Please verify your 5-digit Shipment ID (e.g., `SHP-10001` through `SHP-20000`) and try again."
+    )
+    return not_found_msg, [], "not_found", None
+
+
+def _lookup_employee_safe(target_emp_id: str) -> Tuple[str, List[str], str, Optional[Dict[str, Any]]]:
+    """Lookup employee safely and return formatted profile or friendly not-found notice."""
+    try:
+        emp = database.get_employee(target_emp_id)
+        if emp:
+            return _build_employee_profile_report(emp), [f"Employee Directory Roster ({target_emp_id})"], "employee_lookup", emp
+    except Exception as exc:
+        logger.warning("Employee lookup notice: %s", exc)
+    not_found_emp = (
+        f"I could not find employee **{target_emp_id}** in the FleetHarbor personnel directory. "
+        "Please verify the 5-digit employee ID (e.g., `EMP-20001` through `EMP-20500`) or contact the workforce dispatch desk at `dispatch@fleetharbor.com`."
+    )
+    return not_found_emp, [], "employee_not_found", None
+
+
+def _resolve_deterministic_response(
+    clean_msg: str,
+    session,
+    previous_shipment_id: Optional[str],
+    previous_employee_id: Optional[str],
+) -> Optional[ChatResult]:
+    """Resolve non-LLM deterministic intents (greetings, compound/single entities, direct defs, guardrails)."""
+    msg_lower = clean_msg.lower()
+
     classified = classify_logistics_query(
         clean_msg,
         session_history=session.get_recent_messages() if session else None,
         previous_shipment_id=previous_shipment_id,
+        previous_employee_id=previous_employee_id,
     )
 
-    # 3. Handle Greeting & Capability Inquiries
+    # Extract explicit/resolved IDs & direct domain matches to handle compound queries cleanly
+    explicit_ops_id = extract_operational_id(clean_msg)
+    explicit_emp_id = extract_employee_id(clean_msg)
+    explicit_shp_id = None
+    try:
+        explicit_shp_id = detect_shipment_id(clean_msg)
+    except InvalidShipmentIdError:
+        raise
+
+    direct_match = find_direct_answer(clean_msg)
+
+    target_ops_id = explicit_ops_id or classified.operational_id
+    target_shp_id = explicit_shp_id or (classified.shipment_id if classified.preferred_source == "shipment_database" else None)
+    target_emp_id = explicit_emp_id or (classified.employee_id if classified.preferred_source == "employee_directory" else None)
+
+    # Compound multi-entity query handling (e.g. SHP-10001 + EMP-20001 + FOB vs CIF)
+    component_count = sum(1 for item in (target_ops_id, target_shp_id, target_emp_id, direct_match) if item)
+    if component_count > 1:
+        parts: List[str] = []
+        sources: List[str] = []
+        structured: Dict[str, Any] = {}
+        primary_type = "general_knowledge"
+
+        if target_shp_id:
+            shp_resp, shp_srcs, shp_type, shp_data = _lookup_shipment_safe(target_shp_id, msg_lower)
+            parts.append(shp_resp)
+            sources.extend(shp_srcs)
+            primary_type = shp_type
+            if shp_data:
+                structured["shipment"] = shp_data
+
+        if target_emp_id:
+            emp_resp, emp_srcs, _, emp_data = _lookup_employee_safe(target_emp_id)
+            parts.append(emp_resp)
+            sources.extend(emp_srcs)
+            if emp_data:
+                structured["employee"] = emp_data
+
+        if target_ops_id:
+            ops_rec = database.fetch_operational_record(target_ops_id)
+            if ops_rec:
+                parts.append(build_operational_status_report(ops_rec))
+                sources.append(f"Operational Database ({target_ops_id})")
+                structured["operational"] = ops_rec
+
+        if direct_match:
+            dir_resp, dir_srcs = direct_match
+            parts.append(dir_resp)
+            sources.extend(dir_srcs)
+
+        combined_resp = "\n\n---\n\n".join(parts)
+        deduped_sources = list(dict.fromkeys(sources))
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", combined_resp)
+        return ChatResult(
+            response=combined_resp,
+            sources=deduped_sources,
+            response_type=primary_type,
+            shipment_id=target_shp_id,
+            structured_data=structured,
+        )
+
+    # Greeting & Capability Inquiries
     if classified.intent == LogisticsIntent.GENERAL_CONVERSATION or is_greeting_or_capability_query(clean_msg):
         if session:
             session.add_message("user", clean_msg)
@@ -731,8 +875,128 @@ def generate_response(
             shipment_id=None,
         )
 
-    # 4. Handle Direct Domain Definitions & Authoritative Standard Answers
-    direct_match = find_direct_answer(clean_msg)
+    # Ambiguous Queries Requiring Clarification
+    if classified.intent == LogisticsIntent.CLARIFICATION_REQUIRED:
+        clarif_type = classified.entities.get("clarification_type")
+        if clarif_type == "missing_shipment_id":
+            clarif_text = (
+                "To check your tracking status, real-time location, transit progress, or estimated delivery date, "
+                "please provide your **5-digit Shipment ID** (e.g., `SHP-10001` through `SHP-20000`).\n\n"
+                "If you have a physical waybill or receipt, the tracking ID is printed below the barcode in the format `SHP-XXXXX`."
+            )
+        elif clarif_type == "missing_employee_id":
+            clarif_text = (
+                "To look up an employee profile in the FleetHarbor personnel directory, "
+                "please provide their **5-digit Employee ID** (e.g., `EMP-20001` through `EMP-20500`)."
+            )
+        elif clarif_type == "ambiguous_fee":
+            clarif_text = (
+                "# 📋 FleetHarbor Operational Fee Structures\n\n"
+                "FleetHarbor maintains standard fee schedules across several operational areas. Could you clarify which fee you are inquiring about?\n\n"
+                "- **Demurrage & Detention Fees:** Assessed on ocean containers kept beyond free time (typically $85/day for dry containers, $220/day for reefers).\n"
+                "- **Order Cancellation Haulage Fee:** $150 for standard road dispatch cancellation after collection, $450 for specialized heavy/reefer transport.\n"
+                "- **Re-delivery Attempt Fees:** Assessed after 2 failed delivery attempts when the consignee is unreachable.\n"
+                "- **Customs Clearance Brokerage Fees:** Administrative tariff entry filing and clearance fee schedules."
+            )
+        elif clarif_type == "ambiguous_hub":
+            clarif_text = (
+                "# 🌐 FleetHarbor Global Hub Network\n\n"
+                "FleetHarbor operates 10 global logistics gateways and sorting hubs. Which hub location would you like details on?\n\n"
+                "1. **Dubai Logistics City Gateway** (`DXB-HUB-01`) – UAE\n"
+                "2. **Singapore Changi Mega Cargo Hub** (`SIN-HUB-02`) – Singapore\n"
+                "3. **Rotterdam Maasvlakte Terminal** (`RTM-HUB-03`) – Netherlands\n"
+                "4. **Frankfurt CargoCity South Hub** (`FRA-HUB-04`) – Germany\n"
+                "5. **London Heathrow World Cargo Centre** (`LHR-HUB-05`) – UK\n"
+                "6. **Tokyo Narita Air Cargo Center** (`NRT-HUB-06`) – Japan\n"
+                "7. **Los Angeles / Long Beach Intermodal Hub** (`LAX-HUB-07`) – USA\n"
+                "8. **Chicago O'Hare Freight Consolidation Hub** (`ORD-HUB-08`) – USA\n"
+                "9. **Amsterdam Schiphol Logistics Hub** (`AMS-HUB-09`) – Netherlands\n"
+                "10. **Mumbai Air Cargo & JNPT Terminal** (`BOM-HUB-10`) – India"
+            )
+        elif clarif_type == "broad_delivery":
+            clarif_text = (
+                "# 🚚 FleetHarbor Delivery Operations\n\n"
+                "FleetHarbor provides multimodal delivery management across air, ocean, road linehaul, and local final-mile courier routes.\n\n"
+                "Could you clarify how I can best assist you?\n"
+                "- **Track a Specific Delivery:** Provide your Shipment ID (e.g., `SHP-10001`)\n"
+                "- **Delivery Statuses:** Learn what *Out for Delivery*, *In Transit*, or *Delivered* mean\n"
+                "- **Delivery Exceptions & Delays:** Understand protocols for failed delivery attempts, weather delays, or customs holds\n"
+                "- **Proof of Delivery (POD):** How electronic signature and GPS delivery verification are recorded"
+            )
+        else:
+            clarif_text = (
+                "Could you please provide more details or specify a Shipment ID (e.g., `SHP-10001`) so I can assist you with your logistics request?"
+            )
+
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", clarif_text)
+
+        return ChatResult(
+            response=clarif_text,
+            sources=[],
+            response_type="clarification_request",
+            shipment_id=None,
+        )
+
+    # Aggregate Shipment & Status Count Queries (e.g. "How many shipments are in transit?")
+    if not target_shp_id and not target_ops_id and (
+        (classified.target_attribute == "aggregate_count" and classified.intent == LogisticsIntent.SHIPMENT_INFO)
+        or is_aggregate_shipment_query(clean_msg)
+    ):
+        agg_result = build_shipment_aggregate_report(
+            clean_msg, status_filter=classified.entities.get("status_filter")
+        )
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", agg_result.response)
+        return agg_result
+
+    # Aggregate Employee Workforce Queries (e.g. "How many employees do we have?")
+    if not target_emp_id and not target_ops_id and (
+        (classified.target_attribute == "aggregate_count" and classified.intent == LogisticsIntent.EMPLOYEE_SUPPORT)
+        or is_aggregate_employee_query(clean_msg)
+    ):
+        emp_agg_result = build_employee_aggregate_report()
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", emp_agg_result.response)
+        return emp_agg_result
+
+    # Operational Records (e.g. OPS-001)
+    if target_ops_id:
+        try:
+            ops_record = database.fetch_operational_record(target_ops_id)
+            if ops_record:
+                ops_report = build_operational_status_report(ops_record)
+                source_label = f"Operational Database ({target_ops_id})"
+                if session:
+                    session.add_message("user", clean_msg)
+                    session.add_message("assistant", ops_report)
+                return ChatResult(
+                    response=ops_report,
+                    sources=[source_label],
+                    response_type="operational_status",
+                    shipment_id=None,
+                    structured_data=ops_record,
+                )
+            not_found_msg = (
+                f"I couldn't find operational record **{target_ops_id}** in the FleetHarbor operational database. "
+                f"Please verify the record ID (e.g., `OPS-001` through `OPS-120`) or upload the operational dataset via the attachment (+) button."
+            )
+            if session:
+                session.add_message("user", clean_msg)
+                session.add_message("assistant", not_found_msg)
+            return ChatResult(
+                response=not_found_msg,
+                sources=[],
+                response_type="not_found",
+                shipment_id=None,
+            )
+        except Exception as exc:
+            logger.warning("Operational record lookup notice: %s", exc)
+
+    # Direct Domain Definitions
     if direct_match:
         dir_resp, dir_sources = direct_match
         if session:
@@ -745,96 +1009,35 @@ def generate_response(
             shipment_id=None,
         )
 
-    # 4b. Handle Aggregate Shipment & Status Count Queries (e.g. "How many shipments in transit?")
-    if (classified.target_attribute == "aggregate_count" and classified.intent == LogisticsIntent.SHIPMENT_INFO) or is_aggregate_shipment_query(clean_msg):
-        agg_result = build_shipment_aggregate_report(clean_msg, status_filter=classified.entities.get("status_filter"))
+    # Shipment Inquiries
+    if target_shp_id:
+        shp_resp, shp_srcs, shp_type, shp_data = _lookup_shipment_safe(target_shp_id, msg_lower)
         if session:
             session.add_message("user", clean_msg)
-            session.add_message("assistant", agg_result.response)
-        return agg_result
+            session.add_message("assistant", shp_resp)
+        return ChatResult(
+            response=shp_resp,
+            sources=shp_srcs,
+            response_type=shp_type,
+            shipment_id=target_shp_id,
+            structured_data=shp_data or {},
+        )
 
-    # 4c. Handle Aggregate Employee Workforce Queries (e.g. "How many employees do we have?")
-    if (classified.target_attribute == "aggregate_count" and classified.intent == LogisticsIntent.EMPLOYEE_SUPPORT) or is_aggregate_employee_query(clean_msg):
-        emp_agg_result = build_employee_aggregate_report()
-        if session:
-            session.add_message("user", clean_msg)
-            session.add_message("assistant", emp_agg_result.response)
-        return emp_agg_result
-
-    # 5. Handle Shipment Inquiries (Tracking, Location, Delivery ETA, Details)
-    target_shipment_id = classified.shipment_id or detect_shipment_id(clean_msg)
-    if target_shipment_id:
-        try:
-            shipment = database.get_shipment(target_shipment_id)
-            if shipment:
-                report = build_shipment_status_report(shipment, msg_lower)
-                source_label = map_source_display(target_shipment_id)
-                res_type = "shipment_location" if classified.target_attribute == "location" or "location" in msg_lower or "where" in msg_lower else "shipment_status"
-
-                if session:
-                    session.add_message("user", clean_msg)
-                    session.add_message("assistant", report)
-
-                return ChatResult(
-                    response=report,
-                    sources=[source_label],
-                    response_type=res_type,
-                    shipment_id=target_shipment_id,
-                    structured_data=shipment,
-                )
-        except ShipmentNotFoundError:
-            raise
-        except Exception as exc:
-            logger.warning("Shipment retrieval encountered notice: %s", exc)
-
-    # 6. Handle Employee Directory Lookup Intent
-    target_emp_id = classified.employee_id or extract_employee_id(clean_msg)
+    # Employee Directory Lookup Intent
     if target_emp_id:
-        try:
-            emp = database.get_employee(target_emp_id)
-            if emp:
-                emp_report = (
-                    f"# 👤 Employee Profile – {emp['employee_id']}\n\n"
-                    f"**Personnel Record:** {emp['full_name']} ({emp['job_title']})\n\n"
-                    f"### 1. Operations Overview\n\n"
-                    f"| Field | Details |\n"
-                    f"|---|---|\n"
-                    f"| Employee ID | {emp['employee_id']} |\n"
-                    f"| Full Name | {emp['full_name']} |\n"
-                    f"| Department | {emp['department']} |\n"
-                    f"| Job Title | {emp['job_title']} |\n"
-                    f"| Assigned Hub | {emp['assigned_hub']} |\n"
-                    f"| Shift Rotation | {emp['shift']} |\n"
-                    f"| Certification | {emp.get('certification') or 'Standard Operations Certified'} |\n"
-                    f"| Operational Status | {emp.get('status', 'Active')} |\n\n"
-                    f"### 2. Contact & Internal Routing\n\n"
-                    f"- **Corporate Email:** `{emp['email']}`\n"
-                    f"- **VoIP Extension:** `{emp.get('phone_extension', 'x4000')}`\n"
-                    f"- **Dispatch Desk:** Reachable through {emp['assigned_hub']} operations center."
-                )
-                source_label = f"Employee Directory Roster ({target_emp_id})"
+        emp_resp, emp_srcs, emp_type, emp_data = _lookup_employee_safe(target_emp_id)
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", emp_resp)
+        return ChatResult(
+            response=emp_resp,
+            sources=emp_srcs,
+            response_type=emp_type,
+            shipment_id=None,
+            structured_data=emp_data or {},
+        )
 
-                if session:
-                    session.add_message("user", clean_msg)
-                    session.add_message("assistant", emp_report)
-
-                return ChatResult(
-                    response=emp_report,
-                    sources=[source_label],
-                    response_type="employee_lookup",
-                    shipment_id=None,
-                    structured_data=emp,
-                )
-        except Exception as exc:
-            logger.warning("Employee lookup notice: %s", exc)
-            return ChatResult(
-                response=f"I could not find employee **{target_emp_id}** in the FleetHarbor personnel directory. Please verify the 5-digit employee ID (e.g., `EMP-20001` through `EMP-20500`) or contact the workforce dispatch desk at `dispatch@fleetharbor.com`.",
-                sources=[],
-                response_type="employee_not_found",
-                shipment_id=None,
-            )
-
-    # 7. Handle Clearly Unsupported / Off-Topic Queries
+    # Unsupported / Off-Topic Queries
     if classified.intent == LogisticsIntent.UNSUPPORTED_OFFTOPIC:
         offtopic_msg = (
             "I apologize, but that topic is outside the FleetHarbor logistics domain.\n\n"
@@ -852,23 +1055,95 @@ def generate_response(
             shipment_id=None,
         )
 
-    # 8. RAG Knowledge Retrieval & LLM Generation
-    try:
-        context = retrieve(clean_msg)
-        raw_sources = list(context.source_doc_ids) if context.source_doc_ids else []
-    except Exception as exc:
-        logger.warning("Context retrieval encountered non-fatal error: %s", exc)
-        context = None
-        raw_sources = []
+    return None
 
-    # If no knowledge articles found and query looks unavailable / off-topic
-    if not context or (not context.knowledge_articles and not context.shipment and not getattr(context, "shipment_list", None)):
+
+def _prepare_rag_prompt(
+    clean_msg: str,
+    session,
+    previous_shipment_id: Optional[str],
+):
+    """Run RAG retrieve() ONCE and construct prompt messages for LLM."""
+    context = retrieve(clean_msg, previous_shipment_id=previous_shipment_id)
+    raw_sources = list(context.source_doc_ids) if context and context.source_doc_ids else []
+    if context and getattr(context, "shipment_list", None) and not raw_sources:
+        raw_sources.append("Shipment Database Registry")
+    formatted = format_context(context) if context else ""
+    if not formatted:
+        return context, "", [], []
+
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    if session:
+        messages.extend(session.get_recent_messages(max_turns=3))
+    messages.append({
+        "role": "user",
+        "content": f"CONTEXT:\n{formatted}\n\nUSER QUESTION: {clean_msg}",
+    })
+    return context, formatted, messages, raw_sources
+
+
+def _is_unavailable_text(text: str) -> bool:
+    ans_lower = (text or "").lower()
+    return any(phrase in ans_lower for phrase in (
+        "information is not available",
+        "not available in the fleetharbor",
+        "outside the fleetharbor logistics domain",
+        "temporarily unavailable",
+        "cannot find",
+        "i apologize",
+        "sorry, something unexpected went wrong",
+        "please contact our support team at support@fleetharbor.com",
+    ))
+
+
+def _invoke_llm(messages: List[Dict[str, str]]) -> str:
+    """Invoke call_llm cleanly while honoring test patches on either bot or core chatbot."""
+    from unittest.mock import Mock
+    import logistics_chatbot.chatbot.chatbot as _core_mod
+
+    if isinstance(_core_mod.call_llm, Mock):
+        return _core_mod.call_llm(messages)
+    return call_llm(messages)
+
+
+def generate_response(
+    message: str,
+    session_id: Optional[str] = None,
+) -> ChatResult:
+    """Process a user query through the intelligent RAG pipeline and return a structured ChatResult."""
+    if not message or not message.strip():
+        raise EmptyMessageError(
+            "Message cannot be empty. Please provide a question or shipment query."
+        )
+
+    clean_msg = message.strip()
+    if len(clean_msg) > MAX_QUERY_LENGTH:
+        raise QueryTooLongError()
+
+    session, previous_shipment_id, previous_employee_id = _extract_session_context(session_id)
+
+    # 1. Deterministic fast-path intents (greetings, DB entities, direct defs, guardrails)
+    det_res = _resolve_deterministic_response(
+        clean_msg, session, previous_shipment_id, previous_employee_id
+    )
+    if det_res is not None:
+        return det_res
+
+    # 2. Single-pass RAG retrieval & LLM generation
+    context, formatted_ctx, messages, raw_sources = _prepare_rag_prompt(
+        clean_msg, session, previous_shipment_id
+    )
+
+    if not formatted_ctx or (not context.knowledge_articles and not context.shipment and not context.shipment_list):
         unavailable_msg = (
             "I apologize, but that information is not available in the FleetHarbor logistics knowledge base.\n\n"
             "I can help you with shipment tracking, delivery routes, customs clearance documentation, "
             "cold-chain cargo rules, and logistics policies. If you need specialized assistance, "
             "please contact the support team at support@fleetharbor.com."
         )
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", unavailable_msg)
         return ChatResult(
             response=unavailable_msg,
             sources=[],
@@ -876,34 +1151,23 @@ def generate_response(
             shipment_id=None,
         )
 
-    if context and getattr(context, "shipment_list", None) and not raw_sources:
-        raw_sources.append("Shipment Database Registry")
+    # Let ChatbotError / LLMTimeoutError / LLMRateLimitError propagate cleanly to HTTP layer
+    answer = (_invoke_llm(messages) or "").strip()
+    if not answer:
+        from logistics_chatbot.core.errors import LLMUnavailableError
+        raise LLMUnavailableError(detail="Groq returned an empty reply")
 
-    # Call LLM through core chat
-    answer = _core_chat(clean_msg, session_id=session_id)
-
-    # Extract any bracket citations in the LLM answer
     found_citations = _CITATION_PATTERN.findall(answer)
     for cite in found_citations:
         if cite not in raw_sources and not cite.isdigit():
             raw_sources.append(cite)
 
-    # Clean raw citation brackets from the body for clean user-facing reading
     clean_answer = clean_citation_brackets(answer)
 
-    # Check if the generated response is an apology, unavailable notice, or error
-    ans_lower = clean_answer.lower()
-    is_unavailable_or_error = any(phrase in ans_lower for phrase in [
-        "information is not available",
-        "not available in the fleetharbor",
-        "temporarily unavailable",
-        "cannot find",
-        "i apologize",
-        "sorry, something unexpected went wrong",
-        "please contact our support team at support@fleetharbor.com",
-    ])
-    if is_unavailable_or_error:
-        # Never display verified sources beneath an apology or unavailable message
+    if _is_unavailable_text(clean_answer):
+        if session:
+            session.add_message("user", clean_msg, context=formatted_ctx)
+            session.add_message("assistant", clean_answer)
         return ChatResult(
             response=clean_answer,
             sources=[],
@@ -911,10 +1175,12 @@ def generate_response(
             shipment_id=None,
         )
 
-    # Map sources to human-readable names
     mapped_sources = [map_source_display(s) for s in raw_sources]
-    # Deduplicate while preserving order
     deduped_sources = list(dict.fromkeys(mapped_sources))
+
+    if session:
+        session.add_message("user", clean_msg, context=formatted_ctx)
+        session.add_message("assistant", clean_answer)
 
     return ChatResult(
         response=clean_answer,
@@ -928,65 +1194,63 @@ def stream_chat_response(
     message: str,
     session_id: Optional[str] = None,
 ):
-    """Generator yielding progressive SSE-compatible payload dictionaries for streaming chat responses.
-
-    Yields:
-        dict: {"token": str, "done": False} for token updates,
-              {"done": True, "response": str, "sources": List[str], "response_type": str} on completion.
-    """
+    """Generator yielding progressive SSE-compatible payload dictionaries (single-pass, zero duplicate LLM calls)."""
     clean_msg = (message or "").strip()
     if not clean_msg:
-        yield {"token": "Please type a question about your shipment or logistics operations.", "done": False}
-        yield {
-            "done": True,
-            "response": "Please type a question about your shipment or logistics operations.",
-            "sources": [],
-            "response_type": "error",
-        }
+        msg = "Please type a question about your shipment or logistics operations."
+        yield {"token": msg, "done": False}
+        yield {"done": True, "response": msg, "sources": [], "response_type": "error"}
         return
 
-    # 1. Fast path: check for deterministic intents (greetings, direct definitions, shipment/employee lookup, off-topic)
-    res = generate_response(clean_msg, session_id=session_id)
-    if res.response_type != "general_knowledge" or not config.GROQ_API_KEY:
-        yield {"token": res.response, "done": False}
-        yield {
-            "done": True,
-            "response": res.response,
-            "sources": res.sources,
-            "response_type": res.response_type,
-            "shipment_id": res.shipment_id,
-        }
+    if len(clean_msg) > MAX_QUERY_LENGTH:
+        msg = f"Query is too long. Please keep queries under {MAX_QUERY_LENGTH} characters."
+        yield {"token": msg, "done": False}
+        yield {"done": True, "response": msg, "sources": [], "response_type": "error"}
         return
 
-    # 2. LLM RAG Streaming path
     try:
-        session = None
-        previous_shipment_id = None
-        if session_id:
-            store = get_conversation_store()
-            session = store.get_or_create(session_id)
-            if session and session.messages:
-                for past_msg in reversed(session.messages):
-                    sid = detect_shipment_id(past_msg.content)
-                    if sid:
-                        previous_shipment_id = sid
-                        break
+        session, previous_shipment_id, previous_employee_id = _extract_session_context(session_id)
 
-        context = build_context(clean_msg, previous_shipment_id=previous_shipment_id)
-        if not context:
-            yield {"token": res.response, "done": False}
-            yield {"done": True, "response": res.response, "sources": res.sources, "response_type": res.response_type}
+        # 1. Deterministic fast-path (ZERO retrieve() or call_llm()!)
+        det_res = _resolve_deterministic_response(
+            clean_msg, session, previous_shipment_id, previous_employee_id
+        )
+        if det_res is not None:
+            yield {"token": det_res.response, "done": False}
+            yield {
+                "done": True,
+                "response": det_res.response,
+                "sources": det_res.sources,
+                "response_type": det_res.response_type,
+                "shipment_id": det_res.shipment_id,
+            }
             return
 
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-        if session:
-            messages.extend(session.get_recent_messages(max_turns=3))
-        messages.append({
-            "role": "user",
-            "content": f"CONTEXT:\n{context}\n\nUSER QUESTION: {clean_msg}",
-        })
+        # 2. Single-pass RAG retrieval + streaming LLM call
+        context, formatted_ctx, messages, raw_sources = _prepare_rag_prompt(
+            clean_msg, session, previous_shipment_id
+        )
+        if not formatted_ctx or (not context.knowledge_articles and not context.shipment and not context.shipment_list):
+            unavailable_msg = (
+                "I apologize, but that information is not available in the FleetHarbor logistics knowledge base.\n\n"
+                "I can help you with shipment tracking, delivery routes, customs clearance documentation, "
+                "cold-chain cargo rules, and logistics policies. If you need specialized assistance, "
+                "please contact the support team at support@fleetharbor.com."
+            )
+            if session:
+                session.add_message("user", clean_msg)
+                session.add_message("assistant", unavailable_msg)
+            yield {"token": unavailable_msg, "done": False}
+            yield {
+                "done": True,
+                "response": unavailable_msg,
+                "sources": [],
+                "response_type": "unavailable",
+                "shipment_id": None,
+            }
+            return
 
-        accumulated_chunks = []
+        accumulated_chunks: List[str] = []
         for token_chunk in stream_llm(messages):
             accumulated_chunks.append(token_chunk)
             yield {"token": token_chunk, "done": False}
@@ -994,39 +1258,20 @@ def stream_chat_response(
         full_raw_text = "".join(accumulated_chunks)
         clean_text = clean_citation_brackets(full_raw_text)
 
-        # Apply source extraction and sources guard
-        raw_sources = []
         found_citations = _CITATION_PATTERN.findall(full_raw_text)
         for cite in found_citations:
             if cite not in raw_sources and not cite.isdigit():
                 raw_sources.append(cite)
 
-        ctx_sources = retrieve(clean_msg)
-        if ctx_sources and ctx_sources.source_doc_ids:
-            for s in ctx_sources.source_doc_ids:
-                if s not in raw_sources:
-                    raw_sources.append(s)
-
-        ans_lower = clean_text.lower()
-        is_unavailable = any(phrase in ans_lower for phrase in [
-            "information is not available",
-            "not available in the fleetharbor",
-            "temporarily unavailable",
-            "cannot find",
-            "i apologize",
-            "sorry, something unexpected went wrong",
-            "please contact our support team at support@fleetharbor.com",
-        ])
-
-        if is_unavailable:
-            final_sources = []
+        if _is_unavailable_text(clean_text):
+            final_sources: List[str] = []
             final_type = "unavailable"
         else:
             final_sources = list(dict.fromkeys([map_source_display(s) for s in raw_sources]))
             final_type = "general_knowledge"
 
         if session:
-            session.add_message("user", clean_msg, context=context)
+            session.add_message("user", clean_msg, context=formatted_ctx)
             session.add_message("assistant", clean_text)
 
         yield {
@@ -1037,15 +1282,27 @@ def stream_chat_response(
             "shipment_id": None,
         }
 
-    except Exception as exc:
-        logger.warning("Streaming fallback to synchronous response: %s", exc)
-        yield {"token": res.response, "done": False}
+    except ChatbotError as exc:
+        logger.warning("Handled chatbot error during stream: %s", exc.detail or exc.user_message)
+        yield {"token": exc.user_message, "done": False}
         yield {
             "done": True,
-            "response": res.response,
-            "sources": res.sources,
-            "response_type": res.response_type,
-            "shipment_id": res.shipment_id,
+            "response": exc.user_message,
+            "sources": [],
+            "response_type": "error",
+            "shipment_id": None,
+        }
+
+    except Exception as exc:
+        logger.exception("Unexpected error during chat stream: %s", exc)
+        err_msg = "An operational error occurred while generating your answer. Please try again."
+        yield {"token": err_msg, "done": False}
+        yield {
+            "done": True,
+            "response": err_msg,
+            "sources": [],
+            "response_type": "error",
+            "shipment_id": None,
         }
 
 

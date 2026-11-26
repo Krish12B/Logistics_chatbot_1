@@ -1,0 +1,138 @@
+[
+  {
+    "test_id": "DELIV_001",
+    "category": "delivery_management",
+    "question": "What does 'Out for Delivery' status mean?",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain cargo has departed local delivery hub on courier vehicle for physical delivery today.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELIV_002",
+    "category": "delivery_management",
+    "question": "What happens when a delivery attempt fails because consignee is unavailable?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain delivery re-attempt protocol, driver notice card, and 7-day depot holding window.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELIV_003",
+    "category": "delivery_management",
+    "question": "What is Proof of Delivery (POD) and what details are recorded?",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail electronic POD capturing recipient signature, GPS coordinates, timestamp, and package piece count.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELIV_004",
+    "category": "delivery_management",
+    "question": "How are delivery time windows scheduled for Enterprise tier accounts?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite customer rules SLA providing guaranteed 2-hour delivery booking slots for Enterprise customers.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELIV_005",
+    "category": "delivery_management",
+    "question": "What procedure is followed when cargo is delivered to a destination hub?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail unloading scan, LPN verification, physical container seal check, and sorting to linehaul bay.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELIV_006",
+    "category": "delivery_management",
+    "question": "What is the maximum allowed holding time at destination hub before return haulage?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain standard holding period is 7 to 10 days before Return to Shipper (RTS) procedures initiate.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DELIV_007",
+    "category": "delivery_management",
+    "question": "How does FleetHarbor handle address correction requests during transit?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain rerouting request process through dispatch before final-mile dispatch, including re-consignment fee if applicable.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DELIV_008",
+    "category": "delivery_management",
+    "question": "What is the delivery cutoff time for same-day priority air shipments?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail airport tender cutoff times (typically 12:00 or 14:00 local airport time).",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DELIV_009",
+    "category": "delivery_management",
+    "question": "Can a consignee inspect packages before signing the Proof of Delivery?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain outer carton visual condition signoff and policy for noting damaged boxes directly on POD.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELIV_010",
+    "category": "delivery_management",
+    "question": "What delivery confirmation options are available for high-value cargo?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail adult signature required (DSR), photo POD, and dual security escort for sensitive consignments.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELIV_011",
+    "category": "delivery_management",
+    "question": "What is the estimated delivery time for SHP-10005?",
+    "required_shipment_id": "SHP-10005",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Retrieve estimated delivery date 2026-11-16 and out for delivery status from database.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELIV_012",
+    "category": "delivery_management",
+    "question": "What is last-mile logistics routing optimization?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain dynamic courier route sequencing based on traffic telemetry, delivery windows, and fuel efficiency.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DELIV_013",
+    "category": "delivery_management",
+    "question": "What happens if a recipient refuses to accept a delivery?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Document delivery rejection status 'Refused by Consignee', return to local depot, and notification to shipper.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELIV_014",
+    "category": "delivery_management",
+    "question": "How are delivery time windows calculated across international time zones?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain UTC standardized timestamps with automatic destination local time conversion for delivery estimates.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DELIV_015",
+    "category": "delivery_management",
+    "question": "What is the procedure for contactless delivery during high-security consignments?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain OTP or one-time delivery verification code paired with geo-tagged delivery photograph.",
+    "priority": "P2"
+  }
+]

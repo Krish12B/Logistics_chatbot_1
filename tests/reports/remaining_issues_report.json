@@ -1,0 +1,35 @@
+{
+  "report_title": "FleetHarbor AI - Remaining Issues and Strategic Technical Debt Report",
+  "generated_at": "2026-11-23T16:00:30+05:30",
+  "critical_blockers": 0,
+  "high_severity_defects": 0,
+  "medium_severity_defects": 0,
+  "resolved_issues": [
+    {
+      "id": "ISSUE-1",
+      "title": "CSV Upload Ingestion Failure",
+      "status": "RESOLVED_AND_VERIFIED",
+      "resolution": "Built csv_processor.py with multi-encoding, category detection, validation, relational DB upsert, and ChromaDB vector indexing."
+    },
+    {
+      "id": "ISSUE-2",
+      "title": "Incorrect Query Routing for Operational Records (e.g. stauts of ops-001?)",
+      "status": "RESOLVED_AND_VERIFIED",
+      "resolution": "Implemented query normalizer, OPS identifier extractor, OPERATIONAL_STATUS intent, and database-first retrieval returning structured OPERATIONAL RECORD card."
+    }
+  ],
+  "future_enhancements": [
+    {
+      "id": "ENH-001",
+      "priority": "P2",
+      "area": "Multi-Modal UI Drag-and-Drop",
+      "description": "Add visual drag-and-drop zone directly onto chat conversation pane for Excel (.xlsx) and Parquet logistics manifests."
+    },
+    {
+      "id": "ENH-002",
+      "priority": "P3",
+      "area": "Real-time Telemetry Webhooks",
+      "description": "Stream live IoT sensor telemetry (temperature, GPS location, shock impact) for cold-chain operational cases into the operational_records table via Kafka or MQTT webhooks."
+    }
+  ]
+}

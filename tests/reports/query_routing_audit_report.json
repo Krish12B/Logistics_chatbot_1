@@ -1,0 +1,60 @@
+{
+  "report_title": "FleetHarbor AI - Intelligent Query Routing & Normalization Audit",
+  "generated_at": "2026-11-23T15:59:00+05:30",
+  "pipeline_stages": [
+    "User Query Input",
+    "Input Normalization & Typo Correction (staus/stauts/statuss -> status)",
+    "Identifier Extraction (OPS-*, SHP-*, EMP-*)",
+    "Intent Classification (LogisticsIntent)",
+    "Database-First Lookup (SQLite / Supabase)",
+    "Fallback Semantic Search (ChromaDB)",
+    "Structured Card Formatting"
+  ],
+  "routing_rules_matrix": [
+    {
+      "query_type": "Operational Record (e.g. stauts of ops-001?)",
+      "regex_pattern": "\\bOPS[-\\s]?(\\d{1,6})\\b",
+      "intent": "OPERATIONAL_STATUS",
+      "primary_data_source": "operational_records (SQLite / Supabase)",
+      "response_type": "operational_status",
+      "observed_latency_ms": 0.35,
+      "audit_result": "PASSED"
+    },
+    {
+      "query_type": "Shipment Tracking (e.g. Status of SHP-10001)",
+      "regex_pattern": "\\bSHP[-\\s]?(\\d{5})\\b",
+      "intent": "SHIPMENT_TRACKING",
+      "primary_data_source": "shipments table (SQLite / Supabase)",
+      "response_type": "shipment_location / shipment_status",
+      "observed_latency_ms": 0.45,
+      "audit_result": "PASSED"
+    },
+    {
+      "query_type": "Employee Personnel (e.g. Look up EMP-20001)",
+      "regex_pattern": "\\bEMP[-\\s]?(\\d{5})\\b",
+      "intent": "EMPLOYEE_SUPPORT",
+      "primary_data_source": "employees table (SQLite / Supabase)",
+      "response_type": "employee_lookup",
+      "observed_latency_ms": 0.38,
+      "audit_result": "PASSED"
+    },
+    {
+      "query_type": "Company Policies & SOPs (e.g. Cold-chain pharma guidelines)",
+      "regex_pattern": "Domain keywords without specific database IDs",
+      "intent": "COMPANY_POLICY / LOGISTICS_PROCESS",
+      "primary_data_source": "ChromaDB Vector Store (logistics_knowledge_chunks)",
+      "response_type": "general_knowledge",
+      "observed_latency_ms": 12.5,
+      "audit_result": "PASSED"
+    },
+    {
+      "query_type": "Ambiguous / Incomplete (e.g. Where is my shipment?)",
+      "regex_pattern": "Missing required identifiers",
+      "intent": "CLARIFICATION_REQUIRED",
+      "primary_data_source": "Clarification Engine",
+      "response_type": "clarification_request",
+      "observed_latency_ms": 0.12,
+      "audit_result": "PASSED"
+    }
+  ]
+}

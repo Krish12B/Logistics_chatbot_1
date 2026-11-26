@@ -1,0 +1,93 @@
+[
+  {
+    "test_id": "EDGE_001",
+    "category": "negative_edge_cases",
+    "question": "Track shipment SHP-99999",
+    "required_shipment_id": "SHP-99999",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return user-friendly 'Shipment Not Found' notice advising user to verify the ID.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EDGE_002",
+    "category": "negative_edge_cases",
+    "question": "Track shipment INVALID-ID-XYZ",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Inform user that shipment IDs follow the pattern SHP-10001 (SHP with 5 digits).",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EDGE_003",
+    "category": "negative_edge_cases",
+    "question": "   ",
+    "expected_intent": "error_handling",
+    "expected_source": "api_validation",
+    "expected_behavior": "Reject empty/whitespace query with 400 Bad Request or validation message.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EDGE_004",
+    "category": "negative_edge_cases",
+    "question": "What is the weather on Mars tomorrow?",
+    "expected_intent": "unsupported_offtopic",
+    "expected_source": "classifier",
+    "expected_behavior": "Politely decline off-topic query and restate logistics support capabilities.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EDGE_005",
+    "category": "negative_edge_cases",
+    "question": "Look up employee EMP-99999",
+    "expected_intent": "employee_lookup",
+    "expected_source": "employee_database",
+    "expected_behavior": "Return polite notice that employee EMP-99999 is not found in personnel directory.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EDGE_006",
+    "category": "negative_edge_cases",
+    "question": "Can you write a poem about quantum computers baking cookies?",
+    "expected_intent": "unsupported_offtopic",
+    "expected_source": "classifier",
+    "expected_behavior": "Decline off-topic request and refocus on logistics operations.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EDGE_007",
+    "category": "negative_edge_cases",
+    "question": "DROP TABLE shipments; SELECT * FROM users;",
+    "expected_intent": "security_sanitization",
+    "expected_source": "classifier",
+    "expected_behavior": "Safely sanitize SQL injection attempt and treat as invalid query or standard lookup without error.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EDGE_008",
+    "category": "negative_edge_cases",
+    "question": "<script>alert('xss vulnerability')</script> Track SHP-10001",
+    "expected_intent": "security_sanitization",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Properly HTML/script escape input and safely answer shipment tracking for SHP-10001.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "EDGE_009",
+    "category": "negative_edge_cases",
+    "question": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "expected_intent": "error_handling",
+    "expected_source": "api_validation",
+    "expected_behavior": "Reject oversized query exceeding 2000 character limit with HTTP 413 or QueryTooLongError.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "EDGE_010",
+    "category": "negative_edge_cases",
+    "question": "What is the status of SHP-10001? Also tell me about EMP-20001 and FOB vs CIF shipping terms.",
+    "expected_intent": "complex_query",
+    "expected_source": "orchestrator",
+    "expected_behavior": "Handle compound multi-part query by prioritizing shipment tracking and providing comprehensive answers.",
+    "priority": "P1"
+  }
+]

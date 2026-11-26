@@ -1,0 +1,141 @@
+[
+  {
+    "test_id": "DELAY_001",
+    "category": "shipment_delays",
+    "question": "What happens when a shipment is delayed due to weather?",
+    "expected_intent": "direct_definition",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain exception trigger, status change to Delayed, automated ETA recalculation, and notification dispatch.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_002",
+    "category": "shipment_delays",
+    "question": "Why is shipment SHP-10002 delayed?",
+    "required_shipment_id": "SHP-10002",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Identify delay reason from database: 'Port congestion at Jebel Ali'.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_003",
+    "category": "shipment_delays",
+    "question": "What is the reason for delay on shipment SHP-10007?",
+    "required_shipment_id": "SHP-10007",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Identify delay reason from database: 'Weather disruption at Mumbai airport'.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_004",
+    "category": "shipment_delays",
+    "question": "What is the company policy for escalating shipments delayed more than 48 hours?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite escalation protocol: Level 2 operations supervisor alert, route rerouting review, and direct client call.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELAY_005",
+    "category": "shipment_delays",
+    "question": "How are customs holds categorized and resolved?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail HOLD-DOC (documentation missing), HOLD-VAL (customs valuation dispute), and HOLD-PHYS (physical inspection lane).",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_006",
+    "category": "shipment_delays",
+    "question": "Why is shipment SHP-10003 on customs hold?",
+    "required_shipment_id": "SHP-10003",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Explain customs status: 'Held - awaiting commercial invoice' at JFK Airport, USA.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_007",
+    "category": "shipment_delays",
+    "question": "What is the root cause of delay for SHP-10010?",
+    "required_shipment_id": "SHP-10010",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Identify customs status: 'Held - missing packing list' at LAX Airport, USA.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_008",
+    "category": "shipment_delays",
+    "question": "What compensation is available if a guaranteed delivery SLA is breached?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite customer terms: freight credit or refund per account tier SLA guidelines.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELAY_009",
+    "category": "shipment_delays",
+    "question": "What happens if a cold-chain pharma shipment experiences a temperature excursion?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite policy CC-POL-9921: immediate isolation in secondary reefer, 24-hr QA deviation root-cause investigation, and cold-chain stability assessment.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_010",
+    "category": "shipment_delays",
+    "question": "How should an employee handle cargo damaged in transit during linehaul?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Quarantine cargo, photograph packaging, log exception in WMS/ERP, file damaged freight report within 12 hours.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELAY_011",
+    "category": "shipment_delays",
+    "question": "What is the procedure if a cargo container seal is found broken or mismatched?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Stop unloading immediately, alert security supervisor, notify customs liaison, take high-resolution photos, and verify seal bolt serial number against manifest.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DELAY_012",
+    "category": "shipment_delays",
+    "question": "How long does a customer have to file a formal cargo loss claim?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite claims timeline: outer damage within 3 days, concealed damage within 14 days, total loss within 30 days of estimated delivery.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELAY_013",
+    "category": "shipment_delays",
+    "question": "What happens when a shipment is marked as 'Cancelled'?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain order voiding, return-to-sender or cancellation of dispatch, and assessment of cancellation haulage fee if cargo was already collected.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DELAY_014",
+    "category": "shipment_delays",
+    "question": "What is the demurrage charge rate if a container exceeds free time at port?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Cite customer terms: $85/day for dry containers, $220/day for reefers/hazmat containers after standard 4-7 free days.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DELAY_015",
+    "category": "shipment_delays",
+    "question": "How does FleetHarbor notify consignees about in-transit delays?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain automated EDI/email exception notifications triggered dynamically upon status update.",
+    "priority": "P2"
+  }
+]

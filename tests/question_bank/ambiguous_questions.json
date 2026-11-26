@@ -1,0 +1,92 @@
+[
+  {
+    "test_id": "AMB_001",
+    "category": "ambiguous_questions",
+    "question": "Where is my shipment?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Politely ask the user to provide their 5-digit Shipment ID (e.g., SHP-10001) instead of inventing a status.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "AMB_002",
+    "category": "ambiguous_questions",
+    "question": "When will it arrive?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Request tracking number or shipment ID to check estimated delivery.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "AMB_003",
+    "category": "ambiguous_questions",
+    "question": "Track order",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Prompt user for shipment reference number.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "AMB_004",
+    "category": "ambiguous_questions",
+    "question": "Why is it late?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Ask which shipment ID the user is referring to.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "AMB_005",
+    "category": "ambiguous_questions",
+    "question": "Status check",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Prompt user to provide their shipment ID.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "AMB_006",
+    "category": "ambiguous_questions",
+    "question": "Can you check my employee profile?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Request employee ID (e.g., EMP-20001).",
+    "priority": "P1"
+  },
+  {
+    "test_id": "AMB_007",
+    "category": "ambiguous_questions",
+    "question": "What is the fee?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Ask whether user refers to demurrage, detention, freight cancellation, or re-delivery fees.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "AMB_008",
+    "category": "ambiguous_questions",
+    "question": "Is it cleared?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Ask for the shipment number to verify customs clearance status.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "AMB_009",
+    "category": "ambiguous_questions",
+    "question": "Where is the hub located?",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Ask which gateway hub (Singapore, Dubai, Rotterdam, Frankfurt, etc.) the user is inquiring about.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "AMB_010",
+    "category": "ambiguous_questions",
+    "question": "Tell me about delivery",
+    "expected_intent": "clarification_request",
+    "expected_source": "chatbot_logic",
+    "expected_behavior": "Provide overview of delivery operations and offer to track a specific shipment or explain delivery policies.",
+    "priority": "P2"
+  }
+]

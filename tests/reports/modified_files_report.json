@@ -1,0 +1,86 @@
+{
+  "report_title": "FleetHarbor AI - Modified Files and Code Changes Registry",
+  "generated_at": "2026-11-23T15:59:30+05:30",
+  "files_modified": [
+    {
+      "path": "src/logistics_chatbot/document_ingestion/csv_processor.py",
+      "action": "CREATED",
+      "purpose": "Comprehensive CSV ingestion, encoding detection, schema identification, data validation, database upsert, and ChromaDB vector indexing engine."
+    },
+    {
+      "path": "src/logistics_chatbot/database/database.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Added init_operational_table() creating operational_records in SQLite and Supabase.",
+        "Added fetch_operational_record(doc_id) and get_operational_record(doc_id).",
+        "Added upsert_operational_records(), upsert_shipment_records(), upsert_employee_records() with idempotent conflict resolution."
+      ]
+    },
+    {
+      "path": "database/db.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Exposed get_operational_record_by_id(doc_id).",
+        "Exposed batch upsert methods (upsert_operational_records, upsert_shipment_records, upsert_employee_records)."
+      ]
+    },
+    {
+      "path": "rag/document_processor.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Added .csv to SUPPORTED_EXTENSIONS ('.txt', '.pdf', '.docx', '.csv')."
+      ]
+    },
+    {
+      "path": "api/schemas/request_models.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Enriched DocUploadData with optional fields total_records, imported, skipped, failed, category, summary.",
+        "Enriched DocUploadResponse with top-level summary attribute."
+      ]
+    },
+    {
+      "path": "api/routes/upload.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Integrated process_csv_upload() for .csv files.",
+        "Generates structured CSV IMPORT SUMMARY and detailed JSON response.",
+        "Preserves existing .txt, .pdf, .docx chunking pipeline."
+      ]
+    },
+    {
+      "path": "api/web_ui.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Updated file input element to accept .txt,.pdf,.docx,.csv.",
+        "Removed blocking required attribute from user text input when attachments exist.",
+        "Enhanced handleSend(e) to asynchronously upload attached files to /upload-doc and display the CSV IMPORT SUMMARY in dialogue.",
+        "Handles single-click file attachment and send."
+      ]
+    },
+    {
+      "path": "src/logistics_chatbot/chatbot/classifier.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Added normalize_logistics_query() correcting typos ('staus', 'stauts', 'delivry', etc.) while preserving IDs.",
+        "Added extract_operational_id() matching OPS-* across casing and spacing.",
+        "Added LogisticsIntent.OPERATIONAL_STATUS = 'operational_status'.",
+        "Added operational_id field to ClassifiedIntent dataclass."
+      ]
+    },
+    {
+      "path": "chatbot/bot.py",
+      "action": "MODIFIED",
+      "changes": [
+        "Added build_operational_status_report() generating structured OPERATIONAL RECORD markdown card matching Issue 5.",
+        "Added Section 4c in generate_response() for deterministic operational record database lookup.",
+        "Graceful not-found messaging when operational case does not exist."
+      ]
+    },
+    {
+      "path": "tests/test_csv_ingestion_and_routing.py",
+      "action": "CREATED",
+      "purpose": "26 automated unit and integration tests verifying CSV ingestion, validation, query normalization, and intelligent routing."
+    }
+  ]
+}

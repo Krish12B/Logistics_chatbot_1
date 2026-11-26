@@ -1,0 +1,502 @@
+[
+  {
+    "test_id": "TRACK_001",
+    "category": "shipment_tracking",
+    "question": "Track shipment SHP-10001",
+    "required_shipment_id": "SHP-10001",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "Dubai Hub, UAE",
+      "origin": "Mumbai, India",
+      "destination": "London, UK",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_002",
+    "category": "shipment_tracking",
+    "question": "Where is shipment SHP-10002 located right now?",
+    "required_shipment_id": "SHP-10002",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delayed",
+      "current_location": "Jebel Ali Port, UAE",
+      "origin": "Chennai, India",
+      "destination": "Dubai, UAE",
+      "delay_reason": "Port congestion at Jebel Ali"
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_003",
+    "category": "shipment_tracking",
+    "question": "Show me the tracking status for SHP-10003",
+    "required_shipment_id": "SHP-10003",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "On Hold - Customs",
+      "current_location": "JFK Airport, USA",
+      "origin": "Delhi, India",
+      "destination": "New York, USA",
+      "delay_reason": "Customs hold"
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_004",
+    "category": "shipment_tracking",
+    "question": "Has shipment SHP-10004 been delivered?",
+    "required_shipment_id": "SHP-10004",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delivered",
+      "current_location": "Singapore",
+      "origin": "Ahmedabad, India",
+      "destination": "Singapore",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_005",
+    "category": "shipment_tracking",
+    "question": "Is SHP-10005 out for delivery today?",
+    "required_shipment_id": "SHP-10005",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Out for Delivery",
+      "current_location": "Sydney Local Depot",
+      "origin": "Pune, India",
+      "destination": "Sydney, Australia",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_006",
+    "category": "shipment_tracking",
+    "question": "What is the expected delivery date for SHP-10006?",
+    "required_shipment_id": "SHP-10006",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "Singapore Hub",
+      "origin": "Kolkata, India",
+      "destination": "Tokyo, Japan",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_007",
+    "category": "shipment_tracking",
+    "question": "Why is shipment SHP-10007 delayed?",
+    "required_shipment_id": "SHP-10007",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delayed",
+      "current_location": "Mumbai Hub, India",
+      "origin": "Bangalore, India",
+      "destination": "Berlin, Germany",
+      "delay_reason": "Weather disruption at Mumbai airport"
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_008",
+    "category": "shipment_tracking",
+    "question": "Get full transit route details for SHP-10008",
+    "required_shipment_id": "SHP-10008",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "London Heathrow Hub, UK",
+      "origin": "Hyderabad, India",
+      "destination": "Toronto, Canada",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_009",
+    "category": "shipment_tracking",
+    "question": "Check delivery confirmation of SHP-10009",
+    "required_shipment_id": "SHP-10009",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delivered",
+      "current_location": "Dubai, UAE",
+      "origin": "Jaipur, India",
+      "destination": "Dubai, UAE",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_010",
+    "category": "shipment_tracking",
+    "question": "What is holding up shipment SHP-10010 at customs?",
+    "required_shipment_id": "SHP-10010",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "On Hold - Customs",
+      "current_location": "LAX Airport, USA",
+      "origin": "Surat, India",
+      "destination": "Los Angeles, USA",
+      "delay_reason": "Customs hold"
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_011",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10011?",
+    "required_shipment_id": "SHP-10011",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "In Transit (Dubai Hub)",
+      "origin": "Hyderabad, India",
+      "destination": "Toronto, Canada",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_012",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10012?",
+    "required_shipment_id": "SHP-10012",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delivered",
+      "current_location": "San Francisco, USA Consignee Facility",
+      "origin": "Manila, Philippines",
+      "destination": "San Francisco, USA",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_013",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10013?",
+    "required_shipment_id": "SHP-10013",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delayed",
+      "current_location": "Transit Facility near Dublin",
+      "origin": "Dublin, Ireland",
+      "destination": "New York, USA",
+      "delay_reason": "Highway transit disruption and road transport detour"
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_014",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10014?",
+    "required_shipment_id": "SHP-10014",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "In Transit (Helsinki Hub)",
+      "origin": "Copenhagen, Denmark",
+      "destination": "Shanghai, China",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_015",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10015?",
+    "required_shipment_id": "SHP-10015",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delayed",
+      "current_location": "Transit Facility near Mumbai",
+      "origin": "Mumbai, India",
+      "destination": "London, UK",
+      "delay_reason": "Peak holiday cargo sorting backlog at gateway facility"
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_016",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10016?",
+    "required_shipment_id": "SHP-10016",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "In Transit (Dublin Hub)",
+      "origin": "Zurich, Switzerland",
+      "destination": "Boston, USA",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_017",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10017?",
+    "required_shipment_id": "SHP-10017",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "In Transit (Rome Transit)",
+      "origin": "Doha, Qatar",
+      "destination": "Madrid, Spain",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_018",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10018?",
+    "required_shipment_id": "SHP-10018",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "In Transit",
+      "current_location": "In Transit (North Pacific Route)",
+      "origin": "Seattle, USA",
+      "destination": "Tokyo, Japan",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_019",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10019?",
+    "required_shipment_id": "SHP-10019",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delivered",
+      "current_location": "London, UK Consignee Facility",
+      "origin": "Johannesburg, South Africa",
+      "destination": "London, UK",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  },
+  {
+    "test_id": "TRACK_020",
+    "category": "shipment_tracking",
+    "question": "What is the status and location of shipment SHP-10020?",
+    "required_shipment_id": "SHP-10020",
+    "expected_intent": "shipment_tracking",
+    "expected_source": "shipment_database",
+    "expected_behavior": "Return structured shipment tracking report with verified database fields.",
+    "expected_fields": [
+      "shipment_id",
+      "status",
+      "current_location",
+      "origin",
+      "destination",
+      "estimated_delivery"
+    ],
+    "ground_truth": {
+      "status": "Delivered",
+      "current_location": "Dhahran, Saudi Arabia Consignee Facility",
+      "origin": "Houston, USA",
+      "destination": "Dhahran, Saudi Arabia",
+      "delay_reason": ""
+    },
+    "priority": "P0"
+  }
+]

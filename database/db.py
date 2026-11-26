@@ -53,11 +53,42 @@ def get_employee_by_id(employee_id: str) -> Optional[Dict[str, Any]]:
         return None
 
 
+def get_operational_record_by_id(doc_id: str) -> Optional[Dict[str, Any]]:
+    """Retrieve an operational record by ID (e.g. 'OPS-001')."""
+    clean_id = (doc_id or "").strip().upper()
+    if not clean_id:
+        return None
+    try:
+        return _core_db.get_operational_record(clean_id)
+    except ShipmentNotFoundError:
+        return None
+    except Exception as exc:
+        logger.error("Error retrieving operational record %s: %s", clean_id, exc)
+        return None
+
+
+def upsert_operational_records(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Upsert operational records into database."""
+    return _core_db.upsert_operational_records(records)
+
+
+def upsert_shipment_records(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Upsert shipment records into database."""
+    return _core_db.upsert_shipment_records(records)
+
+
+def upsert_employee_records(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Upsert employee records into database."""
+    return _core_db.upsert_employee_records(records)
+
+
 def init_database() -> None:
     """Initialize database connection or verify schema."""
     _core_db.init_database()
+    _core_db.init_operational_table()
 
 
 def close() -> None:
     """Close active database connections."""
     _core_db.close()
+

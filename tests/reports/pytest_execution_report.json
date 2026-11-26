@@ -1,0 +1,92 @@
+{
+  "report_title": "FleetHarbor Logistics AI Chatbot - Pytest & Playwright Automated Execution Report",
+  "executed_at": "2026-11-26T13:49:20+05:30",
+  "environment": {
+    "python": "3.10.11",
+    "pytest": "9.2.0",
+    "playwright_browser": "msedge 158.0.4370.33 (headless)",
+    "supabase_db_url": "unset (offline SQLite + mocked PG tests)"
+  },
+  "pytest_summary": {
+    "before_fixes": {
+      "total": 61,
+      "passed": 45,
+      "failed": 16,
+      "skipped": 0,
+      "execution_time_seconds": 35.97
+    },
+    "after_fixes": {
+      "total": 61,
+      "passed": 61,
+      "failed": 0,
+      "skipped": 0,
+      "execution_time_seconds": 10.89
+    }
+  },
+  "unittest_regression_summary": {
+    "total": 124,
+    "passed": 122,
+    "failed": 0,
+    "skipped": 2,
+    "skipped_reason": "Live Supabase PostgreSQL cloud tests skipped when SUPABASE_DB_URL is empty",
+    "execution_time_seconds": 25.49
+  },
+  "classifier_benchmark": {
+    "total": 55,
+    "intent_accuracy_pct": 100.0,
+    "source_routing_accuracy_pct": 100.0,
+    "shipment_id_extraction_pct": 100.0,
+    "p50_latency_ms": 0.06
+  },
+  "performance_comparison": [
+    {
+      "metric": "Shipment Single Lookup (50 SQLite queries mean)",
+      "before_optimization": "5.395 ms (P95: 7.192 ms)",
+      "after_optimization": "0.699 ms (P95: 0.910 ms)",
+      "improvement": "7.7x faster (87.0% reduction)"
+    },
+    {
+      "metric": "Filtered Shipment Search (status='Delayed')",
+      "before_optimization": "871.13 ms (CSV scan, count=1294)",
+      "after_optimization": "3.68 ms (indexed SQLite, limit=10)",
+      "improvement": "236.7x faster (99.6% reduction)"
+    },
+    {
+      "metric": "RAG Search (core search_knowledge mean)",
+      "before_optimization": "31.64 ms",
+      "after_optimization": "24.17 ms",
+      "improvement": "23.6% faster"
+    },
+    {
+      "metric": "Hybrid Reranking Semantic Score (rag/search.py)",
+      "before_optimization": "0.0 (key mismatch bug)",
+      "after_optimization": "0.7258 (final=0.7193)",
+      "improvement": "Restored semantic vector scoring"
+    },
+    {
+      "metric": "Streaming RAG Pipeline Calls (/chat/stream)",
+      "before_optimization": "2 LLM calls, 2-4 retrieve() calls, 2 duplicate session turns",
+      "after_optimization": "1 LLM stream call, 1 retrieve() call, 1 session turn",
+      "improvement": "50% fewer LLM calls & tokens per stream query"
+    },
+    {
+      "metric": "Pytest Full Suite Execution Time (61 tests)",
+      "before_optimization": "35.97 s (45 passed / 16 failed)",
+      "after_optimization": "10.89 s (61 passed / 0 failed)",
+      "improvement": "3.3x faster (69.7% reduction)"
+    },
+    {
+      "metric": "Traced Python Peak Memory (benchmark run)",
+      "before_optimization": "300.13 MB peak",
+      "after_optimization": "295.55 MB peak",
+      "improvement": "1.5% lower peak memory"
+    }
+  ],
+  "screenshots_captured": [
+    "tests/reports/screenshots/01_landing_page.png",
+    "tests/reports/screenshots/02_shipment_response.png",
+    "tests/reports/screenshots/03_new_chat_session.png",
+    "tests/reports/screenshots/04_not_found_handled.png",
+    "tests/reports/screenshots/05_validation_and_xss_safe.png"
+  ]
+}

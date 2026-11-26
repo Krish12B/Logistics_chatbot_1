@@ -1,0 +1,49 @@
+{
+  "report_title": "FleetHarbor AI - Database Schema and Data Mapping Report",
+  "generated_at": "2026-11-23T15:58:30+05:30",
+  "databases": {
+    "primary_relational": "SQLite (data/raw/shipments.db)",
+    "cloud_relational": "Supabase PostgreSQL (public schema)",
+    "vector_store": "ChromaDB (data/chroma_db)"
+  },
+  "tables": {
+    "operational_records": {
+      "purpose": "Stores operational case exceptions, warehouse controls, and dispatch workflows",
+      "primary_key": "doc_id",
+      "columns": [
+        {"name": "doc_id", "type": "TEXT", "nullable": false, "description": "Normalized identifier (e.g. OPS-001)"},
+        {"name": "category", "type": "TEXT", "nullable": false, "description": "operational_case, shipment_exception, warehouse_control, transport_operations, delivery_support"},
+        {"name": "section_title", "type": "TEXT", "nullable": false, "description": "Descriptive case title"},
+        {"name": "content", "type": "TEXT", "nullable": false, "description": "Full narrative operational guidelines and protocol"},
+        {"name": "tags", "type": "TEXT", "nullable": true, "description": "Semicolon-delimited keywords"},
+        {"name": "status", "type": "TEXT", "nullable": true, "description": "Extracted case status (e.g. Awaiting Pickup, Delayed, Active)"},
+        {"name": "origin", "type": "TEXT", "nullable": true, "description": "Dispatch origin facility (e.g. Surat)"},
+        {"name": "destination", "type": "TEXT", "nullable": true, "description": "Target destination hub (e.g. Ahmedabad)"},
+        {"name": "assigned_employee", "type": "TEXT", "nullable": true, "description": "Responsible role (e.g. Operations Coordinator)"},
+        {"name": "responsible_department", "type": "TEXT", "nullable": true, "description": "Operational Department"},
+        {"name": "risk_factors", "type": "TEXT", "nullable": true, "description": "Identified transit hazard (e.g. Moisture exposure, Temperature)"},
+        {"name": "last_updated", "type": "TEXT/DATE", "nullable": true, "description": "Standardized ISO date (YYYY-MM-DD)"},
+        {"name": "created_at", "type": "TIMESTAMP", "nullable": false, "description": "Creation timestamp"}
+      ],
+      "indexes": ["CREATE INDEX IF NOT EXISTS idx_ops_doc_id ON operational_records(doc_id)"]
+    },
+    "shipments": {
+      "purpose": "10,000 operational freight shipment tracking records",
+      "primary_key": "shipment_id",
+      "total_records": 10000,
+      "columns": ["shipment_id", "origin", "destination", "status", "current_location", "route", "estimated_delivery", "delay_reason", "customs_status", "last_updated"]
+    },
+    "employees": {
+      "purpose": "500 personnel directory and hub assignment records",
+      "primary_key": "employee_id",
+      "total_records": 500,
+      "columns": ["employee_id", "full_name", "department", "job_title", "assigned_hub", "shift", "certification", "email", "phone_extension", "status"]
+    },
+    "hubs": {
+      "purpose": "10 global logistics gateways and sorting facilities",
+      "primary_key": "hub_id",
+      "total_records": 10,
+      "columns": ["hub_id", "name", "country", "city", "latitude", "longitude", "capacity_teu", "manager_id"]
+    }
+  }
+}

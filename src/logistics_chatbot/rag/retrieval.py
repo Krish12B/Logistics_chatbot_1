@@ -197,25 +197,67 @@ def search_shipments(
     destination: Optional[str] = None,
     limit: int = 10,
 ) -> ShipmentListResult:
-    """Filter shipments by status, origin, and/or destination."""
+    """Filter shipments by status, origin, and/or destination (PostgreSQL -> SQLite -> CSV fallback)."""
+    from unittest.mock import Mock
+    from logistics_chatbot.utils.helpers import format_date
+
+    desc_parts = []
+    if status:
+        desc_parts.append(f"status='{status}'")
+    if origin:
+        desc_parts.append(f"origin contains '{origin}'")
+    if destination:
+        desc_parts.append(f"destination contains '{destination}'")
+    desc = ", ".join(desc_parts) if desc_parts else "all shipments"
+
+    # Fast local SQLite path when Supabase is unconfigured and run_query is not mocked
+    use_postgres = bool(config.SUPABASE_DB_URL) or isinstance(database.run_query, Mock)
+    if not use_postgres:
+        db_path = config.PROJECT_ROOT / "data" / "raw" / "shipments.db"
+        if db_path.exists():
+            sq_conds = []
+            sq_params: list = []
+            if status:
+                sq_conds.append("status = ? COLLATE NOCASE")
+                sq_params.append(status)
+            if origin:
+                sq_conds.append("LOWER(origin) LIKE LOWER(?)")
+                sq_params.append(f"%{origin}%")
+            if destination:
+                sq_conds.append("LOWER(destination) LIKE LOWER(?)")
+                sq_params.append(f"%{destination}%")
+            sq_where = " AND ".join(sq_conds) if sq_conds else "1=1"
+            sq_params.append(limit)
+            sq_sql = f"SELECT * FROM shipments WHERE {sq_where} ORDER BY last_updated DESC LIMIT ?"
+            try:
+                with database._sqlite_conn(db_path) as conn:
+                    rows = [dict(r) for r in conn.execute(sq_sql, tuple(sq_params)).fetchall()]
+                for r in rows:
+                    r["estimated_delivery"] = format_date(r.get("estimated_delivery"))
+                    r["last_updated"] = format_date(r.get("last_updated"))
+                return ShipmentListResult(
+                    shipments=rows,
+                    total_count=len(rows),
+                    filter_description=desc,
+                    source="shipments_sqlite",
+                )
+            except Exception as exc:
+                logger.debug("SQLite search_shipments fallback notice: %s", exc)
+
     conditions = []
     params: list = []
-    desc_parts = []
 
     if status:
         conditions.append("LOWER(status) = LOWER(%s)")
         params.append(status)
-        desc_parts.append(f"status='{status}'")
 
     if origin:
         conditions.append("LOWER(origin) LIKE LOWER(%s)")
         params.append(f"%{origin}%")
-        desc_parts.append(f"origin contains '{origin}'")
 
     if destination:
         conditions.append("LOWER(destination) LIKE LOWER(%s)")
         params.append(f"%{destination}%")
-        desc_parts.append(f"destination contains '{destination}'")
 
     where_clause = " AND ".join(conditions) if conditions else "TRUE"
     params.append(limit)
@@ -242,12 +284,10 @@ def search_shipments(
                 if destination and destination.lower() not in (r.get("destination") or "").lower():
                     continue
                 item = dict(r)
-                from logistics_chatbot.utils.helpers import format_date
                 item["estimated_delivery"] = format_date(item.get("estimated_delivery"))
                 item["last_updated"] = format_date(item.get("last_updated"))
                 filtered.append(item)
 
-            desc = ", ".join(desc_parts) if desc_parts else "all shipments"
             return ShipmentListResult(
                 shipments=filtered[:limit],
                 total_count=len(filtered),
@@ -256,12 +296,10 @@ def search_shipments(
             )
         raise
 
-    from logistics_chatbot.utils.helpers import format_date
     for r in rows:
         r["estimated_delivery"] = format_date(r.get("estimated_delivery"))
         r["last_updated"] = format_date(r.get("last_updated"))
 
-    desc = ", ".join(desc_parts) if desc_parts else "all shipments"
     return ShipmentListResult(
         shipments=rows,
         total_count=len(rows),

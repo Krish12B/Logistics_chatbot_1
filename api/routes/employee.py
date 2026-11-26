@@ -79,7 +79,8 @@ def list_employees_endpoint(
         query = f"SELECT * FROM employees{where_clause} ORDER BY employee_id LIMIT ?"
         params.append(limit)
 
-        with sqlite3.connect(str(db_path)) as conn:
+        from contextlib import closing
+        with closing(sqlite3.connect(str(db_path))) as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute(query, tuple(params))

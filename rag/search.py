@@ -91,6 +91,7 @@ def search_knowledge(
             top_k=fetch_k,
             where=where_filter,
             min_score=min_score,
+            query_vector=query_vec,
         )
     except Exception as exc:
         logger.error("ChromaDB vector search failed: %s", exc)
@@ -112,7 +113,7 @@ def search_knowledge(
         content = (item.get("content") or "").lower()
         title = (item.get("section_title") or item.get("title") or "").lower()
         orig_content = item.get("content") or ""
-        sim_score = float(item.get("similarity_score", 0.0))
+        sim_score = float(item.get("similarity_score", item.get("score", 0.0)))
 
         # Check exact code matches
         code_boost = 0.0

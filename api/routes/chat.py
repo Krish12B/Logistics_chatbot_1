@@ -9,6 +9,7 @@ from fastapi.responses import StreamingResponse
 from api.schemas.request_models import ChatData, ChatRequest, ChatResponse, ErrorResponse
 from chatbot.bot import generate_response, stream_chat_response
 from logistics_chatbot.core import config
+from logistics_chatbot.core.prompts import MAX_QUERY_LENGTH
 from logistics_chatbot.core.errors import (
     ChatbotError,
     EmptyMessageError,
@@ -75,7 +76,7 @@ def handle_chat(request: ChatRequest) -> ChatResponse:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.user_message)
 
     except QueryTooLongError as exc:
-        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail=exc.user_message)
+        raise HTTPException(status_code=getattr(status, "HTTP_413_CONTENT_TOO_LARGE", 413), detail=exc.user_message)
 
     except (LLMAuthError, LLMRateLimitError, LLMTimeoutError, LLMUnavailableError) as exc:
         logger.error("LLM failure during /chat: %s", exc)
@@ -112,10 +113,11 @@ async def handle_chat_stream(request: ChatRequest):
             detail="Message cannot be empty or contain only whitespace.",
         )
 
-    if len(request.message) > getattr(config, "QUERY_MAX_LENGTH", 2000):
+    max_len = getattr(config, "QUERY_MAX_LENGTH", MAX_QUERY_LENGTH)
+    if len(request.message) > max_len:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-            detail=f"Query is too long. Please keep queries under {getattr(config, 'QUERY_MAX_LENGTH', 2000)} characters.",
+            status_code=getattr(status, "HTTP_413_CONTENT_TOO_LARGE", 413),
+            detail=f"Query is too long. Please keep queries under {max_len} characters.",
         )
 
     def event_generator():

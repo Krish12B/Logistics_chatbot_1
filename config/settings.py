@@ -40,8 +40,9 @@ class Settings:
     # Groq API
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
-    MAX_ANSWER_TOKENS: int = int(os.getenv("MAX_ANSWER_TOKENS", "512"))
+    MAX_ANSWER_TOKENS: int = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
     LLM_TIMEOUT_SECONDS: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "30.0"))
+    QUERY_MAX_LENGTH: int = int(os.getenv("QUERY_MAX_LENGTH", "2000"))
 
     # Embeddings
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")

@@ -301,6 +301,7 @@ def query_knowledge_chunks(
     where: Optional[Dict[str, Any]] = None,
     min_score: Optional[float] = None,
     collection_name: Optional[str] = None,
+    query_vector: Optional[List[float]] = None,
 ) -> List[Dict[str, Any]]:
     """Perform semantic vector search in ChromaDB with cosine distance."""
     if not query_text or not query_text.strip():
@@ -316,7 +317,8 @@ def query_knowledge_chunks(
         if col.count() == 0:
             return []
 
-        query_vector = embeddings.embed_query(query_text.strip())
+        if query_vector is None:
+            query_vector = embeddings.embed_query(query_text.strip())
 
         if not isinstance(query_vector, (list, tuple)) or not query_vector or not isinstance(query_vector[0], (int, float)):
             logger.debug("Query vector is not a dense float list (got %s), skipping ChromaDB query", type(query_vector))

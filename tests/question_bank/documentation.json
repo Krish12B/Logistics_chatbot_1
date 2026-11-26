@@ -1,0 +1,92 @@
+[
+  {
+    "test_id": "DOC_001",
+    "category": "documentation_retrieval",
+    "question": "Summarize the required international customs documents described in the compliance manual.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Summarize Commercial Invoice, Packing List, Original Bill of Lading / AWB, Certificate of Origin, and Import Declarations.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DOC_002",
+    "category": "documentation_retrieval",
+    "question": "What does the company manual say about resolving customs HOLD-DOC exceptions?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Identify required submission of missing invoices or packing lists electronically through customs broker within 48 hours.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DOC_003",
+    "category": "documentation_retrieval",
+    "question": "Explain the four international customs inspection lanes described in trade documents.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail Green channel (immediate electronic clearance), Yellow (document review), Orange/Blue (scanning), Red channel (mandatory physical inspection).",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DOC_004",
+    "category": "documentation_retrieval",
+    "question": "Summarize the Dangerous Goods Declaration (DGD) requirements in company documents.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail shipper declaration with UN number, proper shipping name, class, packing group, 24/7 emergency response contact number.",
+    "priority": "P0"
+  },
+  {
+    "test_id": "DOC_005",
+    "category": "documentation_retrieval",
+    "question": "What is the procedure for calibration of temperature sensors under GDP manual?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Annual three-point NIST-traceable calibration with digital certificate retention for 5 years.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DOC_006",
+    "category": "documentation_retrieval",
+    "question": "Explain what the customer carriage document says regarding limits of carrier liability.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain standard carrier liability limits under Montreal Convention (air) and Hague-Visby rules (ocean), advising declared value cargo insurance.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DOC_007",
+    "category": "documentation_retrieval",
+    "question": "What does the warehouse manual specify about battery charging station safety?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail explosive hydrogen gas ventilation, eyewash stations within 10 meters, and acid-resistant PPE.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DOC_008",
+    "category": "documentation_retrieval",
+    "question": "Explain the documentation required for European Union Import Control System 2 (ICS2).",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Explain Entry Summary Declaration (ENS) with 6-digit HS codes required prior to aircraft loading.",
+    "priority": "P1"
+  },
+  {
+    "test_id": "DOC_009",
+    "category": "documentation_retrieval",
+    "question": "What are the rules regarding UN 4G fiberboard box packaging in the dangerous goods manual?",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail drop-tested fiberboard specifications, dangerous goods orientation arrows, and UN certification marks.",
+    "priority": "P2"
+  },
+  {
+    "test_id": "DOC_010",
+    "category": "documentation_retrieval",
+    "question": "Summarize the customer shipping contract rules regarding booking cancellations.",
+    "expected_intent": "general_knowledge",
+    "expected_source": "knowledge_base",
+    "expected_behavior": "Detail cancellation cut-offs (24 hours prior to pickup without fee; late cancellation incur $150 haulage fee).",
+    "priority": "P1"
+  }
+]

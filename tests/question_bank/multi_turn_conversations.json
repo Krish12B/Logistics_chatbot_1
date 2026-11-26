@@ -1,0 +1,216 @@
+[
+  {
+    "test_id": "CONV_001",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Show me shipment SHP-10001",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return tracking details for SHP-10001."
+      },
+      {
+        "turn": 2,
+        "question": "Where is it right now?",
+        "expected_intent": "shipment_location",
+        "expected_behavior": "Resolve pronoun 'it' to SHP-10001 and return Dubai Hub, UAE."
+      },
+      {
+        "turn": 3,
+        "question": "When will it arrive at destination?",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Resolve 'it' to SHP-10001 and return estimated delivery 2026-11-20."
+      }
+    ],
+    "priority": "P0"
+  },
+  {
+    "test_id": "CONV_002",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Check status of package SHP-10002",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return status Delayed."
+      },
+      {
+        "turn": 2,
+        "question": "Why is it delayed?",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Resolve pronoun to SHP-10002 and return delay reason: Port congestion at Jebel Ali."
+      },
+      {
+        "turn": 3,
+        "question": "What is its destination?",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return Dubai, UAE."
+      }
+    ],
+    "priority": "P0"
+  },
+  {
+    "test_id": "CONV_003",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Look up shipment SHP-10003",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return status On Hold - Customs."
+      },
+      {
+        "turn": 2,
+        "question": "What documents are required to clear this hold?",
+        "expected_intent": "general_knowledge",
+        "expected_behavior": "Identify that commercial invoice is missing and provide submission instructions."
+      }
+    ],
+    "priority": "P0"
+  },
+  {
+    "test_id": "CONV_004",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Tell me about shipment SHP-10004",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return status Delivered."
+      },
+      {
+        "turn": 2,
+        "question": "Has it been signed for?",
+        "expected_intent": "general_knowledge",
+        "expected_behavior": "Confirm delivery status and explain Proof of Delivery is recorded upon final delivery."
+      }
+    ],
+    "priority": "P1"
+  },
+  {
+    "test_id": "CONV_005",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Where is SHP-10005 heading?",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return destination Sydney, Australia."
+      },
+      {
+        "turn": 2,
+        "question": "Is it out for delivery?",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Confirm status is Out for Delivery."
+      }
+    ],
+    "priority": "P1"
+  },
+  {
+    "test_id": "CONV_006",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Track order SHP-10007",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return status Delayed."
+      },
+      {
+        "turn": 2,
+        "question": "Where is it stuck?",
+        "expected_intent": "shipment_location",
+        "expected_behavior": "Return current location Mumbai Hub, India."
+      },
+      {
+        "turn": 3,
+        "question": "Now check SHP-10008 instead",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Switch reference to SHP-10008 and return status In Transit."
+      },
+      {
+        "turn": 4,
+        "question": "Where is this one?",
+        "expected_intent": "shipment_location",
+        "expected_behavior": "Return current location London Heathrow Hub, UK for SHP-10008."
+      }
+    ],
+    "priority": "P0"
+  },
+  {
+    "test_id": "CONV_007",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Hello, how can you help me?",
+        "expected_intent": "general_conversation",
+        "expected_behavior": "Return greeting and list logistics capabilities."
+      },
+      {
+        "turn": 2,
+        "question": "Can you track SHP-10009?",
+        "expected_intent": "shipment_tracking",
+        "expected_behavior": "Return details for SHP-10009."
+      }
+    ],
+    "priority": "P1"
+  },
+  {
+    "test_id": "CONV_008",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "What is the policy for cold-chain pharmaceutical shipments?",
+        "expected_intent": "general_knowledge",
+        "expected_behavior": "Explain CC-POL-9921 guidelines."
+      },
+      {
+        "turn": 2,
+        "question": "What happens if temperatures rise above 8 degrees?",
+        "expected_intent": "general_knowledge",
+        "expected_behavior": "Explain excursion protocol and quarantine."
+      }
+    ],
+    "priority": "P1"
+  },
+  {
+    "test_id": "CONV_009",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "Look up employee EMP-20001",
+        "expected_intent": "employee_lookup",
+        "expected_behavior": "Return Stella Davis profile."
+      },
+      {
+        "turn": 2,
+        "question": "What shift does she work?",
+        "expected_intent": "employee_lookup",
+        "expected_behavior": "Return Swing Shift (14:00 - 22:30)."
+      }
+    ],
+    "priority": "P1"
+  },
+  {
+    "test_id": "CONV_010",
+    "category": "multi_turn_conversations",
+    "turns": [
+      {
+        "turn": 1,
+        "question": "What are your cargo weight limits?",
+        "expected_intent": "direct_definition",
+        "expected_behavior": "Return ISO container specifications."
+      },
+      {
+        "turn": 2,
+        "question": "And what is demurrage?",
+        "expected_intent": "direct_definition",
+        "expected_behavior": "Explain port container terminal fee without context collision."
+      }
+    ],
+    "priority": "P1"
+  }
+]
