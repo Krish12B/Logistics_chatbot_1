@@ -107,7 +107,51 @@ def load_kb_rows() -> list[dict]:
                     "last_updated": r.get("last_updated", "2026-11-01"),
                 })
 
-    # 2. Merge legacy FAQs from knowledge_base.json
+    # 2. Load standalone operational manuals and SOPs (*.txt). These files were
+    # previously present in the project but were not included in local fallback
+    # retrieval, so questions about their contents could return no answer.
+    txt_dir = config.PROJECT_ROOT / "knowledge_base"
+    if txt_dir.exists():
+        for path in sorted(txt_dir.glob("*.txt")):
+            try:
+                raw = path.read_text(encoding="utf-8-sig", errors="replace").strip()
+                if not raw:
+                    continue
+                # Keep section boundaries so a focused question retrieves a
+                # compact, relevant part of the manual instead of one huge file.
+                sections = []
+                current_title = path.stem.replace("_", " ").title()
+                current_lines = []
+                for line in raw.splitlines():
+                    stripped = line.strip()
+                    if stripped.startswith("#"):
+                        if current_lines:
+                            sections.append((current_title, "\n".join(current_lines).strip()))
+                            current_lines = []
+                        current_title = stripped.lstrip("# ").strip() or current_title
+                    elif stripped:
+                        current_lines.append(stripped)
+                if current_lines:
+                    sections.append((current_title, "\n".join(current_lines).strip()))
+                for section_no, (title, content) in enumerate(sections, start=1):
+                    if not content:
+                        continue
+                    doc_id = f"TXT-{path.stem.upper()}-{section_no:03d}"
+                    if doc_id in seen_ids:
+                        continue
+                    seen_ids.add(doc_id)
+                    rows.append({
+                        "doc_id": doc_id,
+                        "category": "operational_manual",
+                        "section_title": title,
+                        "content": content,
+                        "tags": f"{path.stem.replace('_', ' ')} {title}",
+                        "last_updated": "2026-11-20",
+                    })
+            except Exception as exc:
+                logger.warning("Could not read knowledge document %s: %s", path.name, exc)
+
+    # 3. Merge legacy FAQs from knowledge_base.json
     if config.LEGACY_FAQ_PATH.exists():
         try:
             with open(config.LEGACY_FAQ_PATH, encoding="utf-8") as f:

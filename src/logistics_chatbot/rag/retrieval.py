@@ -347,26 +347,39 @@ def _offline_keyword_search(query: str, top_k: int = 5) -> list[dict]:
     if not words:
         return []
 
+    # Score title, tags, exact phrases and body separately. This local lexical
+    # path deliberately works even when SentenceTransformers/HuggingFace or
+    # ChromaDB cannot load (for example on a first run without internet).
+    query_lower = re.sub(r"\s+", " ", query.lower()).strip()
     scored = []
     for r in rows:
-        title = r.get("section_title", "").lower()
-        content = r.get("content", "").lower()
-        tags = r.get("tags", "").lower()
+        title = str(r.get("section_title", "")).lower()
+        content = str(r.get("content", "")).lower()
+        tags = str(r.get("tags", "")).lower()
+        haystack = f"{title} {tags} {content}"
         score = 0.0
+        matched = 0
         for w in words:
-            if w in title:
+            if re.search(r"\b" + re.escape(w) + r"\b", title):
+                score += 5.0
+                matched += 1
+            elif re.search(r"\b" + re.escape(w) + r"\b", tags):
                 score += 3.0
-            if w in tags:
-                score += 2.0
-            if w in content:
-                score += 1.0
-        if score >= 3.0:
+                matched += 1
+            elif re.search(r"\b" + re.escape(w) + r"\b", content):
+                score += 1.5
+                matched += 1
+        if len(query_lower) >= 8 and query_lower in haystack:
+            score += 8.0
+        # Prefer a result that covers a larger share of the meaningful query.
+        score += (matched / max(1, len(words))) * 2.0
+        if score >= 2.5:
             scored.append({
-                "doc_id": r["doc_id"],
-                "category": r["category"],
-                "section_title": r["section_title"],
-                "content": r["content"],
-                "score": score,
+                "doc_id": r.get("doc_id", "DOC-LOCAL"),
+                "category": r.get("category", "general"),
+                "section_title": r.get("section_title", ""),
+                "content": r.get("content", ""),
+                "score": round(score, 4),
             })
 
     scored.sort(key=lambda x: x["score"], reverse=True)
@@ -397,10 +410,11 @@ def search_knowledge(
                 ][:top_k]
             if matches:
                 return KnowledgeResult(articles=matches, source="supabase_pgvector")
-    except KnowledgeBaseError:
-        raise
-    except Exception:
-        pass
+    except Exception as exc:
+        # Do not stop the entire RAG pipeline when the embedding model or
+        # optional Supabase vector search is unavailable. Continue to ChromaDB
+        # and finally the local CSV/TXT keyword index.
+        logger.warning("Primary semantic retrieval unavailable; trying fallback: %s", exc)
 
     # 2. ChromaDB vector database semantic search + lightweight lexical boost
     if getattr(config, "VECTOR_STORE", "auto") in ("chroma", "auto"):
@@ -439,9 +453,9 @@ def search_knowledge(
                     chroma_matches = chroma_matches[:top_k]
                 return KnowledgeResult(articles=chroma_matches, source="chroma_db")
         except Exception as exc:
-            logger.debug("ChromaDB query skipped or failed: %s", exc)
+            logger.warning("ChromaDB query skipped; using local knowledge files: %s", exc)
 
-    # 3. Local offline keyword search over kb_long.csv
+    # 3. Local offline keyword search over CSV, legacy FAQ and standalone TXT manuals
     matches = _offline_keyword_search(query, top_k=top_k)
     return KnowledgeResult(articles=matches, source="offline_csv")
 
