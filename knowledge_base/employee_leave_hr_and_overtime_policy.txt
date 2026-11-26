@@ -1,0 +1,34 @@
+# FleetHarbor Logistics • Employee Paid Leave, Time-Off Process, Overtime & HR Policy
+Document Reference: SOP-HR-006
+Classification: Internal Employee Operations & Human Resources Manual
+Last Revised: 26 November 2026
+
+## 1. Paid Leave Policy & Annual Entitlements
+FleetHarbor Logistics provides comprehensive paid leave and time-off benefits to all active full-time hub operations, linehaul dispatch, warehouse, customs brokerage, and corporate employees (EMP-20001 through EMP-20500):
+
+- **Annual Paid Leave (Earned / Vacation Leave):** 20 business days per calendar year, accrued monthly (1.67 days/month). Unused annual leave up to 5 days may carry over into Q1 of the following year.
+- **Paid Sick & Medical Leave:** 10 paid days per calendar year for illness, medical appointments, or recovery. Consecutive absences exceeding 3 days require a licensed physician's medical fitness certificate uploaded to the HR Portal.
+- **Emergency & Bereavement Leave:** Up to 5 paid days per occurrence for immediate family bereavement or verified critical family emergencies.
+- **Parental Leave:** 16 weeks paid maternity leave and 4 weeks paid paternity/adoption leave for eligible employees with at least 6 months of continuous service.
+- **Statutory Public Holidays:** Employees scheduled on 24/7 hub rotations (Day 06:00-14:30, Swing 14:00-22:30, Overnight 22:00-06:30) working an official regional public holiday receive either 2.0x holiday pay or a compensatory paid day off (comp-off) within 60 days.
+
+## 2. Step-by-Step Process of Applying for Leave (Leave Request Workflow)
+All FleetHarbor employees must follow this standardized five-step process to request planned or unscheduled leave:
+
+1. **Step 1 – Advance Notice Window:**
+   - **Planned Paid Annual Leave (1–3 days):** Submit request at least **7 calendar days** prior to departure.
+   - **Extended Leave (4+ consecutive days):** Submit at least **14 calendar days** in advance to allow hub roster coverage planning.
+   - **Unplanned Sick or Emergency Leave:** Notify the on-duty Shift Supervisor or Dispatch Desk (`dispatch@fleetharbor.com`) at least **2 hours before scheduled shift start** and log the absence in the HR Portal within 24 hours.
+2. **Step 2 – Portal Submission:** Log in to the **FleetHarbor HR Self-Service Portal**, select *Time Off -> New Leave Request*, choose the leave category (*Paid Annual*, *Paid Sick*, *Emergency*, or *Comp-Off*), enter dates/shift codes, and attach supporting documents if applicable.
+3. **Step 3 – Supervisor & Terminal Manager Review:** Requests are routed automatically to the employee's assigned Hub Supervisor or Terminal Operations Manager, who verifies minimum hub staffing ratios within **2 business days**.
+4. **Step 4 – Shift Coverage Confirmation:** For critical certified roles (Licensed Customs Brokers, Cold-Chain GDP Specialists `CC-POL-9921`, Forklift Leads), the Dispatch Desk confirms backup rotation coverage before final sign-off.
+5. **Step 5 – HR Approval & Payroll Sync:** Upon supervisor sign-off, HR Payroll Portal updates the leave balance automatically and confirms final approval via corporate `@fleetharbor.com` email.
+
+## 3. Night-Shift Overtime Claims, Shift Swaps & Rescheduling
+- **Overtime Claim Process:** Employees working approved extended hours or night shifts submit a **bi-weekly timesheet** approved by their Shift Operations Manager to the **HR Payroll Portal** (`hr@fleetharbor.com`) by Friday 17:00 of the pay cycle.
+- **Shift Rescheduling / Swaps:** Voluntary shift swaps between qualified certified peers at the same hub must be submitted in the Dispatch Portal at least 24 hours prior to shift start and countersigned by the Hub Supervisor.
+
+## 4. Human Resources & Employee Support Contacts
+- **Employee HR & Paid Leave Desk:** `hr@fleetharbor.com`
+- **Hub Shift Scheduling & Dispatch Desk:** `dispatch@fleetharbor.com`
+- **24/7 Operations Escalation Hotline:** +1 (800) 555-HARBOR / +44 20 7946 0991

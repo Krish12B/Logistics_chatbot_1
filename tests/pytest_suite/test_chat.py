@@ -164,3 +164,26 @@ class TestAggregateAnalytics:
         assert body["data"]["response_type"] == "employee_aggregate"
         assert "500" in body["data"]["response"]
         assert "Warehouse Operations" in body["data"]["response"]
+
+
+class TestPolicyAndHRLeaveQueries:
+    def test_broad_company_policy_returns_multi_policy_overview(self, test_client):
+        """TC-CHAT-14: Generic 'company policy' summarizes all FleetHarbor policies rather than only CC-POL-9921."""
+        resp = test_client.post("/chat", json={"message": "company policy"})
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["data"]["response_type"] == "policy_overview"
+        txt = body["data"]["response"]
+        assert "Customer & Commercial Policies" in txt
+        assert "Employee HR, Paid Leave" in txt
+        assert "CC-POL-9921" in txt
+        assert len(body["data"]["sources"]) >= 4
+
+    def test_paid_leave_and_process_of_leave_retrieve_hr_policy(self):
+        """TC-CHAT-15: 'paid leave?' and 'process of leave' retrieve DOC-AF885F63B95E chunks from ChromaDB."""
+        from rag.search import search_knowledge
+
+        for q in ("paid leave?", "process of leave"):
+            hits = search_knowledge(q, top_k=3)
+            assert len(hits) >= 1
+            assert any(h.get("doc_id") == "DOC-AF885F63B95E" for h in hits), f"Expected HR policy doc for {q!r}"

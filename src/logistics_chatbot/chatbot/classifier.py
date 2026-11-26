@@ -513,6 +513,32 @@ def classify_logistics_query(
             entities={"clarification_type": "broad_delivery"},
         )
 
+    # Check for broad company policy query (so it summarizes all company policies instead of one arbitrary PDF/manual)
+    if clean in (
+        "company policy", "company policies", "what is the company policy",
+        "what is company policy", "what are the company policies", "what are your policies",
+        "what are your company policies", "show company policy", "list policies", "policies",
+    ):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.CLARIFICATION_REQUIRED,
+            confidence=0.96,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.CLARIFICATION_REQUIRED],
+            entities={"clarification_type": "broad_policy"},
+        )
+
+    # Check for Employee Paid Leave / Time-Off / Overtime HR Policy Queries
+    if re.search(
+        r"\b(paid\s+leave|annual\s+leave|sick\s+leave|casual\s+leave|parental\s+leave|bereavement\s+leave|"
+        r"leave\s+(?:policy|process|procedure|request|balance|entitlement|application|approval|rules?)|"
+        r"process\s+(?:of|for)\s+leave|apply\s+for\s+leave|time\s+off|pto|overtime\s+claim)\b",
+        clean,
+    ):
+        return ClassifiedIntent(
+            intent=LogisticsIntent.EMPLOYEE_SUPPORT,
+            confidence=0.94,
+            preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.EMPLOYEE_SUPPORT],
+        )
+
     # 6. Check for Documentation Questions (Give priority to document/form queries)
     if any(k in clean for k in ("document", "documentation", "paperwork", "form", "forms")) or any(k in clean for k in DOCUMENTATION_KEYWORDS):
         return ClassifiedIntent(

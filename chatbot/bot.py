@@ -325,6 +325,7 @@ def map_source_display(source_id: str) -> str:
         "DOC-A425D209E7E3": "Dangerous Goods & Hazardous Materials Packaging SOP (DOC-A425D209E7E3)",
         "DOC-9167A59967A4": "Pharmaceutical Cold-Chain & GDP Compliance Manual (DOC-9167A59967A4)",
         "DOC-9C68FFC317D6": "Employee Operations & Department Directory (DOC-9C68FFC317D6)",
+        "DOC-AF885F63B95E": "Employee Paid Leave, Time-Off Process & HR Policy (DOC-AF885F63B95E)",
         "PDF-CUST-SUPPORT": "Customer Support, Tracking & Booking Reference (PDF-CUST-SUPPORT)",
         "PDF-EXIM-CUSTOMS": "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)",
         "PDF-INCOTERMS": "Incoterms & International Trade Terms Guide (PDF-INCOTERMS)",
@@ -1176,6 +1177,40 @@ def _resolve_deterministic_response(
                 "- **Delivery Statuses:** Learn what *Out for Delivery*, *In Transit*, or *Delivered* mean\n"
                 "- **Delivery Exceptions & Delays:** Understand protocols for failed delivery attempts, weather delays, or customs holds\n"
                 "- **Proof of Delivery (POD):** How electronic signature and GPS delivery verification are recorded"
+            )
+        elif clarif_type == "broad_policy":
+            policy_overview = (
+                "# 📋 FleetHarbor Company Policies Overview\n\n"
+                "FleetHarbor maintains standardized operational, compliance, customer, and employee HR policies across all global hubs:\n\n"
+                "### 1. Customer & Commercial Policies (`DOC-7806D9117C6C`)\n"
+                "- **Service Tiers & Credit:** Enterprise Corporate (Net 30/60), Healthcare & Pharma Priority, and Standard Commercial (Net 15).\n"
+                "- **Booking Cut-Offs & Cancellation:** Air (8h), Ocean FCL (48h), LCL (24h), Road (4h); $150–$450 cancellation haulage after dispatch.\n"
+                "- **Demurrage & Claims:** Ocean free time (5 days import / 7 days export); claims filed within 3/14/30 days and settled within 21 business days.\n\n"
+                "### 2. Cold-Chain, Hazmat & Safety Compliance\n"
+                "- **Cold-Chain Pharmaceutical (`CC-POL-9921`):** WHO/EU/USP GDP validation across -70°C, -20°C, 2°C–8°C, and 15°C–25°C.\n"
+                "- **Dangerous Goods (`DOC-A425D209E7E3`):** IATA/IMDG/ADR hazard segregation (6 m barrier) and lithium battery rules.\n"
+                "- **Warehouse Safety SOP (`DOC-AFFBF53DD573`):** Mandatory EN/ASTM PPE, 8 km/h forklift speed cap, and 3-level incident escalation.\n\n"
+                "### 3. Customs & International Trade (`PDF-EXIM-CUSTOMS`, `PDF-INCOTERMS`)\n"
+                "- **Cross-Border Clearance:** Export/import declarations, commercial invoices, packing lists, HS codes, and Incoterms 2020 rules.\n\n"
+                "### 4. Employee HR, Paid Leave & Overtime (`SOP-HR-006`)\n"
+                "- **Leave & Overtime:** 20 annual paid days, 10 paid sick days, 5-step HR Portal leave approval process, and bi-weekly overtime claims.\n\n"
+                "Would you like detailed guidelines on any specific policy (e.g., `paid leave`, `process of leave`, `claims policy`, `customs clearance`, or `cold-chain CC-POL-9921`)?"
+            )
+            policy_sources = [
+                "Customer Service Rules & Shipping Terms (DOC-7806D9117C6C)",
+                "Warehouse Operations & Safety Standard Operating Procedure (DOC-AFFBF53DD573)",
+                "Pharmaceutical Cold-Chain & GDP Compliance Manual (DOC-9167A59967A4)",
+                "Employee Paid Leave, Time-Off Process & HR Policy (DOC-AF885F63B95E)",
+                "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)",
+            ]
+            if session:
+                session.add_message("user", clean_msg)
+                session.add_message("assistant", policy_overview)
+            return ChatResult(
+                response=policy_overview,
+                sources=policy_sources,
+                response_type="policy_overview",
+                shipment_id=None,
             )
         else:
             clarif_text = (
