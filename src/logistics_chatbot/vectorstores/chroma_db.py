@@ -177,6 +177,30 @@ def delete_collection(name: Optional[str] = None) -> bool:
         return False
 
 
+def delete_document_chunks(
+    document_id: str,
+    collection_name: Optional[str] = None,
+) -> int:
+    """Delete all ChromaDB chunks belonging to a given doc_id / document_id cleanly."""
+    clean_id = (document_id or "").strip()
+    if not clean_id:
+        return 0
+    col = get_or_create_collection(collection_name)
+    total_deleted = 0
+    for field in ("doc_id", "document_id"):
+        try:
+            existing = col.get(where={field: clean_id}, include=[])
+            ids = existing.get("ids") or []
+            if ids:
+                col.delete(ids=ids)
+                total_deleted += len(ids)
+        except Exception as exc:
+            logger.debug("ChromaDB delete notice on %s=%s: %s", field, clean_id, exc)
+    if total_deleted:
+        logger.info("Deleted %d ChromaDB chunks for document '%s'", total_deleted, clean_id)
+    return total_deleted
+
+
 def upsert_knowledge_chunks(
     chunks: List[Dict[str, Any]],
     collection_name: Optional[str] = None,
@@ -222,7 +246,16 @@ def upsert_knowledge_chunks(
             timestamp = str(item.get("timestamp") or item.get("last_updated") or now_iso)
             content_hash = str(item.get("content_hash") or compute_content_hash(f"{title}:{content}"))
 
-            metadata = {
+            vec = item["embedding"]
+            if len(vec) != config.EMBEDDING_DIM:
+                raise VectorDBError(
+                    detail=(
+                        f"Embedding dimension mismatch for '{chunk_id}': got {len(vec)}, "
+                        f"expected {config.EMBEDDING_DIM}"
+                    )
+                )
+
+            metadata: Dict[str, Any] = {
                 "doc_id": doc_id,
                 "title": title,
                 "source": source,
@@ -233,9 +266,24 @@ def upsert_knowledge_chunks(
                 "timestamp": timestamp,
                 "content_hash": content_hash,
             }
+            optional_meta = item.get("metadata") if isinstance(item.get("metadata"), dict) else {}
+            for extra_key in (
+                "document_id",
+                "document_name",
+                "source_file",
+                "page_number",
+                "section_name",
+                "document_category",
+                "upload_timestamp",
+                "section_title",
+                "chunk_id",
+            ):
+                val = item.get(extra_key) if item.get(extra_key) is not None else optional_meta.get(extra_key)
+                if val is not None and isinstance(val, (str, int, float, bool)):
+                    metadata[extra_key] = val
 
             ids.append(chunk_id)
-            embeddings_list.append(item["embedding"])
+            embeddings_list.append(vec)
             documents.append(content)
             metadatas.append(metadata)
 
@@ -349,8 +397,14 @@ def query_knowledge_chunks(
             out.append({
                 "chunk_id": chunk_id,
                 "doc_id": meta.get("doc_id", chunk_id),
-                "section_title": meta.get("title", ""),
+                "document_id": meta.get("document_id", meta.get("doc_id", chunk_id)),
+                "document_name": meta.get("document_name", meta.get("title", "")),
+                "source_file": meta.get("source_file", meta.get("source", "")),
+                "page_number": meta.get("page_number"),
+                "section_name": meta.get("section_name", meta.get("section_title", meta.get("title", ""))),
+                "section_title": meta.get("section_title", meta.get("title", "")),
                 "category": meta.get("category", "general"),
+                "document_category": meta.get("document_category", meta.get("category", "general")),
                 "content": doc,
                 "score": similarity,
                 "source": meta.get("source", ""),
@@ -358,7 +412,9 @@ def query_knowledge_chunks(
                 "language": meta.get("language", "en"),
                 "chunk_index": meta.get("chunk_index", 0),
                 "timestamp": meta.get("timestamp", ""),
+                "upload_timestamp": meta.get("upload_timestamp", meta.get("timestamp", "")),
                 "content_hash": meta.get("content_hash", ""),
+                "metadata": meta,
             })
 
         out.sort(key=lambda x: x["score"], reverse=True)

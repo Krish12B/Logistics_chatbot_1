@@ -71,7 +71,7 @@ KNOWLEDGE_BASE_PATH = LEGACY_FAQ_PATH
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 LLM_TIMEOUT_SECONDS = float(os.getenv("LLM_TIMEOUT_SECONDS", "30"))
-MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
+MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "1024"))
 QUERY_MAX_LENGTH = int(os.getenv("QUERY_MAX_LENGTH", "2000"))
 
 # ── Supabase PostgreSQL Settings ───────────────────────────────────

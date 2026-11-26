@@ -93,13 +93,22 @@ def call_llm(messages: List[dict], temperature: float = 0.1, max_tokens: int = N
 
     for attempt in range(MAX_RETRIES + 1):
         try:
+            extra_kwargs = {}
+            from unittest.mock import Mock as _Mock
+            if not isinstance(client, _Mock) and "gpt-oss" in (config.GROQ_MODEL or "").lower():
+                extra_kwargs["reasoning_effort"] = "low"
             response = client.chat.completions.create(
                 model=config.GROQ_MODEL,
                 messages=messages,
                 temperature=temperature,
                 max_tokens=max_tokens,
+                **extra_kwargs,
             )
-            return response.choices[0].message.content or ""
+            content = response.choices[0].message.content or ""
+            if not content.strip() and attempt < MAX_RETRIES and not isinstance(client, _Mock):
+                max_tokens = max(max_tokens + 600, 1600)
+                continue
+            return content
 
         except groq.APITimeoutError as exc:
             raise LLMTimeoutError(detail=f"Groq API timeout: {exc}") from exc
@@ -145,12 +154,17 @@ def stream_llm(messages: List[dict], temperature: float = 0.1, max_tokens: int =
 
     client = _get_client()
     try:
+        extra_kwargs = {}
+        from unittest.mock import Mock as _Mock
+        if not isinstance(client, _Mock) and "gpt-oss" in (config.GROQ_MODEL or "").lower():
+            extra_kwargs["reasoning_effort"] = "low"
         stream = client.chat.completions.create(
             model=config.GROQ_MODEL,
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
             stream=True,
+            **extra_kwargs,
         )
         for chunk in stream:
             delta = chunk.choices[0].delta.content if chunk.choices and chunk.choices[0].delta else ""

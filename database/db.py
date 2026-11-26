@@ -24,12 +24,24 @@ def get_shipment_by_id(shipment_id: str) -> Optional[Dict[str, Any]]:
         return None
 
     try:
+        if clean_id.startswith("ALC-"):
+            return _core_db.get_enterprise_shipment(clean_id)
         return _core_db.get_shipment(clean_id)
     except ShipmentNotFoundError:
         return None
     except Exception as exc:
         logger.error("Error retrieving shipment %s: %s", clean_id, exc)
         raise DatabaseError(detail=f"Database query failed for shipment {clean_id}: {exc}") from exc
+
+
+def get_enterprise_shipment_by_booking(identifier: str) -> Optional[Dict[str, Any]]:
+    """Retrieve full joined enterprise shipment record by ALC booking ID or UUID."""
+    return _core_db.get_enterprise_shipment(identifier)
+
+
+def search_enterprise_entity(entity_type: str, search_term: str, limit: int = 5) -> List[Dict[str, Any]]:
+    """Query standalone enterprise dimension tables (customer, carrier, warehouse, route, weather)."""
+    return _core_db.search_enterprise_entity(entity_type, search_term, limit=limit)
 
 
 def get_all_shipments(limit: int = 50) -> List[Dict[str, Any]]:

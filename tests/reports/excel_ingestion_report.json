@@ -1,0 +1,101 @@
+{
+  "workbook": "Data_attach2.xlsx",
+  "total_validated_rows": 79000,
+  "validation_errors": [],
+  "fk_checks": [
+    {
+      "relationship": "Shipments.customer_id -> Customers",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.product_id -> Products",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.carrier_id -> Carriers",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.warehouse_id -> Warehouses",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.route_id -> Routes",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.vehicle_id -> Vehicles",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.customs_id -> Customs",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipments.weather_id -> Weather",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "Shipment_Delivery_History.shipment_id -> Shipments",
+      "checked": 5000,
+      "orphans": 0
+    },
+    {
+      "relationship": "AI_Feature_Store.shipment_id -> Shipments",
+      "checked": 10000,
+      "orphans": 0
+    },
+    {
+      "relationship": "AI_Inference_Log.shipment_id -> Shipments",
+      "checked": 10000,
+      "orphans": 0
+    },
+    {
+      "relationship": "AI_Inference_Log.model_id -> AI_Model_Registry",
+      "checked": 10000,
+      "orphans": 0
+    },
+    {
+      "relationship": "AI_Monitoring_Alerts.shipment_id -> Shipments",
+      "checked": 10000,
+      "orphans": 0
+    },
+    {
+      "relationship": "AI_Monitoring_Alerts.inference_id -> AI_Inference_Log",
+      "checked": 10000,
+      "orphans": 0
+    }
+  ],
+  "derived_delay_stats": {
+    "total": 5000,
+    "Delayed": 1191,
+    "Delivered": 3809,
+    "max_delay_days": 18
+  },
+  "sqlite_table_counts": {
+    "enterprise_customers": 3000,
+    "products": 5000,
+    "carriers": 5000,
+    "warehouses": 5000,
+    "routes": 3000,
+    "vehicles": 5000,
+    "weather": 3000,
+    "customs": 5000,
+    "ai_model_registry": 5000,
+    "enterprise_shipments": 5000,
+    "shipment_delivery_history": 5000,
+    "ai_feature_store": 10000,
+    "ai_inference_log": 10000,
+    "ai_monitoring_alerts": 10000
+  },
+  "supabase_status": "blocked_missing_credentials",
+  "supabase_table_counts": {}
+}

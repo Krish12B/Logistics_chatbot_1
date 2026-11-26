@@ -10,6 +10,7 @@ from logistics_chatbot.chatbot.chatbot import get_conversation_store
 from logistics_chatbot.chatbot.classifier import (
     LogisticsIntent,
     classify_logistics_query,
+    extract_booking_id,
     extract_employee_id,
     extract_operational_id,
     extract_shipment_id,
@@ -253,8 +254,10 @@ def find_direct_answer(clean_msg: str) -> Optional[Tuple[str, List[str]]]:
     if ("air vs ocean" in q or "ocean vs air" in q or ("air" in q and "ocean" in q and "transit" in q)):
         return DIRECT_ANSWERS["air vs ocean transit"]
 
-    # Delayed shipment
-    if ("shipment is delayed" in q or "shipment delayed" in q or "happens when a shipment is delayed" in q or "handling shipment delays" in q):
+    # Delayed shipment (keep exact general policy question fast while routing customer delay troubleshooting to RAG)
+    if "what should customers do when a shipment is delayed" in q or "what can be done" in q:
+        return None
+    if ("happens when a shipment is delayed" in q or "handling shipment delays" in q or q in ("shipment delayed", "delayed shipment")):
         return DIRECT_ANSWERS["delayed shipment"]
 
     # Check exact phrasing matches
@@ -300,7 +303,9 @@ class ChatResult:
 def map_source_display(source_id: str) -> str:
     """Map raw internal document IDs into human-readable source titles while preserving the ID for auditability."""
     sid = str(source_id).strip()
-    if sid.startswith("SHP-") or "shipment" in sid.lower():
+    if sid.startswith("Enterprise "):
+        return sid
+    if sid.startswith("SHP-") or ("shipment" in sid.lower() and "pdf" not in sid.lower()):
         clean_id = re.search(r"SHP-\d+", sid)
         shp_str = clean_id.group(0) if clean_id else sid
         return f"Shipment Database Record ({shp_str})"
@@ -320,6 +325,11 @@ def map_source_display(source_id: str) -> str:
         "DOC-A425D209E7E3": "Dangerous Goods & Hazardous Materials Packaging SOP (DOC-A425D209E7E3)",
         "DOC-9167A59967A4": "Pharmaceutical Cold-Chain & GDP Compliance Manual (DOC-9167A59967A4)",
         "DOC-9C68FFC317D6": "Employee Operations & Department Directory (DOC-9C68FFC317D6)",
+        "PDF-CUST-SUPPORT": "Customer Support, Tracking & Booking Reference (PDF-CUST-SUPPORT)",
+        "PDF-EXIM-CUSTOMS": "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)",
+        "PDF-INCOTERMS": "Incoterms & International Trade Terms Guide (PDF-INCOTERMS)",
+        "PDF-DELAY-RISK": "Shipment Delay Causes & Route Risk Reference (PDF-DELAY-RISK)",
+        "PDF-WAREHOUSING": "Warehousing & Contract Logistics Reference (PDF-WAREHOUSING)",
     }
     if sid in doc_map:
         return doc_map[sid]
@@ -726,7 +736,9 @@ def build_employee_aggregate_report() -> ChatResult:
 
 
 def _extract_session_context(session_id: Optional[str]):
-    """Retrieve conversation session plus most recent shipment_id & employee_id."""
+    """Retrieve conversation session plus most recent shipment/booking ID & employee ID."""
+    from logistics_chatbot.chatbot.classifier import extract_booking_id
+
     session = None
     previous_shipment_id = None
     previous_employee_id = None
@@ -735,6 +747,10 @@ def _extract_session_context(session_id: Optional[str]):
         session = store.get_or_create(session_id)
         if session and session.messages:
             for past_msg in reversed(session.messages):
+                if not previous_shipment_id:
+                    booking_ref = extract_booking_id(past_msg.content)
+                    if booking_ref:
+                        previous_shipment_id = booking_ref
                 if not previous_shipment_id:
                     try:
                         sid = detect_shipment_id(past_msg.content)
@@ -749,6 +765,242 @@ def _extract_session_context(session_id: Optional[str]):
                 if previous_shipment_id and previous_employee_id:
                     break
     return session, previous_shipment_id, previous_employee_id
+
+
+def _is_hybrid_enterprise_query(msg_lower: str) -> bool:
+    """Detect whether an enterprise booking query needs ChromaDB knowledge + LLM reasoning."""
+    reasoning_cues = (
+        "why ", "why?", "explain", "what can be done", "how can", "how to ",
+        "recommend", "mitigate", "incoterm", "responsibilit", "guidance",
+        "requirement", "requirements", "what should", "resolve", "steps",
+    )
+    return any(cue in msg_lower for cue in reasoning_cues)
+
+
+def format_enterprise_shipment_context(ent: Dict[str, Any]) -> str:
+    """Serialize all verified relational fields of an enterprise booking for grounded hybrid RAG."""
+    ai_feat = ent.get("ai_features") or {}
+    ai_inf = ent.get("ai_inference") or {}
+    alerts = ent.get("alerts") or []
+    alert_summary = "; ".join(
+        f"[{a.get('severity', 'Info')}] {a.get('alert_type', 'Alert')} ({a.get('alert_status', '')}): {a.get('recommended_action', '')}"
+        for a in alerts[:3]
+    ) or "None"
+
+    delay_txt = (
+        f"Delayed (+{ent.get('delay_days', 0)} days beyond expected)"
+        if ent.get("is_delayed")
+        else f"Delivered ({ent.get('derived_status', 'Delivered')})"
+    )
+
+    lines = [
+        f"Booking Reference: {ent['booking_id']} (UUID: {ent['shipment_id']})",
+        f"Derived Status (from Shipment_Delivery_History): {delay_txt}",
+        f"Customer: {ent.get('customer_name')} ({ent.get('customer_type')}, {ent.get('industry')}, {ent.get('customer_city')}, {ent.get('customer_country')})",
+        f"Product / Cargo: {ent.get('product_name')} | Category: {ent.get('product_category')} | HS Code: {ent.get('hs_code')} | Supplier: {ent.get('supplier_name')}",
+        f"Cargo Flags: Hazardous={ent.get('product_hazardous')}, Perishable={ent.get('product_perishable')}, Temp-Controlled={ent.get('temperature_controlled')}, Fragile={ent.get('fragile')}, Insurance={ent.get('insurance')}",
+        f"Mode & Type: {ent.get('shipping_mode')} ({ent.get('shipment_type')}), Priority={ent.get('priority')}, Weight={ent.get('weight_kg')} kg, Volume={ent.get('volume_cbm')} CBM, Declared Value=${ent.get('declared_value')}",
+        f"Carrier: {ent.get('carrier_name')} ({ent.get('carrier_type')}, Rating={ent.get('carrier_rating')}/5.0, Fleet={ent.get('fleet_size')}, HQ={ent.get('carrier_hq')})",
+        f"Vehicle: {ent.get('vehicle_number')} ({ent.get('vehicle_type')}, Maintenance={ent.get('maintenance_status')}, Fuel={ent.get('fuel_type')})",
+        f"Origin Warehouse: {ent.get('warehouse_name')} ({ent.get('warehouse_city')}, Type={ent.get('warehouse_type')}, Utilization={ent.get('current_utilization')}%)",
+        f"Route: {ent.get('origin_city')}, {ent.get('origin_country')} ({ent.get('origin_port')}) -> {ent.get('destination_city')}, {ent.get('destination_country')} ({ent.get('destination_port')})",
+        f"Route Risk Metrics: Distance={ent.get('distance_km')} km, Avg Transit={ent.get('average_transit_days')} days, Risk={ent.get('route_risk')}, Traffic Index={ent.get('traffic_index')}",
+        f"Weather Forecast ({ent.get('weather_city')}, {ent.get('forecast_date')}): {ent.get('weather_condition')}, Temp={ent.get('temperature')}C, Wind={ent.get('wind_speed')} km/h, Rainfall={ent.get('rainfall')} mm, Visibility={ent.get('visibility')} km",
+        f"Customs: Required={ent.get('customs_required')}, Documentation Complete={ent.get('documentation_complete')}, Inspection Required={ent.get('inspection_required')}, Cargo Class={ent.get('cargo_type')}, Dest Country={ent.get('customs_destination_country')}",
+        f"Schedule & Delivery History: Booked={ent.get('booking_date')}, Shipped={ent.get('ship_date')}, Expected={ent.get('expected_delivery_date')}, Actual={ent.get('actual_delivery_date')}, Attempts={ent.get('delivery_attempts')}",
+        f"Incoterm Field: Not stored on this shipment booking record.",
+    ]
+    if ai_feat or ai_inf:
+        lines.append(
+            f"AI Risk Telemetry: Route Delay Rate={ai_feat.get('route_delay_rate', 'N/A')}%, "
+            f"Carrier Reliability={ai_feat.get('carrier_reliability_score', 'N/A')}, "
+            f"Weather Severity={ai_feat.get('weather_severity_score', 'N/A')}, "
+            f"Predicted Delay Prob={ai_inf.get('delay_probability', 'N/A')} ({ai_inf.get('risk_category', 'N/A')})"
+        )
+    lines.append(f"Monitoring Alerts: {alert_summary}")
+    return "\n".join(lines)
+
+
+def build_enterprise_shipment_report(ent: Dict[str, Any], query_lower: str) -> str:
+    """Build structured, concise Markdown report for enterprise booking queries (Phase 6 format)."""
+    bid = ent["booking_id"]
+    is_delayed = ent.get("is_delayed", False)
+    status_str = f"🔴 Delayed (+{ent.get('delay_days', 0)} days)" if is_delayed else "🟢 Delivered"
+
+    # Focused attribute responses when user asks one concise question
+    if any(w in query_lower for w in ("carrier", "who is carrying", "airline", "shipping line")) and "overview" not in query_lower:
+        return (
+            f"### Shipment Information – `{bid}`\n"
+            f"- **Booking Reference:** `{bid}`\n"
+            f"- **Assigned Carrier:** **{ent.get('carrier_name')}** (`{ent.get('carrier_type')}` carrier)\n"
+            f"- **Carrier Rating:** {ent.get('carrier_rating')}/5.0 ({ent.get('years_of_service')} years of service, fleet size {ent.get('fleet_size'):,}, HQ: {ent.get('carrier_hq')})\n"
+            f"- **Assigned Vehicle:** `{ent.get('vehicle_number')}` ({ent.get('vehicle_type')}, {ent.get('maintenance_status')} condition)\n"
+            f"- **Derived Shipment Status:** {status_str}"
+        )
+
+    if ("destination" in query_lower or "where is it going" in query_lower) and "origin" not in query_lower:
+        return (
+            f"### Shipment Information – `{bid}`\n"
+            f"- **Booking Reference:** `{bid}`\n"
+            f"- **Destination:** **{ent.get('destination_city')}, {ent.get('destination_country')}** (Port/Gateway: {ent.get('destination_port')})\n"
+            f"- **Origin:** {ent.get('origin_city')}, {ent.get('origin_country')} ({ent.get('origin_port')})\n"
+            f"- **Expected Delivery:** {ent.get('expected_delivery_date')} | **Actual Delivery:** {ent.get('actual_delivery_date')} ({status_str})"
+        )
+
+    if "weather" in query_lower and "status" not in query_lower:
+        return (
+            f"### Operational Weather Context – `{bid}`\n"
+            f"- **Monitored City:** {ent.get('weather_city')} (Forecast: {ent.get('forecast_date')})\n"
+            f"- **Condition:** **{ent.get('weather_condition')}**\n"
+            f"- **Metrics:** Temp {ent.get('temperature')}°C | Rainfall {ent.get('rainfall')} mm | Wind {ent.get('wind_speed')} km/h | Humidity {ent.get('humidity')}% | Visibility {ent.get('visibility')} km\n"
+            f"- **Derived Delivery Status:** {status_str}"
+        )
+
+    if any(w in query_lower for w in ("warehouse", "storage facility")):
+        return (
+            f"### Operational Warehouse Information – `{bid}`\n"
+            f"- **Warehouse:** **{ent.get('warehouse_name')}** ({ent.get('warehouse_type')} facility)\n"
+            f"- **Location:** {ent.get('warehouse_city')}, {ent.get('warehouse_state')}\n"
+            f"- **Capacity / Utilization:** {ent.get('warehouse_capacity'):,} units ({ent.get('current_utilization')}% utilized)"
+        )
+
+    if "delivery history" in query_lower or "attempts" in query_lower:
+        return (
+            f"### Operational Delivery History – `{bid}`\n"
+            f"- **Derived Delivery Status:** {status_str} *(computed from `shipment_delivery_history`)*\n"
+            f"- **Expected Delivery Date:** {ent.get('expected_delivery_date')}\n"
+            f"- **Actual Delivery Date:** {ent.get('actual_delivery_date')}\n"
+            f"- **Delivery Attempts:** {ent.get('delivery_attempts')}\n"
+            f"- **Delay Beyond Expected:** {ent.get('delay_days', 0)} day(s)"
+        )
+
+    customs_flag = "Required" if ent.get("customs_required") else "Not Required"
+    docs_flag = "Complete" if ent.get("documentation_complete") else "Incomplete"
+    insp_flag = "Required" if ent.get("inspection_required") else "Not Required"
+    ai_inf = ent.get("ai_inference") or {}
+    alerts = ent.get("alerts") or []
+
+    alert_lines = (
+        "\n".join(
+            f"- **{a.get('severity', 'Info')} — {a.get('alert_type')} ({a.get('alert_status')}):** {a.get('recommended_action')}"
+            for a in alerts[:3]
+        )
+        if alerts
+        else "- No open monitoring alerts logged."
+    )
+
+    return (
+        f"# 📦 Shipment Report – `{bid}`\n\n"
+        f"### Shipment Information\n"
+        f"- **Booking Reference:** `{bid}`\n"
+        f"- **Shipment Status:** {status_str} *(derived from delivery history)*\n"
+        f"- **Customer:** {ent.get('customer_name')} ({ent.get('customer_type')} · {ent.get('industry')})\n"
+        f"- **Origin:** {ent.get('origin_city')}, {ent.get('origin_country')} ({ent.get('origin_port')})\n"
+        f"- **Destination:** {ent.get('destination_city')}, {ent.get('destination_country')} ({ent.get('destination_port')})\n"
+        f"- **Carrier:** {ent.get('carrier_name')} ({ent.get('carrier_type')}, Rating {ent.get('carrier_rating')}/5.0)\n"
+        f"- **Product / Cargo:** {ent.get('product_name')} (`{ent.get('product_category')}`, HS `{ent.get('hs_code')}`, {ent.get('weight_kg')} kg, ${ent.get('declared_value'):,.2f})\n"
+        f"- **Expected Delivery:** {ent.get('expected_delivery_date')}\n"
+        f"- **Actual Delivery:** {ent.get('actual_delivery_date')} ({ent.get('delivery_attempts')} attempt(s))\n\n"
+        f"### Operational Information\n"
+        f"- **Route & Risk:** {ent.get('distance_km')} km (~{ent.get('average_transit_days')} days avg) · Route Risk: **{ent.get('route_risk')}** (Traffic Index: {ent.get('traffic_index')})\n"
+        f"- **Warehouse:** {ent.get('warehouse_name')} ({ent.get('warehouse_type')}, {ent.get('current_utilization')}% utilized)\n"
+        f"- **Weather Forecast:** {ent.get('weather_city')} — {ent.get('weather_condition')} ({ent.get('temperature')}°C, Wind {ent.get('wind_speed')} km/h)\n"
+        f"- **Customs Status:** Customs {customs_flag} · Documentation: **{docs_flag}** · Inspection: {insp_flag}\n"
+        f"- **AI Delay Risk Assessment:** Probability `{ai_inf.get('delay_probability', 'N/A')}` (`{ai_inf.get('risk_category', 'N/A')}` risk)\n"
+        f"{alert_lines}\n\n"
+        f"### Summary\n"
+        f"Shipment `{bid}` ({ent.get('shipping_mode')} {ent.get('shipment_type')}, Priority: {ent.get('priority')}) is **{ent.get('derived_status')}** via {ent.get('carrier_name')} from {ent.get('origin_city')} to {ent.get('destination_city')}."
+    )
+
+
+def _lookup_enterprise_shipment_safe(booking_id: str, msg_lower: str) -> Tuple[str, List[str], str, Optional[Dict[str, Any]]]:
+    """Retrieve enterprise booking safely and return deterministic structured response."""
+    try:
+        ent = database.get_enterprise_shipment(booking_id)
+        if ent:
+            report = build_enterprise_shipment_report(ent, msg_lower)
+            src = f"Enterprise Shipment Database ({ent['booking_id']})"
+            return report, [src], "enterprise_shipment", ent
+    except Exception as exc:
+        logger.warning("Enterprise shipment lookup error for %s: %s", booking_id, exc)
+    not_found = (
+        f"I couldn't find shipment booking **{booking_id}** in the enterprise shipment registry. "
+        "Please verify the booking reference (e.g., `ALC-2025-100000` through `ALC-2026-104999`) or `SHP-10001` ID and try again."
+    )
+    return not_found, [], "not_found", None
+
+
+def _lookup_standalone_enterprise_entity(clean_msg: str) -> Optional[ChatResult]:
+    """Handle explicit lookup requests for Customers, Carriers, Warehouses, or Routes."""
+    patterns = [
+        ("customer", r"(?:customer|client|account)\s+(?:details|info|information|record|profile)?\s*(?:for|named|is|:)?\s*[\"']?([A-Za-z0-9][A-Za-z0-9\s\-&]{2,45})[\"']?"),
+        ("carrier", r"(?:carrier|carrier details|carrier info|shipping line)\s+(?:details|info|information|record)?\s*(?:for|named|is|:)?\s*[\"']?([A-Za-z0-9][A-Za-z0-9\s\-&]{2,40})[\"']?"),
+        ("warehouse", r"(?:warehouse|warehouse details|warehouse info|facility)\s+(?:details|info|information|record)?\s*(?:for|named|in|at|:)?\s*[\"']?([A-Za-z0-9][A-Za-z0-9\s\-]{2,45})[\"']?"),
+    ]
+    for etype, pat in patterns:
+        m = re.search(pat, clean_msg, re.IGNORECASE)
+        if not m:
+            continue
+        term = re.sub(r"[?!.,;:]+$", "", m.group(1)).strip()
+        # Ignore generic policy words
+        if term.lower() in ("information", "details", "rules", "management", "operations", "reference", "requirements"):
+            continue
+        rows = database.search_enterprise_entity(etype, term, limit=3)
+        if not rows:
+            continue
+        r = rows[0]
+        if etype == "customer":
+            body = (
+                f"### Customer Account Details\n"
+                f"- **Customer Name:** {r['customer_name']} (`{r['customer_id']}`)\n"
+                f"- **Type / Industry:** {r['customer_type']} · {r['industry']}\n"
+                f"- **Location:** {r['city']}, {r['state']}, {r['country']}\n"
+                f"- **Status:** {r['customer_status']} (Registered: {r['registration_date']})"
+            )
+            src = f"Enterprise Customers Database ({r['customer_name']})"
+        elif etype == "carrier":
+            body = (
+                f"### Carrier Details\n"
+                f"- **Carrier Name:** {r['carrier_name']} (`{r['carrier_id']}`)\n"
+                f"- **Mode / Type:** {r['carrier_type']}\n"
+                f"- **Rating:** {r['average_rating']}/5.0\n"
+                f"- **Fleet Size:** {r['fleet_size']} · **Experience:** {r['years_of_service']} years\n"
+                f"- **Headquarters:** {r['headquarters']}"
+            )
+            src = f"Enterprise Carriers Database ({r['carrier_name']})"
+        else:
+            body = (
+                f"### Warehouse Information\n"
+                f"- **Warehouse:** {r['warehouse_name']} (`{r['warehouse_id']}`)\n"
+                f"- **Facility Type:** {r['warehouse_type']}\n"
+                f"- **Location:** {r['city']}, {r['state']}\n"
+                f"- **Capacity / Utilization:** {r['warehouse_capacity']:,} ({r['current_utilization']}% utilized)"
+            )
+            src = f"Enterprise Warehouses Database ({r['warehouse_name']})"
+        return ChatResult(response=body, sources=[src], response_type=f"enterprise_{etype}", structured_data=r)
+
+    # Check route lookup: "route from X to Y"
+    rm = re.search(r"route\s+(?:between|from)\s+([A-Za-z\s]{2,30}?)\s+to\s+([A-Za-z\s]{2,30})", clean_msg, re.IGNORECASE)
+    if rm:
+        orig_q = rm.group(1).strip()
+        dest_q = re.sub(r"[?!.,;:]+$", "", rm.group(2)).strip()
+        matched = database.search_enterprise_entity("route", f"{orig_q}->{dest_q}", limit=5)
+        if matched:
+            rt = matched[0]
+            body = (
+                f"### Route Information\n"
+                f"- **Corridor:** {rt['origin_city']}, {rt['origin_country']} ({rt['origin_port']}) → "
+                f"{rt['destination_city']}, {rt['destination_country']} ({rt['destination_port']})\n"
+                f"- **Distance:** {rt['distance_km']} km | **Avg Transit:** {rt['average_transit_days']} days\n"
+                f"- **Route Risk:** {rt['route_risk']} | **Traffic Index:** {rt['traffic_index']}"
+            )
+            return ChatResult(
+                response=body,
+                sources=[f"Enterprise Routes Database ({rt['origin_city']} -> {rt['destination_city']})"],
+                response_type="enterprise_route",
+                structured_data=rt,
+            )
+    return None
 
 
 def _lookup_shipment_safe(target_shipment_id: str, msg_lower: str) -> Tuple[str, List[str], str, Optional[Dict[str, Any]]]:
@@ -803,16 +1055,18 @@ def _resolve_deterministic_response(
     # Extract explicit/resolved IDs & direct domain matches to handle compound queries cleanly
     explicit_ops_id = extract_operational_id(clean_msg)
     explicit_emp_id = extract_employee_id(clean_msg)
+    explicit_booking_id = extract_booking_id(clean_msg)
     explicit_shp_id = None
     try:
         explicit_shp_id = detect_shipment_id(clean_msg)
     except InvalidShipmentIdError:
         raise
 
-    direct_match = find_direct_answer(clean_msg)
+    direct_match = None if (explicit_booking_id or classified.booking_id) else find_direct_answer(clean_msg)
 
     target_ops_id = explicit_ops_id or classified.operational_id
     target_shp_id = explicit_shp_id or (classified.shipment_id if classified.preferred_source == "shipment_database" else None)
+    target_booking_id = explicit_booking_id or classified.booking_id
     target_emp_id = explicit_emp_id or (classified.employee_id if classified.preferred_source == "employee_directory" else None)
 
     # Compound multi-entity query handling (e.g. SHP-10001 + EMP-20001 + FOB vs CIF)
@@ -1009,6 +1263,36 @@ def _resolve_deterministic_response(
             shipment_id=None,
         )
 
+    # Enterprise Booking Inquiries (ALC-2025-XXXXXX / UUID)
+    if target_booking_id:
+        if _is_hybrid_enterprise_query(msg_lower):
+            # Verify existence first so missing IDs never invoke LLM unnecessarily
+            if database.get_enterprise_shipment(target_booking_id) is None:
+                ent_resp, ent_srcs, ent_type, ent_data = _lookup_enterprise_shipment_safe(target_booking_id, msg_lower)
+                if session:
+                    session.add_message("user", clean_msg)
+                    session.add_message("assistant", ent_resp)
+                return ChatResult(
+                    response=ent_resp,
+                    sources=ent_srcs,
+                    response_type=ent_type,
+                    shipment_id=target_booking_id,
+                    structured_data=ent_data or {},
+                )
+            return None  # Hand over to Hybrid Enterprise SQL + ChromaDB RAG + LLM pipeline
+
+        ent_resp, ent_srcs, ent_type, ent_data = _lookup_enterprise_shipment_safe(target_booking_id, msg_lower)
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", ent_resp)
+        return ChatResult(
+            response=ent_resp,
+            sources=ent_srcs,
+            response_type=ent_type,
+            shipment_id=target_booking_id,
+            structured_data=ent_data or {},
+        )
+
     # Shipment Inquiries
     if target_shp_id:
         shp_resp, shp_srcs, shp_type, shp_data = _lookup_shipment_safe(target_shp_id, msg_lower)
@@ -1055,6 +1339,14 @@ def _resolve_deterministic_response(
             shipment_id=None,
         )
 
+    # Standalone Enterprise Dimension Entity Lookups (Customers, Carriers, Warehouses, Routes)
+    ent_entity_res = _lookup_standalone_enterprise_entity(clean_msg)
+    if ent_entity_res is not None:
+        if session:
+            session.add_message("user", clean_msg)
+            session.add_message("assistant", ent_entity_res.response)
+        return ent_entity_res
+
     return None
 
 
@@ -1063,7 +1355,64 @@ def _prepare_rag_prompt(
     session,
     previous_shipment_id: Optional[str],
 ):
-    """Run RAG retrieve() ONCE and construct prompt messages for LLM."""
+    """Run RAG retrieve() (plus enterprise SQL + ChromaDB hybrid enrichment when applicable) ONCE."""
+    from logistics_chatbot.chatbot.classifier import extract_booking_id
+    from logistics_chatbot.rag.retrieval import RetrievedContext, QueryIntent, QueryType, search_knowledge
+
+    booking_ref = extract_booking_id(clean_msg)
+    if not booking_ref and previous_shipment_id and (
+        previous_shipment_id.upper().startswith("ALC-") or len(previous_shipment_id) == 36
+    ):
+        booking_ref = previous_shipment_id
+
+    if booking_ref:
+        ent = database.get_enterprise_shipment(booking_ref)
+        if ent:
+            rag_query = clean_msg
+            low = clean_msg.lower()
+            if "delay" in low:
+                rag_query = f"{clean_msg} shipment delay causes route risk weather customs carrier reliability"
+            elif "custom" in low:
+                rag_query = f"{clean_msg} customs clearance export import documentation inspection hs code"
+            elif "incoterm" in low:
+                rag_query = f"{clean_msg} Incoterms 2020 buyer seller responsibility risk transfer"
+            elif ent.get("is_delayed") or "guidance" in low or "recommend" in low:
+                rag_query = f"{clean_msg} Allcargo customer support delay causes route risk escalation procedure"
+
+            kb_res = search_knowledge(rag_query, top_k=4)
+            articles = kb_res.articles if kb_res else []
+            ctx = RetrievedContext(
+                intent=QueryIntent(query_type=QueryType.MIXED, raw_query=clean_msg),
+                shipment=ent,
+                knowledge_articles=articles,
+                source_doc_ids=[a.get("doc_id", "DOC") for a in articles if a.get("doc_id")],
+            )
+            raw_sources = [f"Enterprise Shipment Database ({ent['booking_id']})"] + list(ctx.source_doc_ids)
+            ent_block = "ENTERPRISE SHIPMENT DATABASE RECORD:\n" + format_enterprise_shipment_context(ent)
+            kb_lines = []
+            for a in articles:
+                did = a.get("doc_id", "DOC")
+                ttl = a.get("section_title") or a.get("title") or ""
+                kb_lines.append(f"[{did}] {ttl}\n{a.get('content', '')}")
+            kb_block = "KNOWLEDGE BASE:\n" + "\n\n".join(kb_lines) if kb_lines else "KNOWLEDGE BASE:\n(No additional documents matched.)"
+            formatted = f"{ent_block}\n\n{kb_block}"
+
+            messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+            if session:
+                messages.extend(session.get_recent_messages(max_turns=3))
+            messages.append({
+                "role": "user",
+                "content": (
+                    f"CONTEXT:\n{formatted}\n\n"
+                    f"USER QUESTION: {clean_msg}\n\n"
+                    "FORMAT INSTRUCTIONS: Organize your answer clearly using these headings where applicable: "
+                    "### Shipment Information, ### Operational Information, ### Knowledge-Based Explanation, ### Summary. "
+                    "Clearly distinguish verified database records from general knowledge base guidance. "
+                    "Never invent Incoterms or fields marked not stored in the record."
+                ),
+            })
+            return ctx, formatted, messages, raw_sources
+
     context = retrieve(clean_msg, previous_shipment_id=previous_shipment_id)
     raw_sources = list(context.source_doc_ids) if context and context.source_doc_ids else []
     if context and getattr(context, "shipment_list", None) and not raw_sources:
@@ -1178,6 +1527,12 @@ def generate_response(
     mapped_sources = [map_source_display(s) for s in raw_sources]
     deduped_sources = list(dict.fromkeys(mapped_sources))
 
+    res_booking_id = (
+        context.shipment.get("booking_id")
+        if (context and isinstance(context.shipment, dict) and context.shipment.get("booking_id"))
+        else None
+    )
+
     if session:
         session.add_message("user", clean_msg, context=formatted_ctx)
         session.add_message("assistant", clean_answer)
@@ -1185,8 +1540,8 @@ def generate_response(
     return ChatResult(
         response=clean_answer,
         sources=deduped_sources,
-        response_type="general_knowledge",
-        shipment_id=None,
+        response_type="hybrid_enterprise_rag" if res_booking_id else "general_knowledge",
+        shipment_id=res_booking_id,
     )
 
 
@@ -1266,9 +1621,15 @@ def stream_chat_response(
         if _is_unavailable_text(clean_text):
             final_sources: List[str] = []
             final_type = "unavailable"
+            res_booking_id = None
         else:
             final_sources = list(dict.fromkeys([map_source_display(s) for s in raw_sources]))
-            final_type = "general_knowledge"
+            res_booking_id = (
+                context.shipment.get("booking_id")
+                if (context and isinstance(context.shipment, dict) and context.shipment.get("booking_id"))
+                else None
+            )
+            final_type = "hybrid_enterprise_rag" if res_booking_id else "general_knowledge"
 
         if session:
             session.add_message("user", clean_msg, context=formatted_ctx)
@@ -1279,7 +1640,7 @@ def stream_chat_response(
             "response": clean_text,
             "sources": final_sources,
             "response_type": final_type,
-            "shipment_id": None,
+            "shipment_id": res_booking_id,
         }
 
     except ChatbotError as exc:

@@ -31,6 +31,15 @@ logger = logging.getLogger("logistics_chatbot.retrieval")
 
 LOOSE_ID_PATTERN = re.compile(r"\bSHP[-\s]?\d+\b", re.IGNORECASE)
 VALID_ID_PATTERN = re.compile(r"^SHP-\d{5}$")
+BOOKING_ID_PATTERN = re.compile(r"\bALC[-\s]?(\d{4})[-\s]?(\d{5,7})\b", re.IGNORECASE)
+
+
+def detect_booking_id(text: str) -> Optional[str]:
+    """Return a normalized enterprise booking reference (e.g. 'ALC-2025-100000') if present."""
+    match = BOOKING_ID_PATTERN.search(text or "")
+    if not match:
+        return None
+    return f"ALC-{match.group(1)}-{match.group(2)}"
 
 
 def detect_shipment_id(text: str) -> Optional[str]:
@@ -393,18 +402,41 @@ def search_knowledge(
     except Exception:
         pass
 
-    # 2. ChromaDB vector database semantic search
+    # 2. ChromaDB vector database semantic search + lightweight lexical boost
     if getattr(config, "VECTOR_STORE", "auto") in ("chroma", "auto"):
         try:
             from logistics_chatbot.vectorstores import chroma_db
             where_filter = {"category": category.lower()} if category else None
+            fetch_k = top_k * 2 if where_filter is None else top_k
             chroma_matches = chroma_db.query_knowledge_chunks(
                 query,
-                top_k=top_k,
+                top_k=fetch_k,
                 where=where_filter,
                 min_score=min_score,
             )
             if chroma_matches:
+                clean_q = query.lower()
+                q_tokens = {
+                    t for t in re.findall(r"\b[a-z0-9\-]{3,}\b", clean_q)
+                    if t not in _STOP_WORDS
+                }
+                if q_tokens:
+                    reranked = []
+                    for item in chroma_matches:
+                        txt_low = (item.get("content") or "").lower()
+                        title_low = (item.get("section_title") or item.get("section_name") or "").lower()
+                        hits = sum(1 for tok in q_tokens if tok in txt_low or tok in title_low)
+                        lex = hits / max(1, len(q_tokens))
+                        sem = float(item.get("score", 0.0))
+                        boosted = round((sem * 0.82) + (lex * 0.18), 4)
+                        enriched = dict(item)
+                        enriched["semantic_score"] = sem
+                        enriched["score"] = boosted
+                        reranked.append(enriched)
+                    reranked.sort(key=lambda x: x["score"], reverse=True)
+                    chroma_matches = reranked[:top_k]
+                else:
+                    chroma_matches = chroma_matches[:top_k]
                 return KnowledgeResult(articles=chroma_matches, source="chroma_db")
         except Exception as exc:
             logger.debug("ChromaDB query skipped or failed: %s", exc)

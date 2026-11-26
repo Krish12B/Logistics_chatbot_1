@@ -1,0 +1,249 @@
+{
+  "groq_configured": true,
+  "groq_model": "openai/gpt-oss-20b",
+  "supabase_db_url_configured": false,
+  "test_a_chromadb": [
+    {
+      "query": "Explain the Incoterms 2020 rules.",
+      "http_status": 200,
+      "latency_ms": 11825.2,
+      "top_hit": {
+        "chunk_id": "PDF-INCOTERMS-P01-C004",
+        "document_name": "Incoterms & International Trade Terms Guide",
+        "page_number": 1,
+        "score": 0.5888
+      },
+      "sources": [
+        "Incoterms & International Trade Terms Guide (PDF-INCOTERMS)"
+      ],
+      "response_preview": "# \ud83d\udccb Incoterms 2020 Rules\n\n### 1. Overview\nIncoterms 2020 are a set of internationally recognized trade terms published by the International Chamber of Commerce. They define the responsibilities, costs, and risk transfer points between sellers and buyers for goods shipped by various transport modes. The 2020 edition, ef"
+    },
+    {
+      "query": "What is the difference between EXW and DDP?",
+      "http_status": 200,
+      "latency_ms": 927.0,
+      "top_hit": {
+        "chunk_id": "PDF-INCOTERMS-P01-C005",
+        "document_name": "Incoterms & International Trade Terms Guide",
+        "page_number": 1,
+        "score": 0.5312
+      },
+      "sources": [
+        "Incoterms & International Trade Terms Guide (PDF-INCOTERMS)",
+        "Logistics Terminology & Glossary (GL-0025)",
+        "Logistics Terminology & Glossary (GL-0021)"
+      ],
+      "response_preview": "# \ud83d\udccb EXW vs. DDP\n\n### 1. Overview\n**EXW (Ex Works)** places the minimum obligation on the seller: the goods are made available at the seller\u2019s premises, and the buyer assumes all costs and risks from that point onward, including export clearance, loading, and onward transport. \n**DDP (Delivered Duty Paid)** places the m"
+    },
+    {
+      "query": "What documents are required for international shipping?",
+      "http_status": 200,
+      "latency_ms": 968.9,
+      "top_hit": {
+        "chunk_id": "PDF-EXIM-CUSTOMS-P01-C004",
+        "document_name": "Export-Import Documentation & Customs Reference Guide",
+        "page_number": 1,
+        "score": 0.564
+      },
+      "sources": [
+        "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)"
+      ],
+      "response_preview": "# \ud83d\udccb International Shipping Documents\n\n### 1. Overview\nInternational shipments rely on a set of core documents that satisfy carriers, customs authorities, banks, and insurers. These documents establish the legal, financial, and logistical framework for moving goods across borders.\n\n### 2. Required Documents / Key Proced"
+    },
+    {
+      "query": "What are the major reasons for shipment delays?",
+      "http_status": 200,
+      "latency_ms": 939.2,
+      "top_hit": {
+        "chunk_id": "PDF-DELAY-RISK-P02-C005",
+        "document_name": "Shipment Delay Causes & Route Risk Reference",
+        "page_number": 2,
+        "score": 0.6527
+      },
+      "sources": [
+        "Shipment Delay Causes & Route Risk Reference (PDF-DELAY-RISK)",
+        "Shipment Delay & Exception Policy (FAQ-LEGACY-DELAY)"
+      ],
+      "response_preview": "# \ud83d\udccb Major Reasons for Shipment Delays\n\n### 1. Overview\nShipment delays arise from a mix of controllable and uncontrollable factors that can occur at any point in the logistics chain. Understanding these categories helps shippers identify which delays can be mitigated by planning and which are inherent to the trade lane"
+    },
+    {
+      "query": "Explain bonded warehousing.",
+      "http_status": 200,
+      "latency_ms": 6970.3,
+      "top_hit": {
+        "chunk_id": "PDF-WAREHOUSING-P02-C004",
+        "document_name": "Warehousing & Contract Logistics Reference",
+        "page_number": 2,
+        "score": 0.6572
+      },
+      "sources": [
+        "Warehousing & Contract Logistics Reference (PDF-WAREHOUSING)",
+        "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)"
+      ],
+      "response_preview": "# \ud83d\udccb Bonded Warehousing\n\n### 1. Overview\nA bonded warehouse is a customs\u2011licensed facility where imported goods can be stored before duty and applicable taxes are paid. The goods are placed under a customs bond, allowing the importer to defer payment until the items are withdrawn for domestic consumption or re\u2011export.\n\n"
+    },
+    {
+      "query": "How can customers track shipments using ECU360?",
+      "http_status": 200,
+      "latency_ms": 15714.1,
+      "top_hit": {
+        "chunk_id": "PDF-CUST-SUPPORT-P06-C005",
+        "document_name": "Customer Support, Tracking & Booking Reference",
+        "page_number": 6,
+        "score": 0.6626
+      },
+      "sources": [
+        "Customer Support, Tracking & Booking Reference (PDF-CUST-SUPPORT)",
+        "Verified Knowledge Document (OT-001)"
+      ],
+      "response_preview": "# \ud83d\udccb Tracking a Shipment \u2014 The ECU360 Platform\n\n### 1. Overview\nCustomers can view real\u2011time shipment status and milestone history directly on the ECU360 client portal using their order ID or LR number. The platform displays key stages such as booked, in transit, at customs, out for delivery, or delivered.\n\n### 2. Requi"
+    },
+    {
+      "query": "What is the customs clearance process?",
+      "http_status": 200,
+      "latency_ms": 790.7,
+      "top_hit": {
+        "chunk_id": "GL-0069_0",
+        "document_name": "Customs clearance",
+        "page_number": null,
+        "score": 0.7516
+      },
+      "sources": [
+        "Customs & Regulatory Policy (GL-0069)",
+        "Customs & Regulatory Policy (FAQ-LEGACY-CUSTOMS)",
+        "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)",
+        "Customs Trade Compliance & Cross-Border Rules (DOC-6BDEA8303C7A)",
+        "Freight Lifecycle, Shipping Terms & Operational SOP (DOC-CAED8BC8636D)"
+      ],
+      "response_preview": "# \ud83d\udccb Customs Clearance Process\n\n### 1. Overview\nCustoms clearance is the government process that releases goods after declarations are filed and duties are settled. It involves filing the bill of entry, risk assessment, and, if needed, inspection or documentary audit before the goods are released.\n\n### 2. Required Docum"
+    }
+  ],
+  "test_b_database": {
+    "summary": {
+      "tables": {
+        "enterprise_customers": 3000,
+        "products": 5000,
+        "carriers": 5000,
+        "warehouses": 5000,
+        "routes": 3000,
+        "vehicles": 5000,
+        "weather": 3000,
+        "customs": 5000,
+        "enterprise_shipments": 5000,
+        "shipment_delivery_history": 5000,
+        "ai_model_registry": 5000,
+        "ai_feature_store": 10000,
+        "ai_inference_log": 10000,
+        "ai_monitoring_alerts": 10000
+      },
+      "derived_delivery_status": {
+        "Delayed": 1191,
+        "Delivered": 3809
+      }
+    },
+    "alc_100000_derived_status": "Delivered",
+    "alc_100000_carrier": "MSC 1654",
+    "alc_100000_customer": "Trident Trading 1899",
+    "alc_100000_warehouse": "New York Distribution Center 853",
+    "alc_100000_weather": "Clear",
+    "alc_100001_derived_status": "Delayed",
+    "alc_100001_delay_days": 5,
+    "customer_lookup_ok": true,
+    "carrier_lookup_ok": true,
+    "warehouse_lookup_ok": true,
+    "route_lookup_ok": true
+  },
+  "test_c_hybrid": [
+    {
+      "query": "Explain why shipment ALC-2025-100001 might be delayed using its shipment record and the knowledge base.",
+      "http_status": 200,
+      "latency_ms": 13767.9,
+      "response_type": "hybrid_enterprise_rag",
+      "shipment_id": "ALC-2025-100001",
+      "sources": [
+        "Enterprise Shipment Database (ALC-2025-100001)",
+        "Shipment Delay Causes & Route Risk Reference (PDF-DELAY-RISK)",
+        "Shipment Delay & Exception Policy (FAQ-LEGACY-DELAY)"
+      ],
+      "response_preview": "### Shipment Information \n- **Booking Reference:** ALC\u20112025\u2011100001 \n- **Status:** Delayed (+5\u202fdays beyond expected) \n- **Schedule:** Booked\u202f2025\u201108\u201128 \u2192 Shipped\u202f2025\u201108\u201131 \u2192 Expected\u202f2025\u201109\u201109 \u2192 Actual\u202f2025\u201109\u201114 \n- **Route:** Hamburg \u2192 Kolkata (Chennai Port) \n- **Carrier:** MSC\u202f2360 (Road) \n- **Vehicle:** TR\u20115717\u20111756 (Truck) \n- **Cargo:** Machinery SKU\u201111803, HS\u202f8479.41, weight\u202f29,577.52\u202fkg, va"
+    },
+    {
+      "query": "Explain the customs requirements relevant to shipment ALC-2025-100000.",
+      "http_status": 200,
+      "latency_ms": 13839.8,
+      "response_type": "hybrid_enterprise_rag",
+      "shipment_id": "ALC-2025-100000",
+      "sources": [
+        "Enterprise Shipment Database (ALC-2025-100000)",
+        "Export-Import Documentation & Customs Reference Guide (PDF-EXIM-CUSTOMS)"
+      ],
+      "response_preview": "### Shipment Information \n- **Booking Reference:** ALC\u20112025\u2011100000 \n- **Customer:** Trident Trading 1899 (Kolkata, India) \n- **Product / Cargo:** Machinery SKU\u201110114, HS Code\u202f8479.32 \n- **Declared Value:** $165,766.99 \n- **Customs:** Required\u202f=\u202fTrue, Documentation\u202fComplete\u202f=\u202fTrue, Inspection\u202fRequired\u202f=\u202fFalse, Cargo Class\u202f=\u202fMachinery, Destination Country\u202f=\u202fUAE \n\n### Operational Information \n- **Mod"
+    },
+    {
+      "query": "Explain the shipping responsibilities using the shipment's Incoterm for ALC-2025-100000.",
+      "http_status": 200,
+      "latency_ms": 12363.4,
+      "response_type": "unavailable",
+      "shipment_id": null,
+      "sources": [],
+      "response_preview": "I apologize, but that information is not available in the FleetHarbor logistics knowledge base. Please contact our support team at support@fleetharbor.com for specialized assistance."
+    },
+    {
+      "query": "Provide operational guidance for handling shipment ALC-2025-100001.",
+      "http_status": 200,
+      "latency_ms": 11182.5,
+      "response_type": "hybrid_enterprise_rag",
+      "shipment_id": "ALC-2025-100001",
+      "sources": [
+        "Enterprise Shipment Database (ALC-2025-100001)",
+        "Shipment Delay Causes & Route Risk Reference (PDF-DELAY-RISK)",
+        "Customer Support, Tracking & Booking Reference (PDF-CUST-SUPPORT)"
+      ],
+      "response_preview": "### Shipment Information \n- **Booking Reference:** ALC\u20112025\u2011100001 (UUID: 0b3e6b43\u2011595b\u201147e2\u2011b040\u2011e49c8abc0fc3) \n- **Customer:** Trident Retail 956, Chicago, United States \n- **Product / Cargo:** Machinery SKU\u201111803 (HS Code\u202f8479.41) \u2013 non\u2011hazardous, non\u2011perishable, non\u2011temp\u2011controlled, non\u2011fragile, insured. \n- **Mode & Type:** Road (Import) \u2013 Urgent priority, weight\u202f29,577.52\u202fkg, volume\u202f48.55\u202fCBM"
+    }
+  ],
+  "test_d_memory_and_regression": [
+    {
+      "query": "Find shipment ALC-2025-100000.",
+      "http_status": 200,
+      "shipment_id": "ALC-2025-100000",
+      "response_type": "enterprise_shipment",
+      "response_preview": "# \ud83d\udce6 Shipment Report \u2013 `ALC-2025-100000`\n\n### Shipment Information\n- **Booking Reference:** `ALC-2025-100000`\n- **Shipment Status:** \ud83d\udfe2 Delivered *(derived from delivery history)*\n- **Customer:** Trident Trading 1899 (Individual \u00b7 None)\n- **O"
+    },
+    {
+      "query": "Who is its carrier?",
+      "http_status": 200,
+      "shipment_id": "ALC-2025-100000",
+      "response_type": "enterprise_shipment",
+      "response_preview": "### Shipment Information \u2013 `ALC-2025-100000`\n- **Booking Reference:** `ALC-2025-100000`\n- **Assigned Carrier:** **MSC 1654** (`Sea` carrier)\n- **Carrier Rating:** 3.15/5.0 (18 years of service, fleet size 32, HQ: United States)\n- **Assigned"
+    },
+    {
+      "query": "What is its destination?",
+      "http_status": 200,
+      "shipment_id": "ALC-2025-100000",
+      "response_type": "enterprise_shipment",
+      "response_preview": "### Shipment Information \u2013 `ALC-2025-100000`\n- **Booking Reference:** `ALC-2025-100000`\n- **Destination:** **Chicago, United States** (Port/Gateway: Port Houston)\n- **Origin:** Manchester, United Kingdom (Port of Felixstowe)\n- **Expected De"
+    },
+    {
+      "query": "Why might it be delayed?",
+      "http_status": 200,
+      "shipment_id": "ALC-2025-100000",
+      "response_type": "hybrid_enterprise_rag",
+      "response_preview": "### Shipment Information \n- **Booking Reference:** ALC\u20112025\u2011100000 \n- **Origin:** Manchester, United Kingdom (Port of Felixstowe) \n- **Destination:** Chicago, United States (Port Houston) \n- **Mode:** Sea (Import) \n- **Carrier:** MSC\u202f1654 \n"
+    },
+    {
+      "query": "Track shipment SHP-10001",
+      "http_status": 200,
+      "shipment_id": "SHP-10001",
+      "response_type": "shipment_status",
+      "response_preview": "# \ud83d\udce6 Shipment Status \u2013 SHP-10001\n\n**Current Status:** \ud83d\udfe1 In Transit\n\n### 1. Shipment Overview\n\n| Field | Details |\n|---|---|\n| Shipment ID | SHP-10001 |\n| Current Location | Dubai Hub, UAE |\n| Origin | Mumbai, India |\n| Destination | London, "
+    },
+    {
+      "query": "Where is it now?",
+      "http_status": 200,
+      "shipment_id": "SHP-10001",
+      "response_type": "shipment_location",
+      "response_preview": "# \ud83d\udccd Shipment Location \u2013 SHP-10001\n\n**Current Location:** \ud83d\udccd Dubai Hub, UAE\n**Current Status:** \ud83d\udfe1 In Transit\n\n### 1. Shipment Overview\n\n| Field | Details |\n|---|---|\n| Shipment ID | SHP-10001 |\n| Current Location | Dubai Hub, UAE |\n| Origin |"
+    }
+  ]
+}

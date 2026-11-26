@@ -717,6 +717,283 @@ def get_employee_counts() -> dict[str, Any]:
     }
 
 
+_ENTERPRISE_SHIPMENT_SQL_SELECT = """
+    SELECT
+        s.shipment_id, s.booking_id, s.customer_id, s.product_id, s.carrier_id,
+        s.warehouse_id, s.route_id, s.vehicle_id, s.customs_id, s.weather_id,
+        s.booking_date, s.ship_date, s.expected_delivery_date, s.shipping_mode,
+        s.shipment_type, s.priority, s.weight_kg, s.volume_cbm, s.declared_value,
+        s.insurance, s.fragile,
+        c.customer_name, c.customer_type, c.industry AS customer_industry,
+        c.city AS customer_city, c.state AS customer_state, c.country AS customer_country,
+        c.customer_status,
+        p.product_name, p.category AS product_category, p.hs_code,
+        p.hazardous AS product_hazardous, p.perishable AS product_perishable,
+        p.temperature_controlled, p.supplier_name,
+        cr.carrier_name, cr.carrier_type, cr.average_rating AS carrier_rating,
+        cr.fleet_size, cr.years_of_service, cr.headquarters AS carrier_hq,
+        w.warehouse_name, w.city AS warehouse_city, w.state AS warehouse_state,
+        w.warehouse_capacity, w.current_utilization, w.warehouse_type,
+        r.origin_city, r.destination_city, r.origin_country, r.destination_country,
+        r.origin_port, r.destination_port, r.distance_km, r.average_transit_days,
+        r.route_risk, r.traffic_index,
+        v.vehicle_number, v.vehicle_type, v.capacity_kg AS vehicle_capacity_kg,
+        v.fuel_type, v.maintenance_status, v.vehicle_age,
+        wt.city AS weather_city, wt.forecast_date, wt.weather_condition,
+        wt.temperature, wt.rainfall, wt.humidity, wt.wind_speed, wt.visibility,
+        cu.customs_required, cu.documentation_complete, cu.inspection_required,
+        cu.cargo_type, cu.destination_country AS customs_destination_country,
+        h.history_id, h.actual_delivery_date, h.delivery_status AS derived_status,
+        h.delivery_attempts
+    FROM enterprise_shipments s
+    JOIN enterprise_customers c ON c.customer_id = s.customer_id
+    JOIN products p ON p.product_id = s.product_id
+    JOIN carriers cr ON cr.carrier_id = s.carrier_id
+    JOIN warehouses w ON w.warehouse_id = s.warehouse_id
+    JOIN routes r ON r.route_id = s.route_id
+    JOIN vehicles v ON v.vehicle_id = s.vehicle_id
+    JOIN weather wt ON wt.weather_id = s.weather_id
+    JOIN customs cu ON cu.customs_id = s.customs_id
+    LEFT JOIN shipment_delivery_history h ON h.shipment_id = s.shipment_id
+"""
+
+
+def _enrich_enterprise_shipment_dict(row: dict, alerts: list[dict], latest_feat: Optional[dict], latest_inf: Optional[dict]) -> dict:
+    """Normalize booleans and compute derived delay metrics from Shipment_Delivery_History."""
+    from datetime import datetime as _dt
+    from logistics_chatbot.utils.helpers import format_date
+
+    rec = dict(row)
+    for bcol in (
+        "insurance", "fragile", "product_hazardous", "product_perishable",
+        "temperature_controlled", "customs_required", "documentation_complete", "inspection_required",
+    ):
+        if bcol in rec and rec[bcol] is not None:
+            rec[bcol] = bool(rec[bcol])
+
+    derived_status = rec.get("derived_status") or "Pending"
+    rec["is_delayed"] = (derived_status.lower() == "delayed")
+    rec["status"] = derived_status
+
+    delay_days = 0
+    try:
+        exp_str = str(rec.get("expected_delivery_date") or "")[:10]
+        act_str = str(rec.get("actual_delivery_date") or "")[:10]
+        if exp_str and act_str:
+            delay_days = max(0, (_dt.strptime(act_str, "%Y-%m-%d").date() - _dt.strptime(exp_str, "%Y-%m-%d").date()).days)
+    except Exception:
+        delay_days = 0
+    rec["delay_days"] = delay_days
+
+    for dcol in ("booking_date", "ship_date", "expected_delivery_date", "actual_delivery_date", "forecast_date"):
+        if rec.get(dcol) is not None:
+            rec[dcol] = format_date(rec[dcol])
+
+    # Provide unified origin/destination compatibility aliases for REST/API consumers
+    rec["origin"] = f"{rec.get('origin_city', '')}, {rec.get('origin_country', '')}".strip(", ")
+    rec["destination"] = f"{rec.get('destination_city', '')}, {rec.get('destination_country', '')}".strip(", ")
+    rec["route"] = f"{rec.get('origin_port', '')} -> {rec.get('destination_port', '')}".strip(" ->")
+    rec["estimated_delivery"] = rec.get("expected_delivery_date")
+
+    rec["ai_features"] = dict(latest_feat) if latest_feat else {}
+    rec["ai_inference"] = dict(latest_inf) if latest_inf else {}
+    rec["alerts"] = [dict(a) for a in alerts]
+    return rec
+
+
+def get_enterprise_shipment(identifier: str) -> Optional[dict]:
+    """Retrieve full 14-table enterprise shipment record by booking_id (ALC-2025-...) or UUID."""
+    clean = (identifier or "").strip()
+    if not clean:
+        return None
+    is_uuid = bool(__import__("re").match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", clean))
+    lookup_val = clean.lower() if is_uuid else clean.upper()
+
+    if config.SUPABASE_DB_URL:
+        try:
+            where = "s.shipment_id = %s::uuid" if is_uuid else "UPPER(s.booking_id) = %s"
+            rows = run_query(f"{_ENTERPRISE_SHIPMENT_SQL_SELECT} WHERE {where}", (lookup_val,))
+            if rows:
+                sid = str(rows[0]["shipment_id"])
+                feats = run_query(
+                    "SELECT route_delay_rate, carrier_reliability_score, weather_severity_score, feature_timestamp "
+                    "FROM ai_feature_store WHERE shipment_id = %s::uuid ORDER BY feature_timestamp DESC LIMIT 1",
+                    (sid,),
+                )
+                infs = run_query(
+                    "SELECT ai.delay_probability, ai.risk_category, ai.latency_ms, ai.prediction_timestamp, "
+                    "mr.model_name, mr.model_version, mr.deployment_status "
+                    "FROM ai_inference_log ai JOIN ai_model_registry mr ON mr.model_id = ai.model_id "
+                    "WHERE ai.shipment_id = %s::uuid ORDER BY ai.prediction_timestamp DESC LIMIT 1",
+                    (sid,),
+                )
+                alerts = run_query(
+                    "SELECT alert_type, severity, recommended_action, alert_status "
+                    "FROM ai_monitoring_alerts WHERE shipment_id = %s::uuid LIMIT 5",
+                    (sid,),
+                )
+                return _enrich_enterprise_shipment_dict(rows[0], alerts, feats[0] if feats else None, infs[0] if infs else None)
+            return None
+        except Exception as exc:
+            logger.debug("Supabase enterprise lookup fallback notice: %s", exc)
+
+    db_path = _resolve_sqlite_db_path()
+    if db_path is not None:
+        try:
+            with _sqlite_conn(db_path) as conn:
+                tbl_exists = conn.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name='enterprise_shipments'"
+                ).fetchone()
+                if not tbl_exists:
+                    return None
+                where = "LOWER(s.shipment_id) = ?" if is_uuid else "UPPER(s.booking_id) = ?"
+                row = conn.execute(f"{_ENTERPRISE_SHIPMENT_SQL_SELECT} WHERE {where}", (lookup_val,)).fetchone()
+                if not row:
+                    return None
+                row_dict = dict(row)
+                sid = row_dict["shipment_id"]
+                feat_row = conn.execute(
+                    "SELECT route_delay_rate, carrier_reliability_score, weather_severity_score, feature_timestamp "
+                    "FROM ai_feature_store WHERE shipment_id = ? ORDER BY feature_timestamp DESC LIMIT 1",
+                    (sid,),
+                ).fetchone()
+                inf_row = conn.execute(
+                    "SELECT ai.delay_probability, ai.risk_category, ai.latency_ms, ai.prediction_timestamp, "
+                    "mr.model_name, mr.model_version, mr.deployment_status "
+                    "FROM ai_inference_log ai JOIN ai_model_registry mr ON mr.model_id = ai.model_id "
+                    "WHERE ai.shipment_id = ? ORDER BY ai.prediction_timestamp DESC LIMIT 1",
+                    (sid,),
+                ).fetchone()
+                alert_rows = conn.execute(
+                    "SELECT alert_type, severity, recommended_action, alert_status "
+                    "FROM ai_monitoring_alerts WHERE shipment_id = ? LIMIT 5",
+                    (sid,),
+                ).fetchall()
+                return _enrich_enterprise_shipment_dict(
+                    row_dict,
+                    [dict(a) for a in alert_rows],
+                    dict(feat_row) if feat_row else None,
+                    dict(inf_row) if inf_row else None,
+                )
+        except Exception as exc:
+            logger.warning("SQLite enterprise shipment lookup failed: %s", exc)
+    return None
+
+
+def search_enterprise_entity(entity_type: str, search_term: str, limit: int = 5) -> list[dict]:
+    """Query standalone enterprise dimension tables (customer, carrier, warehouse, route, weather)."""
+    clean = (search_term or "").strip()
+    if not clean:
+        return []
+    etype = entity_type.lower().strip()
+    if etype == "route" and "->" in clean:
+        orig_q, dest_q = [p.strip() for p in clean.split("->", 1)]
+        orig_p, dest_p = f"%{orig_q}%", f"%{dest_q}%"
+        rt_sql = (
+            "SELECT * FROM routes WHERE LOWER(origin_city) LIKE LOWER(?) "
+            "AND LOWER(destination_city) LIKE LOWER(?) LIMIT ?"
+        )
+        if config.SUPABASE_DB_URL:
+            try:
+                return run_query(rt_sql.replace("?", "%s"), (orig_p, dest_p, limit))
+            except Exception as exc:
+                logger.debug("Supabase paired route search notice: %s", exc)
+        db_path = _resolve_sqlite_db_path()
+        if db_path is not None:
+            try:
+                with _sqlite_conn(db_path) as conn:
+                    return [dict(r) for r in conn.execute(rt_sql, (orig_p, dest_p, limit)).fetchall()]
+            except Exception as exc:
+                logger.debug("SQLite paired route search notice: %s", exc)
+        return []
+
+    like_param = f"%{clean}%"
+
+    sql_map = {
+        "customer": (
+            "SELECT * FROM enterprise_customers WHERE LOWER(customer_name) LIKE LOWER(?) "
+            "OR LOWER(customer_id) = LOWER(?) LIMIT ?"
+        ),
+        "carrier": (
+            "SELECT * FROM carriers WHERE LOWER(carrier_name) LIKE LOWER(?) "
+            "OR LOWER(carrier_id) = LOWER(?) LIMIT ?"
+        ),
+        "warehouse": (
+            "SELECT * FROM warehouses WHERE LOWER(warehouse_name) LIKE LOWER(?) "
+            "OR LOWER(city) LIKE LOWER(?) OR LOWER(warehouse_id) = LOWER(?) LIMIT ?"
+        ),
+        "route": (
+            "SELECT * FROM routes WHERE LOWER(origin_city) LIKE LOWER(?) "
+            "OR LOWER(destination_city) LIKE LOWER(?) OR LOWER(origin_port) LIKE LOWER(?) "
+            "OR LOWER(destination_port) LIKE LOWER(?) LIMIT ?"
+        ),
+        "weather": (
+            "SELECT * FROM weather WHERE LOWER(city) LIKE LOWER(?) ORDER BY forecast_date DESC LIMIT ?"
+        ),
+    }
+    if etype not in sql_map:
+        return []
+
+    if config.SUPABASE_DB_URL:
+        try:
+            pg_sql = sql_map[etype].replace("?", "%s").replace("= LOWER(%s)", "= LOWER(%s)")
+            if etype == "warehouse":
+                params = (like_param, like_param, clean, limit)
+            elif etype == "route":
+                params = (like_param, like_param, like_param, like_param, limit)
+            elif etype == "weather":
+                params = (like_param, limit)
+            else:
+                params = (like_param, clean, limit)
+            return run_query(pg_sql, params)
+        except Exception as exc:
+            logger.debug("Supabase entity search notice: %s", exc)
+
+    db_path = _resolve_sqlite_db_path()
+    if db_path is not None:
+        try:
+            with _sqlite_conn(db_path) as conn:
+                sql = sql_map[etype]
+                if etype == "warehouse":
+                    params_sq: tuple = (like_param, like_param, clean, limit)
+                elif etype == "route":
+                    params_sq = (like_param, like_param, like_param, like_param, limit)
+                elif etype == "weather":
+                    params_sq = (like_param, limit)
+                else:
+                    params_sq = (like_param, clean, limit)
+                return [dict(r) for r in conn.execute(sql, params_sq).fetchall()]
+        except Exception as exc:
+            logger.debug("SQLite entity search notice: %s", exc)
+    return []
+
+
+def get_enterprise_summary_counts() -> dict[str, Any]:
+    """Return verified counts across enterprise supply chain tables and derived delay breakdown."""
+    tables = [
+        "enterprise_customers", "products", "carriers", "warehouses", "routes",
+        "vehicles", "weather", "customs", "enterprise_shipments",
+        "shipment_delivery_history", "ai_model_registry", "ai_feature_store",
+        "ai_inference_log", "ai_monitoring_alerts",
+    ]
+    db_path = _resolve_sqlite_db_path()
+    out: dict[str, Any] = {"tables": {}, "derived_delivery_status": {}}
+    if db_path is not None:
+        try:
+            with _sqlite_conn(db_path) as conn:
+                for t in tables:
+                    exists = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (t,)).fetchone()
+                    if exists:
+                        out["tables"][t] = int(conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0])
+                hist_exists = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='shipment_delivery_history'").fetchone()
+                if hist_exists:
+                    for st, cnt in conn.execute("SELECT delivery_status, COUNT(*) FROM shipment_delivery_history GROUP BY delivery_status").fetchall():
+                        out["derived_delivery_status"][st] = int(cnt)
+        except Exception as exc:
+            logger.debug("Enterprise summary count notice: %s", exc)
+    return out
+
+
 def close():
     """Close the database connection (call at shutdown)."""
     global _connection

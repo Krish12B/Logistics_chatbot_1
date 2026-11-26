@@ -26,11 +26,13 @@ logger = logging.getLogger("logistics_chatbot.classifier")
 
 LOOSE_SHIPMENT_ID_PATTERN = re.compile(r"\bSHP[-\s]?(\d{3,6})\b", re.IGNORECASE)
 VALID_SHIPMENT_ID_PATTERN = re.compile(r"^SHP-\d{5}$")
+BOOKING_ID_PATTERN = re.compile(r"\bALC[-\s]?(\d{4})[-\s]?(\d{5,7})\b", re.IGNORECASE)
+UUID_PATTERN = re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.IGNORECASE)
 EMPLOYEE_ID_PATTERN = re.compile(r"\bEMP[-\s]?(\d{5})\b", re.IGNORECASE)
 OPERATIONAL_ID_PATTERN = re.compile(r"\bOPS[-\s]?(\d{1,6})\b", re.IGNORECASE)
 
 PRONOUN_FOLLOWUP_PATTERN = re.compile(
-    r"\b(it|this|that|its|the shipment|the package|the order|the cargo|the container|where is it|when will it|is it)\b",
+    r"\b(it|this|that|its|this shipment|the shipment|the package|the order|the cargo|the container|the booking|where is it|when will it|is it)\b",
     re.IGNORECASE,
 )
 
@@ -73,6 +75,7 @@ class ClassifiedIntent:
     confidence: float
     preferred_source: str
     shipment_id: Optional[str] = None
+    booking_id: Optional[str] = None
     employee_id: Optional[str] = None
     operational_id: Optional[str] = None
     resolved_reference: bool = False
@@ -145,6 +148,17 @@ def extract_employee_id(text: str) -> Optional[str]:
     return None
 
 
+def extract_booking_id(text: str) -> Optional[str]:
+    """Extract an enterprise booking reference (e.g. 'ALC-2025-100000') or UUID."""
+    match = BOOKING_ID_PATTERN.search(text or "")
+    if match:
+        return f"ALC-{match.group(1)}-{match.group(2)}"
+    uuid_match = UUID_PATTERN.search(text or "")
+    if uuid_match:
+        return uuid_match.group(0).lower()
+    return None
+
+
 # ── Pattern Dictionaries for Category Classification ─────────────────
 
 GREETING_EXACT = {
@@ -178,6 +192,8 @@ DOCUMENTATION_KEYWORDS = (
     "certificate of origin", "customs document", "shipping document", "proof of delivery",
     "pod", "e-pod", "shipper letter of instruction", "sli", "paperwork", "invoice guide",
     "export declaration", "import declaration", "customs clearance", "border clearance",
+    "hs code", "hs codes", "tariff classification", "letter of credit", "shipping bill",
+    "bill of entry", "insurance certificate", "export-import", "export import",
 )
 
 POLICY_KEYWORDS = (
@@ -185,7 +201,12 @@ POLICY_KEYWORDS = (
     "shipping terms", "refund", "sla", "service level", "guarantee", "cancellation policy",
     "customer rule", "payment terms", "credit limit", "claims filing", "compliance",
     "guidelines", "safety compliance", "insurance", "reverse logistics", "return shipment",
-    "return policy",
+    "return policy", "incoterm", "incoterms",
+)
+
+INCOTERM_WORD_PATTERN = re.compile(
+    r"\b(exw|fca|cpt|cip|dap|dpu|ddp|fas|fob|cfr|cif|incoterms?)\b",
+    re.IGNORECASE,
 )
 
 PROCESS_KEYWORDS = (
@@ -196,6 +217,9 @@ PROCESS_KEYWORDS = (
     "packaging rule", "lithium battery", "hazmat", "dangerous goods", "dg class", "intermodal",
     "inspection checklist", "checklist workflow", "inspection workflow", "dispatch routing",
     "weight distribution", "flatbed", "loading procedure", "standard operational steps",
+    "bonded warehouse", "bonded warehousing", "open warehouse", "open warehousing",
+    "dwell time", "contract logistics", "third-party logistics", "warehouse management system",
+    "booking process", "make a booking", "ecu360", "track a shipment",
 )
 
 OPERATIONAL_KEYWORDS = (
@@ -204,6 +228,7 @@ OPERATIONAL_KEYWORDS = (
     "seal was found broken", "seal broken", "tampered", "engine breakdown", "breakdown",
     "incident report", "incident", "damaged pallet", "severe weather", "blizzard",
     "weather warning", "who do we alert", "emergency alert", "highway", "strike",
+    "chokepoint", "vessel variance", "schedule reliability", "route risk", "delay causes",
 )
 
 EMPLOYEE_KEYWORDS = (
@@ -349,15 +374,16 @@ def classify_logistics_query(
             target_attribute="aggregate_count",
         )
 
-    # 3. Check for Explicit Shipment ID in query
+    # 3. Check for Explicit Shipment ID (SHP-xxxxx) or Enterprise Booking Reference (ALC-YYYY-XXXXXX)
     direct_shipment_id = None
     try:
         direct_shipment_id = extract_shipment_id(query)
     except InvalidShipmentIdError:
         raise
+    direct_booking_id = extract_booking_id(query) if not direct_shipment_id else None
 
     # 4a. Multi-Turn Employee Pronoun Resolution (e.g., 'What shift does she work?' after EMP-20001)
-    if not direct_shipment_id and previous_employee_id:
+    if not direct_shipment_id and not direct_booking_id and previous_employee_id:
         has_emp_pronoun = bool(EMPLOYEE_PRONOUN_PATTERN.search(clean))
         has_emp_attr = any(k in clean for k in EMPLOYEE_FOLLOWUP_ATTR_KEYWORDS)
         has_explicit_shipment_word = bool(re.search(r"\b(shipment|package|parcel|cargo|container|order|waybill)\b", clean))
@@ -372,58 +398,62 @@ def classify_logistics_query(
                 target_attribute="employee_followup",
             )
 
-    # 4b. Multi-Turn Shipment Reference Resolution (Pronoun handling)
+    # 4b. Multi-Turn Shipment & Booking Reference Resolution (Pronoun handling)
     resolved_shipment_id = direct_shipment_id
+    resolved_booking_id = direct_booking_id
     resolved_reference = False
 
-    if not resolved_shipment_id and previous_shipment_id:
-        # Check if the query refers to the prior shipment via pronoun or contextual phrase
+    if not resolved_shipment_id and not resolved_booking_id and previous_shipment_id:
         has_pronoun = bool(PRONOUN_FOLLOWUP_PATTERN.search(query))
         tracking_followups = ("where", "status", "location", "arrive", "arrival", "eta", "delivered", "delay", "route", "destination", "origin")
         is_tracking_inquiry = any(w in clean for w in tracking_followups)
 
-        # Ensure the user didn't shift to an independent documentation/policy/employee question
-        has_independent_domain = any(k in clean for k in (
-            "bill of lading", "commercial invoice", "customs document", "claims", "refund",
-            "forklift", "pharma", "cargo weight", "dimension limit", "container spec"
+        # Standalone conceptual topics (without a pronoun like 'it'/'its'/'this shipment') do not inherit prior IDs
+        has_independent_domain = (not has_pronoun) and any(k in clean for k in (
+            "bill of lading", "commercial invoice", "customs document", "documents required", "what documents",
+            "documentation", "claims", "refund", "forklift", "pharma", "cargo weight", "dimension limit",
+            "container spec", "incoterm", "exw", "ddp", "fob", "cif", "bonded warehouse", "open warehouse",
         ))
 
         if (has_pronoun or is_tracking_inquiry) and not has_independent_domain:
-            resolved_shipment_id = previous_shipment_id
+            if previous_shipment_id.upper().startswith("ALC-") or UUID_PATTERN.match(previous_shipment_id):
+                resolved_booking_id = previous_shipment_id
+            else:
+                resolved_shipment_id = previous_shipment_id
             resolved_reference = True
-            logger.info("Resolved pronoun reference to previous shipment: %s", previous_shipment_id)
+            logger.info("Resolved pronoun reference to previous tracking ref: %s", previous_shipment_id)
 
-    # 5. Routing for Shipment Inquiries
-    if resolved_shipment_id:
-        # Delivery updates: when, arrive, eta, delay reason, delivery status for this shipment
+    # 5. Routing for Shipment & Enterprise Booking Inquiries
+    if resolved_shipment_id or resolved_booking_id:
+        kwargs = {
+            "shipment_id": resolved_shipment_id,
+            "booking_id": resolved_booking_id,
+            "resolved_reference": resolved_reference,
+            "entities": {"booking_id": resolved_booking_id} if resolved_booking_id else {},
+        }
         if re.search(r"\b(when|arrive|arrival|eta|delivery\s+(?:date|status|schedule|update|time)|delivery|delivered|delay|delayed)\b", clean):
             return ClassifiedIntent(
                 intent=LogisticsIntent.DELIVERY_UPDATES,
                 confidence=0.95,
                 preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.DELIVERY_UPDATES],
-                shipment_id=resolved_shipment_id,
-                resolved_reference=resolved_reference,
                 target_attribute="eta",
+                **kwargs,
             )
-        # Shipment info: dimensions, weight, cargo, sender, receiver, manifest, goods, contents, route, hub
-        elif re.search(r"\b(dimensions?|weight|cargo|goods|consignment|manifest|recipient|receiver|sender|consignor|consignee|hub|route|origin|destination|contents?|specs?|specification|details?|info)\b", clean):
+        elif re.search(r"\b(dimensions?|weight|cargo|goods|consignment|manifest|recipient|receiver|sender|consignor|consignee|hub|route|origin|destination|contents?|specs?|specification|details?|info|carrier|customer|warehouse|vehicle|weather|customs|product)\b", clean):
             return ClassifiedIntent(
                 intent=LogisticsIntent.SHIPMENT_INFO,
                 confidence=0.95,
                 preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.SHIPMENT_INFO],
-                shipment_id=resolved_shipment_id,
-                resolved_reference=resolved_reference,
                 target_attribute="details",
+                **kwargs,
             )
-        # Tracking: location, where, track, position, reached, status
         else:
             return ClassifiedIntent(
                 intent=LogisticsIntent.SHIPMENT_TRACKING,
                 confidence=0.95,
                 preferred_source=INTENT_SOURCE_MAP[LogisticsIntent.SHIPMENT_TRACKING],
-                shipment_id=resolved_shipment_id,
-                resolved_reference=resolved_reference,
                 target_attribute="location",
+                **kwargs,
             )
 
     # 5b. Ambiguous & Incomplete Query Detection (Requests requiring specific identifiers)
@@ -492,7 +522,7 @@ def classify_logistics_query(
         )
 
     # 7. Check for Company Policy & Claims
-    if any(k in clean for k in POLICY_KEYWORDS):
+    if any(k in clean for k in POLICY_KEYWORDS) or INCOTERM_WORD_PATTERN.search(clean):
         return ClassifiedIntent(
             intent=LogisticsIntent.COMPANY_POLICY,
             confidence=0.92,
@@ -508,7 +538,7 @@ def classify_logistics_query(
         )
 
     # 9. Check for Logistics Processes & Technical Standards
-    if any(k in clean for k in PROCESS_KEYWORDS):
+    if any(k in clean for k in PROCESS_KEYWORDS) or re.search(r"\b(3pl|wms)\b", clean):
         return ClassifiedIntent(
             intent=LogisticsIntent.LOGISTICS_PROCESS,
             confidence=0.91,
