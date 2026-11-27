@@ -23,7 +23,7 @@ DB_PATH = ROOT / "data" / "raw" / "shipments.db"
 CSV_PROCESSED = ROOT / "data" / "processed" / "shipments.csv"
 CSV_RAW = ROOT / "data" / "raw" / "shipments.csv"
 KB_CSV = ROOT / "data" / "knowledge_base" / "kb_long.csv"
-REPORTS_DIR = ROOT / "tests" / "reports"
+REPORTS_DIR = ROOT / "reports"
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 VALID_STATUSES = {

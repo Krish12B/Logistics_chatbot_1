@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FleetHarbor AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Marked.js for GitHub Flavored Markdown with offline fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🚢</div>
+      <div class="brand-text">
+        <h1>FleetHarbor AI</h1>
+      </div>
+    </div>
+    <div class="header-links">
+      <button type="button" id="toggleHistoryBtn" class="btn-nav" title="Toggle Question History Sidebar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>History</span>
+        <span class="history-badge" id="navHistoryCount" style="padding: 0.1rem 0.45rem; font-size: 0.7rem; background: rgba(255, 255, 255, 0.2); color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3);">0</span>
+      </button>
+      <span class="badge-online"><span class="badge-dot"></span> System Live</span>
+      <a href="/docs" class="btn-nav" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+        Swagger Docs (/docs)
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="history-backdrop" id="historyBackdrop" onclick="closeMobileHistory()"></div>
+
+    <!-- History Section Sidebar -->
+    <aside class="history-sidebar" id="historySidebar" aria-label="Question History">
+      <div class="history-header">
+        <div class="history-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Question History</span>
+          <span class="history-badge" id="historyCountBadge">0</span>
+        </div>
+        <div class="history-actions">
+          <button type="button" class="btn-icon" id="newChatBtn" title="Start New Chat Session" onclick="startNewChat()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button type="button" class="btn-icon btn-danger" id="clearHistoryBtn" title="Clear All History" onclick="clearAllHistory()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="history-search">
+        <svg class="history-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="historySearchInput" class="history-search-input" placeholder="Search asked questions..." oninput="filterHistory(this.value)" />
+      </div>
+
+      <div class="history-list" id="historyList">
+        <!-- Dynamically rendered by JavaScript -->
+      </div>
+
+      <div class="history-footer">
+        <span>💡 Click any question to re-ask instantly</span>
+      </div>
+    </aside>
+
+    <div class="chat-card">
+      <div class="chat-header">
+        <div class="chat-header-title">
+          <h2>Live Assistant Dialogue</h2>
+        </div>
+      </div>
+      
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+          <div class="welcome-container">
+            <div class="welcome-header">
+              <span style="font-size: 1.5rem;">🚢</span>
+              <h3>Welcome to FleetHarbor AI!</h3>
+            </div>
+            <p>Hello! I am your enterprise logistics operations assistant connected directly to real-time freight records, employee profiles, and our certified knowledge base.</p>
+            
+            <div class="welcome-pill-row">
+              <span class="welcome-pill">GDP Cold-Chain Rules</span>
+              <span class="welcome-pill">Customs Compliance</span>
+            </div>
+
+            <ul class="welcome-list">
+              <li>Track shipments by ID (e.g. <code>SHP-10001</code> to <code>SHP-20000</code>) for routes, delays & ETAs.</li>
+              <li>Look up logistics personnel (e.g. <code>EMP-20001</code>) for roles, certifications & dispatch contacts.</li>
+              <li>Query cross-border customs regulations, commercial invoice standards, and GDP cold-chain manuals.</li>
+            </ul>
+            <p style="margin-top: 0.6rem; margin-bottom: 0;"><strong>How can I assist your logistics workflow today?</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="suggestions" id="suggestionsContainer"></div>
+
+      <div class="attach-tray" id="attachTray" aria-live="polite"></div>
+
+      <form class="chat-input-area" id="chatForm" onsubmit="handleSend(event); return false;">
+        <button type="button" id="attachBtn" class="btn-attach" aria-label="Attach a file" title="Attach a file (.txt, .pdf, .docx, .csv)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <div class="chat-input-wrapper">
+          <input type="text" id="userInput" class="chat-input" placeholder="Ask a question or track shipment (e.g. 'Status of SHP-15000' or 'Look up EMP-20001')..." autocomplete="off" />
+        </div>
+        <button type="submit" id="sendBtn" class="btn-send">
+          <span>Send</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </form>
+
+      <input type="file" id="fileInput" accept=".txt,.pdf,.docx,.csv" multiple hidden />
+    </div>
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

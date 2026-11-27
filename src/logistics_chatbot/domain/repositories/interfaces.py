@@ -1,0 +1,56 @@
+"""Abstract repository and external gateway protocols (Dependency Inversion)."""
+from __future__ import annotations
+
+from typing import Any, Dict, Iterator, List, Optional, Protocol
+
+
+class LogisticsDataRepository(Protocol):
+    """Contract for relational persistence across shipments, employees, operational & enterprise records."""
+
+    def get_shipment(self, shipment_id: str) -> dict: ...
+    def get_employee(self, employee_id: str) -> dict: ...
+    def fetch_operational_record(self, doc_id: str) -> Optional[dict]: ...
+    def get_enterprise_shipment(self, identifier: str) -> Optional[dict]: ...
+    def search_enterprise_entity(self, entity_type: str, search_term: str, limit: int = 5) -> List[dict]: ...
+    def get_shipment_status_counts(self) -> Dict[str, int]: ...
+    def get_employee_counts(self) -> Dict[str, Any]: ...
+    def upsert_operational_records(self, records: List[dict]) -> dict: ...
+    def upsert_shipment_records(self, records: List[dict]) -> dict: ...
+    def upsert_employee_records(self, records: List[dict]) -> dict: ...
+
+
+class VectorStoreGateway(Protocol):
+    """Contract for dense semantic vector stores (ChromaDB, pgvector)."""
+
+    def query_knowledge_chunks(
+        self,
+        query_text: str,
+        top_k: Optional[int] = None,
+        where: Optional[Dict[str, Any]] = None,
+        min_score: Optional[float] = None,
+        collection_name: Optional[str] = None,
+        query_vector: Optional[List[float]] = None,
+    ) -> List[Dict[str, Any]]: ...
+
+    def upsert_knowledge_chunks(
+        self,
+        chunks: List[Dict[str, Any]],
+        collection_name: Optional[str] = None,
+        batch_size: int = 100,
+    ) -> int: ...
+
+    def check_health(self) -> Dict[str, Any]: ...
+
+
+class EmbeddingGateway(Protocol):
+    """Contract for dense text embedding generation."""
+
+    def embed_query(self, query: str) -> List[float]: ...
+    def embed_texts(self, texts: List[str]) -> List[List[float]]: ...
+
+
+class LLMGateway(Protocol):
+    """Contract for synchronous and streaming LLM inference."""
+
+    def call_llm(self, messages: List[dict], temperature: float = 0.1, max_tokens: Optional[int] = None) -> str: ...
+    def stream_llm(self, messages: List[dict], temperature: float = 0.1, max_tokens: Optional[int] = None) -> Iterator[str]: ...

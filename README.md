@@ -1,174 +1,133 @@
-# AI-Powered Logistics Chatbot (FleetHarbor)
+# NexusFreight / FleetHarbor Logistics AI Chatbot
 
-An enterprise-grade, backend-driven Logistics Support AI Chatbot utilizing Retrieval-Augmented Generation (RAG) to deliver accurate, grounded tracking, customs, delay, and operational policy guidance.
+An enterprise-grade, Clean Architecture Logistics Support AI Chatbot powered by FastAPI, Hybrid RAG (ChromaDB + SQLite/PostgreSQL), SentenceTransformers, and Groq LLM inference for accurate shipment tracking, employee lookup, customs guidance, and operational policy Q&A.
 
-## 🚀 Key Technologies
-- **Application Framework:** FastAPI & Uvicorn (REST API)
-- **Primary Vector Database:** ChromaDB 1.5.9 (Local Persistent & Server HNSW Cosine Indexing)
-- **Relational & Cloud Vector Database:** Supabase PostgreSQL with `pgvector`
-- **Embedding Generation:** SentenceTransformers `all-MiniLM-L6-v2` (384 dimensions)
-- **LLM Inference:** Groq API (`openai/gpt-oss-20b`) with exponential backoff & rate-limit handling
-- **Testing:** Python `unittest` (84 automated tests, 100% passing)
+## Key Technologies
+- **Architecture:** Clean Architecture (`presentation` → `application` → `domain` ← `infrastructure`)
+- **API & Web UI:** FastAPI + Uvicorn + decoupled `frontend/` HTML/CSS/JS SPA
+- **Vector Database:** ChromaDB (`PersistentClient` at `data/chroma_db/`, `1,155` indexed chunks)
+- **Relational Persistence:** Local SQLite (`data/raw/shipments.db`, 19 tables / `89,634` rows) + optional Supabase PostgreSQL (`pgvector`)
+- **Embeddings:** SentenceTransformers `all-MiniLM-L6-v2` (384 dimensions) with in-memory LRU cache
+- **LLM Inference:** Groq API (`openai/gpt-oss-20b`) with exponential backoff, rate-limit handling, and SSE streaming
+- **Testing:** Unified `pytest` suite (`tests/{unit,integration,api,e2e}` — `204 passed, 2 skipped` in `27.54s`) + Playwright E2E + 55-case classifier benchmark (`100.0%`)
 
 ---
 
-## 📁 Project Architecture & Directory Structure
+## Project Directory Structure
 
 ```text
 shipment_chatbot_project/
-│
-├── data/                               # Project Datasets & Vector Storage
-│   ├── raw/                            # Initial seed & raw tracking data
-│   │   ├── shipments.csv               # 10 operational shipments
-│   │   ├── shipments_seed.json
-│   │   └── shipments.db
-│   ├── processed/                      # Cleaned operational datasets
-│   │   └── shipments.csv
-│   ├── knowledge_base/                 # Logistics domain policies & FAQ corpus
-│   │   ├── kb_long.csv                 # 2,194 domain knowledge articles
-│   │   ├── kb_long.txt
-│   │   ├── knowledge_base.csv
-│   │   └── knowledge_base.json
-│   └── chroma_db/                      # Local persistent ChromaDB vector store
-│
-├── docs/                               # Project Documentation & Architecture
-│   ├── architecture/
-│   │   ├── schema.sql                  # PostgreSQL & pgvector DDL
-│   │   ├── backend_audit_report.md
-│   │   ├── supabase_connection_report.md
-│   │   ├── rag_integration_report.md
-│   │   └── chroma_vector_db_report.md
-│   └── README.md
-│
-├── scripts/                            # Operational & Diagnostic CLI Utilities
-│   ├── ingest_documents.py             # Knowledge ingestion (Chroma & Supabase)
-│   ├── setup_database.py               # Supabase schema migration executor
-│   ├── setup_database.sql              # Supabase table DDL and RPC functions
-│   ├── test_connections.py             # Diagnostic & connectivity check
-│   ├── retrieval_demo.py               # RAG context preview tool
-│   └── generate_kb.py                  # Knowledge base synthesis script
-│
-├── src/                                # Core Application Source Code
-│   └── logistics_chatbot/
-│       ├── __init__.py
-│       ├── api/                        # REST API Layer
-│       │   ├── __init__.py
-│       │   ├── app.py                  # FastAPI entry point & health checks
-│       │   └── routes/                 # Modular API route controllers
-│       │       ├── __init__.py
-│       │       ├── chat.py             # POST /api/chat
-│       │       └── shipments.py        # GET /api/shipments
-│       ├── core/                       # Core Configuration & Primitives
-│       │   ├── __init__.py
-│       │   ├── config.py               # Path-anchored environment configuration
-│       │   ├── errors.py               # Typed exception hierarchy
-│       │   └── prompts.py              # System prompt & grounding constraints
-│       ├── chatbot/                    # Chatbot Orchestration & Memory
-│       │   ├── __init__.py
-│       │   ├── chatbot.py              # Dialogue manager & CLI interface
-│       │   ├── conversation.py         # Multi-turn sliding window session memory
-│       │   └── llm_client.py           # Groq client with retry engine
-│       ├── rag/                        # RAG & Information Retrieval
-│       │   ├── __init__.py
-│       │   ├── embeddings.py           # Dense vector encoding (384-dim)
-│       │   ├── ingestion.py            # CSV/JSON document parsing & loading
-│       │   ├── knowledge_base.py       # Supabase pgvector search
-│       │   └── retrieval.py            # Hybrid retrieval (SQL + Vector)
-│       ├── vectorstores/               # Vector Store Connectors
-│       │   ├── __init__.py
-│       │   ├── chroma_db.py            # ChromaDB Persistent & HTTP client
-│       │   └── supabase_db.py          # Supabase REST client
-│       ├── database/                   # Relational Persistence
-│       │   ├── __init__.py
-│       │   └── database.py             # PostgreSQL connection pool & queries
-│       ├── schemas/                    # Pydantic Request/Response Models
-│       │   ├── __init__.py
-│       │   └── models.py
-│       └── utils/                      # Helper Functions
-│           ├── __init__.py
-│           └── helpers.py              # Hashing, date parsing, pgvector formats
-│
-├── tests/                              # Automated Test Suite (84 tests)
+├── src/logistics_chatbot/
 │   ├── __init__.py
-│   ├── test_api.py                     # REST API endpoint tests
-│   ├── test_chatbot.py                 # Chatbot behavioral & grounding tests
-│   ├── test_chroma_db.py               # ChromaDB connection & vector search tests
-│   ├── test_rag_integration.py         # End-to-end RAG scenarios (1-12)
-│   └── test_supabase_connection.py     # Database connection & pooling tests
-│
-├── .env                                # Local secrets (ignored in Git)
-├── .env.example                        # Template for environment configuration
-├── .gitignore                          # Excludes .env, pycache, chroma_db
-├── pyproject.toml                      # Modern packaging specification
-├── requirements.txt                    # Python dependencies
-├── run_chatbot.py                      # Root shortcut to launch interactive CLI
-├── run_server.py                       # Root shortcut to start FastAPI server
-└── README.md
+│   ├── main.py                         # Canonical ASGI app, create_app(), serve()
+│   ├── core/                           # config.py, constants.py, errors.py, logging.py
+│   ├── domain/                         # Pure entities, exceptions, repository interfaces
+│   ├── application/
+│   │   ├── services/                   # chat_service, shipment_service, employee_service, document_service
+│   │   ├── chatbot/                    # classifier, conversation, deterministic_responses, response_formatter, orchestrator
+│   │   ├── rag/                        # hybrid_search, retriever, context_builder
+│   │   ├── ingestion/                  # document_processor, csv_processor, kb_loader
+│   │   └── prompts/                    # system_prompt.py
+│   ├── infrastructure/
+│   │   ├── database/                   # connection, sqlite_repository, postgres_repository, csv_fallback, repository
+│   │   ├── vector_store/               # chroma_store, pgvector_store, supabase_rest
+│   │   ├── llm/                        # groq_client.py
+│   │   └── embeddings/                 # sentence_transformer.py
+│   ├── presentation/api/               # app.py, dependencies.py, routes/*, schemas/*
+│   └── utils/                          # helpers.py
+├── frontend/
+│   ├── templates/index.html            # FleetHarbor AI web UI template
+│   └── static/{css/style.css, js/app.js, assets/}
+├── data/
+│   ├── raw/                            # shipments.db (19 tables), shipments.csv, shipments_seed.json
+│   ├── processed/                      # shipments.csv
+│   ├── generated/                      # employees_roster.csv, customer_accounts.csv, global_hubs.csv
+│   ├── knowledge_base/                 # kb_long.csv, kb_long.txt, knowledge_base.*, manuals/*.txt
+│   ├── source_documents/               # Reference PDFs + Data_attach2.xlsx
+│   ├── sql/                            # Seed SQL files
+│   ├── uploads/                        # Upload staging directory
+│   └── chroma_db/                      # Persistent ChromaDB vector store
+├── migrations/sql/                     # schema.sql, schema_v2_enterprise.sql
+├── docs/
+│   ├── architecture/schema_mapping_v2.md
+│   └── reports/                        # Integration reports (Markdown / DOCX)
+├── reports/                            # Runtime validation, benchmark & QA outputs
+├── scripts/
+│   ├── setup/                          # setup_database.py, test_connections.py
+│   ├── ingestion/                      # ingest_documents.py, ingest_excel_supabase.py, ingest_new_pdfs.py, index_all_knowledge_base.py
+│   ├── validation/                     # evaluate_chatbot_intelligence.py, verify_live_integration.py, audit_live_server.py, etc.
+│   ├── benchmarks/                     # benchmark_performance.py
+│   └── generators/                     # create_question_bank.py, generate_*.py
+├── tests/
+│   ├── conftest.py                     # Shared fixtures (TestClient, isolated ChromaDB, mocked LLM)
+│   ├── api/                            # FastAPI route & contract tests
+│   ├── unit/                           # Clean architecture boundaries, classifier, memory, retriever, services
+│   ├── integration/                    # SQLite, ChromaDB, CSV ingestion, enterprise data & RAG pipeline tests
+│   ├── e2e/                            # Playwright headless browser UI walkthrough
+│   ├── evaluators/                     # data_validator.py, metrics.py, question_bank_runner.py
+│   └── question_bank/                  # 12 domain evaluation JSON suites
+├── pyproject.toml
+├── pytest.ini
+├── requirements.txt
+├── .env.example
+├── run_chatbot.py
+└── run_server.py
 ```
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
-### 1. Install Dependencies
+### 1. Install Dependencies & Editable Package
 ```bash
 pip install -r requirements.txt
+pip install -e . --no-build-isolation --no-deps
 ```
 
 ### 2. Configure Environment (`.env`)
-Copy `.env.example` to `.env` in the project root:
+Copy `.env.example` to `.env` in the project root and set at minimum `GROQ_API_KEY`:
 ```ini
 GROQ_API_KEY=your_groq_api_key_here
 GROQ_MODEL=openai/gpt-oss-20b
-
-# ChromaDB Settings
 CHROMA_MODE=persistent
 CHROMA_PERSIST_DIRECTORY=data/chroma_db
 CHROMA_COLLECTION_NAME=logistics_knowledge_chunks
-
-# Supabase PostgreSQL (Optional for live cloud database)
-SUPABASE_DB_URL=postgresql://postgres.xxx:password@aws-0-region.pooler.supabase.com:6543/postgres?sslmode=require
+# Optional Supabase PostgreSQL connection string:
+SUPABASE_DB_URL=
 ```
-*(Note: If `SUPABASE_DB_URL` is omitted, the chatbot runs seamlessly in offline mode using `data/raw/shipments.csv` and ChromaDB).*
+When `SUPABASE_DB_URL` is unset, the application operates in local mode backed by `data/raw/shipments.db` and persistent `data/chroma_db/`.
 
 ---
 
-## ⚡ Execution Guide
+## Execution Guide
 
-### 1. Run Diagnostic & Connectivity Check
+### 1. Diagnostic & Connectivity Check
 ```bash
-python scripts/test_connections.py
+python scripts/setup/test_connections.py
 ```
 
-### 2. Ingest Knowledge into ChromaDB
+### 2. Launch FastAPI Server & Web UI
 ```bash
-# Ingest full knowledge base (2,194 articles)
-python scripts/ingest_documents.py --target chroma
-
-# Ingest test batch of 50 articles
-python scripts/ingest_documents.py --target chroma --limit 50
+python run_server.py
+# Or directly via Uvicorn:
+uvicorn logistics_chatbot.main:app --host 127.0.0.1 --port 8000 --reload
 ```
+- **Web Chat UI:** `http://127.0.0.1:8000/`
+- **Swagger UI:** `http://127.0.0.1:8000/docs`
+- **Health:** `GET /health`, `GET /api/health`, `GET /api/vector-db/health`
+- **Chat:** `POST /chat`, `POST /chat/stream`, `POST /api/chat`
+- **Shipments & Employees:** `GET /shipment/{id}`, `GET /api/shipments`, `GET /api/shipments/{shipment_id}`, `GET /employee/{id}`, `GET /employees`
+- **Document / CSV Upload:** `POST /upload-doc`
 
-### 3. Launch Interactive Terminal Chatbot
+### 3. Launch Interactive Terminal CLI
 ```bash
 python run_chatbot.py
 ```
-*Example questions:*
-- `What is the status of SHP-10001?`
-- `Why is SHP-10002 delayed?`
-- `What documents are required for international customs?`
 
-### 4. Start the FastAPI REST API Server
+### 4. Run Automated Tests, Benchmarks & Validators
 ```bash
-python run_server.py
+python -m pytest -q
+python scripts/validation/evaluate_chatbot_intelligence.py
+python scripts/benchmarks/benchmark_performance.py
+python -m tests.evaluators.data_validator
 ```
-- **API Swagger Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Health Check:** `GET http://127.0.0.1:8000/api/health`
-- **ChromaDB Health:** `GET http://127.0.0.1:8000/api/vector-db/health`
-- **Chat Endpoint:** `POST http://127.0.0.1:8000/api/chat`
-
-### 5. Run the Automated Test Suite
-```bash
-python -m unittest discover -s tests -v
-```
-**Results:** `84 passed, 0 failed, 2 skipped (cloud-only) in ~8.3 seconds`.

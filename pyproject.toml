@@ -1,27 +1,47 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "logistics-chatbot"
-version = "1.0.0"
-description = "FleetHarbor Logistics AI Chatbot backend using ChromaDB, Supabase PostgreSQL, pgvector, and Groq LLM"
+version = "2.0.0"
+description = "NexusFreight / FleetHarbor Enterprise Logistics AI Chatbot with FastAPI, Clean Architecture, Hybrid RAG, ChromaDB, and SQLite/Supabase."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "chromadb>=1.0.0",
+    "fastapi>=0.110.0",
     "groq>=0.9.0",
-    "python-dotenv>=1.0.0",
-    "supabase>=2.0.0",
-    "sentence-transformers>=3.0.0",
-    "psycopg2-binary>=2.9.9",
     "httpx>=0.27.0",
     "numpy>=1.24.0",
-    "fastapi>=0.110.0",
+    "openpyxl>=3.1.0",
+    "psycopg2-binary>=2.9.9",
+    "pydantic>=2.0.0",
+    "pypdf>=4.0.0",
+    "python-docx>=1.1.0",
+    "python-dotenv>=1.0.0",
+    "python-multipart>=0.0.9",
+    "sentence-transformers>=3.0.0",
+    "supabase>=2.0.0",
     "uvicorn>=0.28.0",
-    "chromadb>=1.0.0",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src", "."]
-include = ["logistics_chatbot*", "shipment_chatbot*"]
+[project.optional-dependencies]
+dev = [
+    "playwright>=1.50.0",
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.0.0",
+    "pytest-mock>=3.14.0",
+]
 
+[project.scripts]
+nexusfreight-server = "logistics_chatbot.main:serve"
+nexusfreight-cli = "logistics_chatbot.application.chatbot.orchestrator:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["logistics_chatbot*"]
+
+[tool.pyright]
+extraPaths = ["src"]
+include = ["src", "tests", "scripts", "run_server.py", "run_chatbot.py"]

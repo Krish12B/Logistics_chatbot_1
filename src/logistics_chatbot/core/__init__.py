@@ -1,4 +1,23 @@
-"""Core module containing configuration, error definitions, and system prompts."""
-from logistics_chatbot.core.config import *
-from logistics_chatbot.core.errors import *
-from logistics_chatbot.core.prompts import SYSTEM_PROMPT, HELP_TEXT, MAX_QUERY_LENGTH
+"""Core module containing configuration, constants, logging, and typed exceptions."""
+from logistics_chatbot.core import config, constants
+from logistics_chatbot.core.errors import *  # noqa: F401,F403
+from logistics_chatbot.core.logging import configure_logging, get_logger
+
+__all__ = [
+    "config",
+    "constants",
+    "configure_logging",
+    "get_logger",
+    "ChatbotError",
+    "EmptyMessageError",
+    "QueryTooLongError",
+    "InvalidShipmentIdError",
+    "ShipmentNotFoundError",
+    "DatabaseError",
+    "KnowledgeBaseError",
+    "VectorDBError",
+    "LLMTimeoutError",
+    "LLMAuthError",
+    "LLMRateLimitError",
+    "LLMUnavailableError",
+]

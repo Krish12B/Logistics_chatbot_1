@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-11-26T21:26:46.007781",
+  "database_path": "C:\\Users\\admin\\OneDrive\\Desktop\\shipment_chatbot_project_updated_v2\\shipment_chatbot_project\\data\\raw\\shipments.db",
+  "total_records_checked": 10000,
+  "valid_records_count": 10000,
+  "invalid_records_count": 0,
+  "records_with_warnings": 0,
+  "summary": {
+    "processed_csv_records": 10000,
+    "sqlite_records": 10000,
+    "employee_table": {
+      "total_records": 500,
+      "unique_ids": 500,
+      "missing_email_records": 0,
+      "status": "Healthy"
+    },
+    "hubs_table": {
+      "total_records": 10,
+      "status": "Healthy"
+    },
+    "data_integrity_score_pct": 100.0
+  },
+  "issues_by_category": {
+    "duplicate_ids": [],
+    "invalid_id_formats": [],
+    "missing_required_fields": [],
+    "invalid_status_values": [],
+    "date_format_inconsistencies": [],
+    "business_rule_violations": [],
+    "csv_database_discrepancies": []
+  },
+  "proposed_corrections": []
+}

@@ -1,7 +1,4 @@
-"""FleetHarbor Logistics AI Chatbot package.
+"""NexusFreight / FleetHarbor Enterprise Logistics AI Chatbot package."""
+__version__ = "2.0.0"
 
-Integrates ChromaDB, Supabase PostgreSQL with pgvector, and Groq LLM.
-"""
-__version__ = "1.0.0"
-
-from logistics_chatbot.chatbot.chatbot import chat
+__all__ = ["__version__"]
